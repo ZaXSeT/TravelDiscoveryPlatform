@@ -54,6 +54,30 @@ const earthFragmentShader = /* glsl */ `
   }
 `;
 
+const atmosphereVertexShader = /* glsl */ `
+  varying vec3 vNormal;
+  void main() {
+    vNormal = normalize(normalMatrix * normal);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const atmosphereFragmentShader = /* glsl */ `
+  varying vec3 vNormal;
+  void main() {
+    float NdotV = max(0.0, dot(vNormal, vec3(0.0, 0.0, 1.0)));
+    // Fresnel effect: stronger at the edges
+    float fresnel = pow(1.0 - NdotV, 5.0);
+    // Fade out exactly at the edge to prevent hard circular boundaries
+    float edgeFade = smoothstep(0.0, 0.1, NdotV);
+    
+    float intensity = fresnel * edgeFade;
+    gl_FragColor = vec4(0.3, 0.6, 1.0, 1.0) * intensity * 1.5;
+    #include <tonemapping_fragment>
+    #include <colorspace_fragment>
+  }
+`;
+
 function Markers() {
   const router = useRouter();
   const [hovered, setHovered] = useState<string | null>(null);
@@ -130,6 +154,19 @@ function Earth() {
     [tex.day, tex.night],
   );
 
+  const atmosphereMaterial = useMemo(
+    () =>
+      new THREE.ShaderMaterial({
+        vertexShader: atmosphereVertexShader,
+        fragmentShader: atmosphereFragmentShader,
+        blending: THREE.AdditiveBlending,
+        side: THREE.FrontSide,
+        transparent: true,
+        depthWrite: false,
+      }),
+    [],
+  );
+
   useFrame((_, delta) => {
     if (earth.current) earth.current.rotation.y += delta * 0.03;
     if (clouds.current) clouds.current.rotation.y += delta * 0.043;
@@ -150,9 +187,14 @@ function Earth() {
         <meshStandardMaterial
           map={tex.clouds}
           transparent
-          opacity={0.34}
+          opacity={0.6}
           depthWrite={false}
         />
+      </mesh>
+
+      <mesh scale={1.03}>
+        <sphereGeometry args={[R, 64, 64]} />
+        <primitive object={atmosphereMaterial} attach="material" />
       </mesh>
     </>
   );

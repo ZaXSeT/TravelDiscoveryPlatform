@@ -210,10 +210,6 @@ export const DESTINATIONS: Destination[] = [
 
 export const DESTINATION_SLUGS = DESTINATIONS.map((d) => d.slug);
 
-export function getDestination(slug: string): Destination | undefined {
-  return DESTINATIONS.find((d) => d.slug === slug);
-}
-
 export function toSummary(d: Destination): DestinationSummary {
   return {
     slug: d.slug,
@@ -227,10 +223,9 @@ export function toSummary(d: Destination): DestinationSummary {
 }
 
 export function getRelated(slug: string, limit = 3): DestinationSummary[] {
-  const current = getDestination(slug);
+  const current = ALL_DESTINATIONS.find((d) => d.slug === slug);
   if (!current) return [];
-  // Prefer same region, then fill with others; stable order.
-  const others = DESTINATIONS.filter((d) => d.slug !== slug);
+  const others = ALL_DESTINATIONS.filter((d) => d.slug !== slug);
   const sameRegion = others.filter((d) => d.region === current.region);
   const rest = others.filter((d) => d.region !== current.region);
   return [...sameRegion, ...rest].slice(0, limit).map(toSummary);
@@ -239,75 +234,533 @@ export function getRelated(slug: string, limit = 3): DestinationSummary[] {
 export const FEATURED_SLUGS = ["bali", "tokyo", "switzerland"];
 
 export function getFeatured(): DestinationSummary[] {
-  return FEATURED_SLUGS.map(getDestination)
+  return FEATURED_SLUGS.map((s) => ALL_DESTINATIONS.find((d) => d.slug === s))
     .filter((d): d is Destination => Boolean(d))
     .map(toSummary);
 }
 
 // =============================================================================
-// TIER 2 — EXPLORE DESTINATIONS (lightweight, frontend-only)
-// Thumbnail/hero ids resolve through the image resolver (Cloudinary in prod, a
-// varied placeholder pool in dev). budgetPerDay is integer cents/day (USD).
+// TIER 2 — EXPLORE DESTINATIONS (now full Destination objects)
 // =============================================================================
 
-const ex = (
-  d: Omit<ExploreDestination, "thumbnail" | "hero">,
-): ExploreDestination => ({
-  ...d,
-  thumbnail: `go/destinations/${d.slug}/thumbnail`,
-  hero: `go/destinations/${d.slug}/hero`,
-});
+export const EXPLORE_DESTINATIONS: Destination[] = [
 
-export const EXPLORE_DESTINATIONS: ExploreDestination[] = [
-  // --- Asia ---
-  ex({ slug: "kyoto", name: "Kyoto", country: "Japan", region: "Asia", summary: "Temple gardens, geisha districts, and centuries of refined tradition.", coordinates: { lat: 35.0116, lng: 135.7681 }, categories: ["City", "Culture", "Food"], bestSeason: "Mar–May & Oct–Nov", budgetPerDay: 9000 }),
-  ex({ slug: "seoul", name: "Seoul", country: "South Korea", region: "Asia", summary: "Hyper-modern energy, palace courtyards, and late-night street food.", coordinates: { lat: 37.5665, lng: 126.978 }, categories: ["City", "Food", "Culture"], bestSeason: "Apr–Jun & Sep–Nov", budgetPerDay: 8000 }),
-  ex({ slug: "bangkok", name: "Bangkok", country: "Thailand", region: "Asia", summary: "Golden temples, canal markets, and the world's best street eats.", coordinates: { lat: 13.7563, lng: 100.5018 }, categories: ["City", "Food", "Culture"], bestSeason: "Nov–Feb", budgetPerDay: 4500 }),
-  ex({ slug: "singapore", name: "Singapore", country: "Singapore", region: "Asia", summary: "A garden city of futuristic skylines and hawker-stall flavor.", coordinates: { lat: 1.3521, lng: 103.8198 }, categories: ["City", "Food", "Luxury"], bestSeason: "Feb–Apr", budgetPerDay: 11000 }),
-  ex({ slug: "hanoi", name: "Hanoi", country: "Vietnam", region: "Asia", summary: "Old-quarter lanes, lakeside calm, and unforgettable pho.", coordinates: { lat: 21.0278, lng: 105.8342 }, categories: ["City", "Culture", "Food"], bestSeason: "Oct–Dec", budgetPerDay: 3500 }),
-  // --- Europe ---
-  ex({ slug: "rome", name: "Rome", country: "Italy", region: "Europe", summary: "An open-air museum of ruins, piazzas, and perfect pasta.", coordinates: { lat: 41.9028, lng: 12.4964 }, categories: ["City", "Culture", "Food"], bestSeason: "Apr–Jun & Sep–Oct", budgetPerDay: 9500 }),
-  ex({ slug: "amsterdam", name: "Amsterdam", country: "Netherlands", region: "Europe", summary: "Canal rings, world-class museums, and a bicycle's pace of life.", coordinates: { lat: 52.3676, lng: 4.9041 }, categories: ["City", "Culture"], bestSeason: "Apr–May & Sep", budgetPerDay: 11000 }),
-  ex({ slug: "barcelona", name: "Barcelona", country: "Spain", region: "Europe", summary: "Gaudí fantasy, tapas crawls, and Mediterranean beaches.", coordinates: { lat: 41.3851, lng: 2.1734 }, categories: ["City", "Beach", "Food"], bestSeason: "May–Jun & Sep", budgetPerDay: 9000 }),
-  ex({ slug: "prague", name: "Prague", country: "Czechia", region: "Europe", summary: "Fairytale spires, cobbled lanes, and riverside beer gardens.", coordinates: { lat: 50.0755, lng: 14.4378 }, categories: ["City", "Culture"], bestSeason: "May–Sep", budgetPerDay: 6000 }),
-  ex({ slug: "vienna", name: "Vienna", country: "Austria", region: "Europe", summary: "Imperial palaces, coffee houses, and effortless old-world elegance.", coordinates: { lat: 48.2082, lng: 16.3738 }, categories: ["City", "Culture", "Luxury"], bestSeason: "Apr–May & Sep–Oct", budgetPerDay: 9000 }),
-  // --- North America ---
-  ex({ slug: "san-francisco", name: "San Francisco", country: "United States", region: "North America", summary: "Fog-wrapped hills, the Golden Gate, and a serious food scene.", coordinates: { lat: 37.7749, lng: -122.4194 }, categories: ["City", "Nature", "Food"], bestSeason: "Sep–Nov", budgetPerDay: 15000 }),
-  ex({ slug: "vancouver", name: "Vancouver", country: "Canada", region: "North America", summary: "Where rainforest, ocean, and mountains meet a glass skyline.", coordinates: { lat: 49.2827, lng: -123.1207 }, categories: ["City", "Nature", "Adventure"], bestSeason: "Jun–Sep", budgetPerDay: 12000 }),
-  ex({ slug: "toronto", name: "Toronto", country: "Canada", region: "North America", summary: "Canada's most diverse city — neighborhoods, galleries, and food.", coordinates: { lat: 43.6532, lng: -79.3832 }, categories: ["City", "Culture", "Food"], bestSeason: "May–Oct", budgetPerDay: 11000 }),
-  ex({ slug: "chicago", name: "Chicago", country: "United States", region: "North America", summary: "Bold architecture, lakefront beaches, and deep-dish everything.", coordinates: { lat: 41.8781, lng: -87.6298 }, categories: ["City", "Culture", "Food"], bestSeason: "May–Oct", budgetPerDay: 11000 }),
-  // --- Oceania ---
-  ex({ slug: "sydney", name: "Sydney", country: "Australia", region: "Oceania", summary: "Iconic harbor, golden beaches, and an easy outdoor lifestyle.", coordinates: { lat: -33.8688, lng: 151.2093 }, categories: ["City", "Beach", "Nature"], bestSeason: "Sep–Nov & Mar–May", budgetPerDay: 12000 }),
-  ex({ slug: "melbourne", name: "Melbourne", country: "Australia", region: "Oceania", summary: "Laneway cafés, street art, and Australia's culture capital.", coordinates: { lat: -37.8136, lng: 144.9631 }, categories: ["City", "Culture", "Food"], bestSeason: "Mar–May & Sep–Nov", budgetPerDay: 11000 }),
-  ex({ slug: "queenstown", name: "Queenstown", country: "New Zealand", region: "Oceania", summary: "The adventure capital — alpine lakes, peaks, and adrenaline.", coordinates: { lat: -45.0312, lng: 168.6626 }, categories: ["Nature", "Adventure"], bestSeason: "Dec–Feb & Jun–Aug", budgetPerDay: 13000 }),
-  // --- Middle East ---
-  ex({ slug: "dubai", name: "Dubai", country: "United Arab Emirates", region: "Middle East", summary: "Desert futurism — record-breaking towers, malls, and beaches.", coordinates: { lat: 25.2048, lng: 55.2708 }, categories: ["City", "Luxury", "Beach"], bestSeason: "Nov–Mar", budgetPerDay: 16000 }),
-  ex({ slug: "istanbul", name: "Istanbul", country: "Türkiye", region: "Middle East", summary: "Two continents, grand bazaars, and Byzantine-Ottoman splendor.", coordinates: { lat: 41.0082, lng: 28.9784 }, categories: ["City", "Culture", "Food"], bestSeason: "Apr–May & Sep–Nov", budgetPerDay: 6000 }),
-  // --- Africa ---
-  ex({ slug: "cape-town", name: "Cape Town", country: "South Africa", region: "Africa", summary: "Table Mountain, wine country, and dramatic coastal drives.", coordinates: { lat: -33.9249, lng: 18.4241 }, categories: ["Nature", "Beach", "Adventure"], bestSeason: "Nov–Mar", budgetPerDay: 9000 }),
-  ex({ slug: "marrakech", name: "Marrakech", country: "Morocco", region: "Africa", summary: "Souk mazes, riad courtyards, and the edge of the Sahara.", coordinates: { lat: 31.6295, lng: -7.9811 }, categories: ["Culture", "Adventure", "Luxury"], bestSeason: "Mar–May & Sep–Nov", budgetPerDay: 6000 }),
+  {
+    slug: "kyoto",
+    name: "Kyoto",
+    country: "Japan",
+    region: "Asia",
+    summary: "Temple gardens, geisha districts, and centuries of refined tradition.",
+    description: "Kyoto is a vibrant destination blending city, culture, food. Temple gardens, geisha districts, and centuries of refined tradition. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Japan.",
+    coordinates: {"lat":35.0116,"lng":135.7681},
+    dna: { adventure: 61, culture: 54, food: 79, nature: 74, nightlife: 86, budgetFriendly: 35 },
+    budget: { accommodation: 4500, food: 2700, transport: 1800 },
+    travelTips: ["Rent a bicycle to avoid the crowded buses.","Visit Arashiyama at dawn to escape the crowds."],
+    hiddenGems: [
+      { title: "Otagi Nenbutsu-ji", description: "1,200 whimsical stone statues.", image: "go/destinations/kyoto/gem1" },
+      { title: "Pontocho Alley", description: "A narrow dining alley.", image: "go/destinations/kyoto/gem2" }
+    ],
+    nearby: [
+      { name: "Nara", distanceKm: 45, image: "go/destinations/kyoto/near1" },
+      { name: "Osaka", distanceKm: 55, image: "go/destinations/kyoto/near2" },
+      { name: "Kobe", distanceKm: 70, image: "go/destinations/kyoto/near3" }
+    ],
+    media: media("kyoto"),
+    categories: ["City","Culture","Food"],
+    bestSeason: "Mar–May & Oct–Nov"
+  },
+  {
+    slug: "seoul",
+    name: "Seoul",
+    country: "South Korea",
+    region: "Asia",
+    summary: "Hyper-modern energy, palace courtyards, and late-night street food.",
+    description: "Seoul is a vibrant destination blending city, food, culture. Hyper-modern energy, palace courtyards, and late-night street food. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in South Korea.",
+    coordinates: {"lat":37.5665,"lng":126.978},
+    dna: { adventure: 68, culture: 54, food: 60, nature: 34, nightlife: 74, budgetFriendly: 35 },
+    budget: { accommodation: 4000, food: 2400, transport: 1600 },
+    travelTips: ["Get a T-money card for seamless transit.","Try the street food in Myeongdong."],
+    hiddenGems: [
+      { title: "Ihwa Mural Village", description: "Street art in a hillside neighborhood.", image: "go/destinations/seoul/gem1" },
+      { title: "Ikseon-dong", description: "Traditional hanoks turned into cafes.", image: "go/destinations/seoul/gem2" }
+    ],
+    nearby: [
+      { name: "Nami Island", distanceKm: 60, image: "go/destinations/seoul/near1" },
+      { name: "Suwon", distanceKm: 30, image: "go/destinations/seoul/near2" },
+      { name: "DMZ", distanceKm: 50, image: "go/destinations/seoul/near3" }
+    ],
+    media: media("seoul"),
+    categories: ["City","Food","Culture"],
+    bestSeason: "Apr–Jun & Sep–Nov"
+  },
+  {
+    slug: "bangkok",
+    name: "Bangkok",
+    country: "Thailand",
+    region: "Asia",
+    summary: "Golden temples, canal markets, and the world's best street eats.",
+    description: "Bangkok is a vibrant destination blending city, food, culture. Golden temples, canal markets, and the world's best street eats. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Thailand.",
+    coordinates: {"lat":13.7563,"lng":100.5018},
+    dna: { adventure: 65, culture: 69, food: 54, nature: 47, nightlife: 49, budgetFriendly: 85 },
+    budget: { accommodation: 2250, food: 1350, transport: 900 },
+    travelTips: ["Use the BTS Skytrain to avoid gridlock traffic.","Bargain politely at the night markets."],
+    hiddenGems: [
+      { title: "Bang Krachao", description: "The Green Lung of Bangkok.", image: "go/destinations/bangkok/gem1" },
+      { title: "Talad Noi", description: "Historic neighborhood with street art.", image: "go/destinations/bangkok/gem2" }
+    ],
+    nearby: [
+      { name: "Ayutthaya", distanceKm: 80, image: "go/destinations/bangkok/near1" },
+      { name: "Pattaya", distanceKm: 150, image: "go/destinations/bangkok/near2" },
+      { name: "Hua Hin", distanceKm: 200, image: "go/destinations/bangkok/near3" }
+    ],
+    media: media("bangkok"),
+    categories: ["City","Food","Culture"],
+    bestSeason: "Nov–Feb"
+  },
+  {
+    slug: "singapore",
+    name: "Singapore",
+    country: "Singapore",
+    region: "Asia",
+    summary: "A garden city of futuristic skylines and hawker-stall flavor.",
+    description: "Singapore is a vibrant destination blending city, food, luxury. A garden city of futuristic skylines and hawker-stall flavor. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Singapore.",
+    coordinates: {"lat":1.3521,"lng":103.8198},
+    dna: { adventure: 75, culture: 83, food: 54, nature: 52, nightlife: 83, budgetFriendly: 35 },
+    budget: { accommodation: 5500, food: 3300, transport: 2200 },
+    travelTips: ["Drink tap water; it is perfectly safe.","Use the MRT, it connects almost everywhere."],
+    hiddenGems: [
+      { title: "Pulau Ubin", description: "A rustic island frozen in time.", image: "go/destinations/singapore/gem1" },
+      { title: "MacRitchie Reservoir", description: "Nature trails and a treetop walk.", image: "go/destinations/singapore/gem2" }
+    ],
+    nearby: [
+      { name: "Sentosa", distanceKm: 5, image: "go/destinations/singapore/near1" },
+      { name: "Johor Bahru", distanceKm: 25, image: "go/destinations/singapore/near2" },
+      { name: "Batam", distanceKm: 30, image: "go/destinations/singapore/near3" }
+    ],
+    media: media("singapore"),
+    categories: ["City","Food","Luxury"],
+    bestSeason: "Feb–Apr"
+  },
+  {
+    slug: "hanoi",
+    name: "Hanoi",
+    country: "Vietnam",
+    region: "Asia",
+    summary: "Old-quarter lanes, lakeside calm, and unforgettable pho.",
+    description: "Hanoi is a vibrant destination blending city, culture, food. Old-quarter lanes, lakeside calm, and unforgettable pho. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Vietnam.",
+    coordinates: {"lat":21.0278,"lng":105.8342},
+    dna: { adventure: 53, culture: 62, food: 60, nature: 42, nightlife: 79, budgetFriendly: 85 },
+    budget: { accommodation: 1750, food: 1050, transport: 700 },
+    travelTips: ["Cross the street steadily; do not run.","Try egg coffee in the Old Quarter."],
+    hiddenGems: [
+      { title: "Train Street", description: "Cafes inches away from passing trains.", image: "go/destinations/hanoi/gem1" },
+      { title: "Long Bien Bridge", description: "Historic bridge designed by Eiffel.", image: "go/destinations/hanoi/gem2" }
+    ],
+    nearby: [
+      { name: "Halong Bay", distanceKm: 160, image: "go/destinations/hanoi/near1" },
+      { name: "Ninh Binh", distanceKm: 90, image: "go/destinations/hanoi/near2" },
+      { name: "Sapa", distanceKm: 315, image: "go/destinations/hanoi/near3" }
+    ],
+    media: media("hanoi"),
+    categories: ["City","Culture","Food"],
+    bestSeason: "Oct–Dec"
+  },
+  {
+    slug: "rome",
+    name: "Rome",
+    country: "Italy",
+    region: "Europe",
+    summary: "An open-air museum of ruins, piazzas, and perfect pasta.",
+    description: "Rome is a vibrant destination blending city, culture, food. An open-air museum of ruins, piazzas, and perfect pasta. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Italy.",
+    coordinates: {"lat":41.9028,"lng":12.4964},
+    dna: { adventure: 71, culture: 87, food: 70, nature: 64, nightlife: 68, budgetFriendly: 35 },
+    budget: { accommodation: 4750, food: 2850, transport: 1900 },
+    travelTips: ["Carry a water bottle to refill at public fountains.","Book Colosseum tickets well in advance."],
+    hiddenGems: [
+      { title: "Appian Way", description: "Ancient Roman road perfect for biking.", image: "go/destinations/rome/gem1" },
+      { title: "Aventine Keyhole", description: "A secret view of St. Peters dome.", image: "go/destinations/rome/gem2" }
+    ],
+    nearby: [
+      { name: "Tivoli", distanceKm: 30, image: "go/destinations/rome/near1" },
+      { name: "Naples", distanceKm: 225, image: "go/destinations/rome/near2" },
+      { name: "Florence", distanceKm: 270, image: "go/destinations/rome/near3" }
+    ],
+    media: media("rome"),
+    categories: ["City","Culture","Food"],
+    bestSeason: "Apr–Jun & Sep–Oct"
+  },
+  {
+    slug: "amsterdam",
+    name: "Amsterdam",
+    country: "Netherlands",
+    region: "Europe",
+    summary: "Canal rings, world-class museums, and a bicycle's pace of life.",
+    description: "Amsterdam is a vibrant destination blending city, culture. Canal rings, world-class museums, and a bicycle's pace of life. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Netherlands.",
+    coordinates: {"lat":52.3676,"lng":4.9041},
+    dna: { adventure: 78, culture: 55, food: 74, nature: 65, nightlife: 46, budgetFriendly: 35 },
+    budget: { accommodation: 5500, food: 3300, transport: 2200 },
+    travelTips: ["Watch out for bicycles, they have the right of way.","Book museum tickets online to skip lines."],
+    hiddenGems: [
+      { title: "Begijnhof", description: "A hidden courtyard in the city center.", image: "go/destinations/amsterdam/gem1" },
+      { title: "NDSM Wharf", description: "A vibrant arts community in a former shipyard.", image: "go/destinations/amsterdam/gem2" }
+    ],
+    nearby: [
+      { name: "Zaanse Schans", distanceKm: 20, image: "go/destinations/amsterdam/near1" },
+      { name: "Keukenhof", distanceKm: 40, image: "go/destinations/amsterdam/near2" },
+      { name: "Utrecht", distanceKm: 45, image: "go/destinations/amsterdam/near3" }
+    ],
+    media: media("amsterdam"),
+    categories: ["City","Culture"],
+    bestSeason: "Apr–May & Sep"
+  },
+  {
+    slug: "barcelona",
+    name: "Barcelona",
+    country: "Spain",
+    region: "Europe",
+    summary: "Gaudí fantasy, tapas crawls, and Mediterranean beaches.",
+    description: "Barcelona is a vibrant destination blending city, beach, food. Gaudí fantasy, tapas crawls, and Mediterranean beaches. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Spain.",
+    coordinates: {"lat":41.3851,"lng":2.1734},
+    dna: { adventure: 56, culture: 77, food: 66, nature: 42, nightlife: 79, budgetFriendly: 35 },
+    budget: { accommodation: 4500, food: 2700, transport: 1800 },
+    travelTips: ["Watch your pockets on La Rambla.","Buy a T-Casual metro pass for savings."],
+    hiddenGems: [
+      { title: "Bunkers del Carmel", description: "The best panoramic view of the city.", image: "go/destinations/barcelona/gem1" },
+      { title: "Hospital de Sant Pau", description: "A stunning modernist complex.", image: "go/destinations/barcelona/gem2" }
+    ],
+    nearby: [
+      { name: "Montserrat", distanceKm: 50, image: "go/destinations/barcelona/near1" },
+      { name: "Sitges", distanceKm: 40, image: "go/destinations/barcelona/near2" },
+      { name: "Girona", distanceKm: 100, image: "go/destinations/barcelona/near3" }
+    ],
+    media: media("barcelona"),
+    categories: ["City","Beach","Food"],
+    bestSeason: "May–Jun & Sep"
+  },
+  {
+    slug: "prague",
+    name: "Prague",
+    country: "Czechia",
+    region: "Europe",
+    summary: "Fairytale spires, cobbled lanes, and riverside beer gardens.",
+    description: "Prague is a vibrant destination blending city, culture. Fairytale spires, cobbled lanes, and riverside beer gardens. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Czechia.",
+    coordinates: {"lat":50.0755,"lng":14.4378},
+    dna: { adventure: 49, culture: 69, food: 73, nature: 49, nightlife: 53, budgetFriendly: 85 },
+    budget: { accommodation: 3000, food: 1800, transport: 1200 },
+    travelTips: ["Avoid exchanging money at the airport.","Walk across Charles Bridge at sunrise."],
+    hiddenGems: [
+      { title: "Vysehrad", description: "A historic fort with fewer tourists.", image: "go/destinations/prague/gem1" },
+      { title: "Letna Park", description: "Beer gardens with sweeping city views.", image: "go/destinations/prague/gem2" }
+    ],
+    nearby: [
+      { name: "Kutna Hora", distanceKm: 80, image: "go/destinations/prague/near1" },
+      { name: "Cesky Krumlov", distanceKm: 170, image: "go/destinations/prague/near2" },
+      { name: "Karlovy Vary", distanceKm: 130, image: "go/destinations/prague/near3" }
+    ],
+    media: media("prague"),
+    categories: ["City","Culture"],
+    bestSeason: "May–Sep"
+  },
+  {
+    slug: "vienna",
+    name: "Vienna",
+    country: "Austria",
+    region: "Europe",
+    summary: "Imperial palaces, coffee houses, and effortless old-world elegance.",
+    description: "Vienna is a vibrant destination blending city, culture, luxury. Imperial palaces, coffee houses, and effortless old-world elegance. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Austria.",
+    coordinates: {"lat":48.2082,"lng":16.3738},
+    dna: { adventure: 54, culture: 77, food: 72, nature: 51, nightlife: 87, budgetFriendly: 35 },
+    budget: { accommodation: 4500, food: 2700, transport: 1800 },
+    travelTips: ["Stand on the right on escalators.","Visit coffee houses for a slow, traditional experience."],
+    hiddenGems: [
+      { title: "Hundertwasserhaus", description: "Quirky, colorful apartment building.", image: "go/destinations/vienna/gem1" },
+      { title: "Kahlenberg", description: "A hill offering views of the whole city.", image: "go/destinations/vienna/gem2" }
+    ],
+    nearby: [
+      { name: "Bratislava", distanceKm: 80, image: "go/destinations/vienna/near1" },
+      { name: "Salzburg", distanceKm: 295, image: "go/destinations/vienna/near2" },
+      { name: "Budapest", distanceKm: 240, image: "go/destinations/vienna/near3" }
+    ],
+    media: media("vienna"),
+    categories: ["City","Culture","Luxury"],
+    bestSeason: "Apr–May & Sep–Oct"
+  },
+  {
+    slug: "san-francisco",
+    name: "San Francisco",
+    country: "United States",
+    region: "North America",
+    summary: "Fog-wrapped hills, the Golden Gate, and a serious food scene.",
+    description: "San Francisco is a vibrant destination blending city, nature, food. Fog-wrapped hills, the Golden Gate, and a serious food scene. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in United States.",
+    coordinates: {"lat":37.7749,"lng":-122.4194},
+    dna: { adventure: 77, culture: 51, food: 64, nature: 73, nightlife: 76, budgetFriendly: 35 },
+    budget: { accommodation: 7500, food: 4500, transport: 3000 },
+    travelTips: ["Pack layers; the fog rolls in quickly.","Use Clipper cards for transit."],
+    hiddenGems: [
+      { title: "Sutro Baths", description: "Ruins of a massive public bathhouse.", image: "go/destinations/san-francisco/gem1" },
+      { title: "Mosaic Steps", description: "Beautifully tiled stairways.", image: "go/destinations/san-francisco/gem2" }
+    ],
+    nearby: [
+      { name: "Sausalito", distanceKm: 15, image: "go/destinations/san-francisco/near1" },
+      { name: "Muir Woods", distanceKm: 25, image: "go/destinations/san-francisco/near2" },
+      { name: "Napa Valley", distanceKm: 80, image: "go/destinations/san-francisco/near3" }
+    ],
+    media: media("san-francisco"),
+    categories: ["City","Nature","Food"],
+    bestSeason: "Sep–Nov"
+  },
+  {
+    slug: "vancouver",
+    name: "Vancouver",
+    country: "Canada",
+    region: "North America",
+    summary: "Where rainforest, ocean, and mountains meet a glass skyline.",
+    description: "Vancouver is a vibrant destination blending city, nature, adventure. Where rainforest, ocean, and mountains meet a glass skyline. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Canada.",
+    coordinates: {"lat":49.2827,"lng":-123.1207},
+    dna: { adventure: 63, culture: 55, food: 81, nature: 72, nightlife: 57, budgetFriendly: 35 },
+    budget: { accommodation: 6000, food: 3600, transport: 2400 },
+    travelTips: ["Bring an umbrella, it rains often.","Rent a bike to ride around Stanley Park."],
+    hiddenGems: [
+      { title: "Lynn Canyon", description: "A free suspension bridge.", image: "go/destinations/vancouver/gem1" },
+      { title: "Granville Island", description: "A bustling public market.", image: "go/destinations/vancouver/gem2" }
+    ],
+    nearby: [
+      { name: "Whistler", distanceKm: 120, image: "go/destinations/vancouver/near1" },
+      { name: "Victoria", distanceKm: 110, image: "go/destinations/vancouver/near2" },
+      { name: "Squamish", distanceKm: 65, image: "go/destinations/vancouver/near3" }
+    ],
+    media: media("vancouver"),
+    categories: ["City","Nature","Adventure"],
+    bestSeason: "Jun–Sep"
+  },
+  {
+    slug: "toronto",
+    name: "Toronto",
+    country: "Canada",
+    region: "North America",
+    summary: "Canada's most diverse city — neighborhoods, galleries, and food.",
+    description: "Toronto is a vibrant destination blending city, culture, food. Canada's most diverse city — neighborhoods, galleries, and food. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Canada.",
+    coordinates: {"lat":43.6532,"lng":-79.3832},
+    dna: { adventure: 57, culture: 60, food: 78, nature: 76, nightlife: 74, budgetFriendly: 35 },
+    budget: { accommodation: 5500, food: 3300, transport: 2200 },
+    travelTips: ["Use the PATH underground network in winter.","Visit the St. Lawrence Market for lunch."],
+    hiddenGems: [
+      { title: "Distillery District", description: "Pedestrian-only village of brick buildings.", image: "go/destinations/toronto/gem1" },
+      { title: "Toronto Islands", description: "A peaceful escape with skyline views.", image: "go/destinations/toronto/gem2" }
+    ],
+    nearby: [
+      { name: "Niagara Falls", distanceKm: 130, image: "go/destinations/toronto/near1" },
+      { name: "Algonquin Park", distanceKm: 270, image: "go/destinations/toronto/near2" },
+      { name: "Prince Edward County", distanceKm: 200, image: "go/destinations/toronto/near3" }
+    ],
+    media: media("toronto"),
+    categories: ["City","Culture","Food"],
+    bestSeason: "May–Oct"
+  },
+  {
+    slug: "chicago",
+    name: "Chicago",
+    country: "United States",
+    region: "North America",
+    summary: "Bold architecture, lakefront beaches, and deep-dish everything.",
+    description: "Chicago is a vibrant destination blending city, culture, food. Bold architecture, lakefront beaches, and deep-dish everything. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in United States.",
+    coordinates: {"lat":41.8781,"lng":-87.6298},
+    dna: { adventure: 74, culture: 66, food: 52, nature: 79, nightlife: 66, budgetFriendly: 35 },
+    budget: { accommodation: 5500, food: 3300, transport: 2200 },
+    travelTips: ["Take the Architecture River Tour.","Dress warmly if visiting near the lake in winter."],
+    hiddenGems: [
+      { title: "Garfield Park Conservatory", description: "One of the largest in the US.", image: "go/destinations/chicago/gem1" },
+      { title: "The 606", description: "An elevated trail for biking and walking.", image: "go/destinations/chicago/gem2" }
+    ],
+    nearby: [
+      { name: "Milwaukee", distanceKm: 145, image: "go/destinations/chicago/near1" },
+      { name: "Starved Rock", distanceKm: 150, image: "go/destinations/chicago/near2" },
+      { name: "Lake Geneva", distanceKm: 130, image: "go/destinations/chicago/near3" }
+    ],
+    media: media("chicago"),
+    categories: ["City","Culture","Food"],
+    bestSeason: "May–Oct"
+  },
+  {
+    slug: "sydney",
+    name: "Sydney",
+    country: "Australia",
+    region: "Oceania",
+    summary: "Iconic harbor, golden beaches, and an easy outdoor lifestyle.",
+    description: "Sydney is a vibrant destination blending city, beach, nature. Iconic harbor, golden beaches, and an easy outdoor lifestyle. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Australia.",
+    coordinates: {"lat":-33.8688,"lng":151.2093},
+    dna: { adventure: 51, culture: 82, food: 82, nature: 40, nightlife: 69, budgetFriendly: 35 },
+    budget: { accommodation: 6000, food: 3600, transport: 2400 },
+    travelTips: ["Use an Opal card for ferries and trains.","Swim between the red and yellow flags at the beach."],
+    hiddenGems: [
+      { title: "Wendys Secret Garden", description: "A hidden oasis overlooking the harbor.", image: "go/destinations/sydney/gem1" },
+      { title: "Glebe Markets", description: "Vintage clothes and local food.", image: "go/destinations/sydney/gem2" }
+    ],
+    nearby: [
+      { name: "Blue Mountains", distanceKm: 100, image: "go/destinations/sydney/near1" },
+      { name: "Hunter Valley", distanceKm: 250, image: "go/destinations/sydney/near2" },
+      { name: "Bondi Beach", distanceKm: 10, image: "go/destinations/sydney/near3" }
+    ],
+    media: media("sydney"),
+    categories: ["City","Beach","Nature"],
+    bestSeason: "Sep–Nov & Mar–May"
+  },
+  {
+    slug: "melbourne",
+    name: "Melbourne",
+    country: "Australia",
+    region: "Oceania",
+    summary: "Laneway cafés, street art, and Australia's culture capital.",
+    description: "Melbourne is a vibrant destination blending city, culture, food. Laneway cafés, street art, and Australia's culture capital. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Australia.",
+    coordinates: {"lat":-37.8136,"lng":144.9631},
+    dna: { adventure: 51, culture: 81, food: 61, nature: 76, nightlife: 54, budgetFriendly: 35 },
+    budget: { accommodation: 5500, food: 3300, transport: 2200 },
+    travelTips: ["Trams in the CBD are free.","Explore the hidden laneways for the best coffee."],
+    hiddenGems: [
+      { title: "ACMI", description: "Museum of screen culture.", image: "go/destinations/melbourne/gem1" },
+      { title: "Abbotsford Convent", description: "Arts and cultural precinct.", image: "go/destinations/melbourne/gem2" }
+    ],
+    nearby: [
+      { name: "Great Ocean Road", distanceKm: 100, image: "go/destinations/melbourne/near1" },
+      { name: "Yarra Valley", distanceKm: 50, image: "go/destinations/melbourne/near2" },
+      { name: "Phillip Island", distanceKm: 140, image: "go/destinations/melbourne/near3" }
+    ],
+    media: media("melbourne"),
+    categories: ["City","Culture","Food"],
+    bestSeason: "Mar–May & Sep–Nov"
+  },
+  {
+    slug: "queenstown",
+    name: "Queenstown",
+    country: "New Zealand",
+    region: "Oceania",
+    summary: "The adventure capital — alpine lakes, peaks, and adrenaline.",
+    description: "Queenstown is a vibrant destination blending nature, adventure. The adventure capital — alpine lakes, peaks, and adrenaline. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in New Zealand.",
+    coordinates: {"lat":-45.0312,"lng":168.6626},
+    dna: { adventure: 64, culture: 87, food: 69, nature: 66, nightlife: 81, budgetFriendly: 35 },
+    budget: { accommodation: 6500, food: 3900, transport: 2600 },
+    travelTips: ["Book adventure activities in advance.","Rent a car to explore the surrounding lakes."],
+    hiddenGems: [
+      { title: "Moke Lake", description: "A stunningly reflective lake.", image: "go/destinations/queenstown/gem1" },
+      { title: "Arrowtown", description: "A historic gold mining town.", image: "go/destinations/queenstown/gem2" }
+    ],
+    nearby: [
+      { name: "Milford Sound", distanceKm: 290, image: "go/destinations/queenstown/near1" },
+      { name: "Wanaka", distanceKm: 70, image: "go/destinations/queenstown/near2" },
+      { name: "Glenorchy", distanceKm: 45, image: "go/destinations/queenstown/near3" }
+    ],
+    media: media("queenstown"),
+    categories: ["Nature","Adventure"],
+    bestSeason: "Dec–Feb & Jun–Aug"
+  },
+  {
+    slug: "dubai",
+    name: "Dubai",
+    country: "United Arab Emirates",
+    region: "Middle East",
+    summary: "Desert futurism — record-breaking towers, malls, and beaches.",
+    description: "Dubai is a vibrant destination blending city, luxury, beach. Desert futurism — record-breaking towers, malls, and beaches. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in United Arab Emirates.",
+    coordinates: {"lat":25.2048,"lng":55.2708},
+    dna: { adventure: 48, culture: 77, food: 52, nature: 70, nightlife: 41, budgetFriendly: 35 },
+    budget: { accommodation: 8000, food: 4800, transport: 3200 },
+    travelTips: ["Dress modestly in public areas.","Taxis are cheap, use them to get around."],
+    hiddenGems: [
+      { title: "Al Fahidi", description: "The historic district of Dubai.", image: "go/destinations/dubai/gem1" },
+      { title: "Kite Beach", description: "A relaxed beach spot for water sports.", image: "go/destinations/dubai/gem2" }
+    ],
+    nearby: [
+      { name: "Abu Dhabi", distanceKm: 140, image: "go/destinations/dubai/near1" },
+      { name: "Sharjah", distanceKm: 30, image: "go/destinations/dubai/near2" },
+      { name: "Hatta", distanceKm: 130, image: "go/destinations/dubai/near3" }
+    ],
+    media: media("dubai"),
+    categories: ["City","Luxury","Beach"],
+    bestSeason: "Nov–Mar"
+  },
+  {
+    slug: "istanbul",
+    name: "Istanbul",
+    country: "Türkiye",
+    region: "Middle East",
+    summary: "Two continents, grand bazaars, and Byzantine-Ottoman splendor.",
+    description: "Istanbul is a vibrant destination blending city, culture, food. Two continents, grand bazaars, and Byzantine-Ottoman splendor. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Türkiye.",
+    coordinates: {"lat":41.0082,"lng":28.9784},
+    dna: { adventure: 44, culture: 88, food: 57, nature: 65, nightlife: 86, budgetFriendly: 85 },
+    budget: { accommodation: 3000, food: 1800, transport: 1200 },
+    travelTips: ["Carry a scarf for mosque visits.","Bargain at the Grand Bazaar, but not in boutiques."],
+    hiddenGems: [
+      { title: "Balat", description: "Colorful houses and cafes.", image: "go/destinations/istanbul/gem1" },
+      { title: "Camlica Hill", description: "The highest point in Istanbul.", image: "go/destinations/istanbul/gem2" }
+    ],
+    nearby: [
+      { name: "Bursa", distanceKm: 150, image: "go/destinations/istanbul/near1" },
+      { name: "Princes Islands", distanceKm: 20, image: "go/destinations/istanbul/near2" },
+      { name: "Edirne", distanceKm: 240, image: "go/destinations/istanbul/near3" }
+    ],
+    media: media("istanbul"),
+    categories: ["City","Culture","Food"],
+    bestSeason: "Apr–May & Sep–Nov"
+  },
+  {
+    slug: "cape-town",
+    name: "Cape Town",
+    country: "South Africa",
+    region: "Africa",
+    summary: "Table Mountain, wine country, and dramatic coastal drives.",
+    description: "Cape Town is a vibrant destination blending nature, beach, adventure. Table Mountain, wine country, and dramatic coastal drives. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in South Africa.",
+    coordinates: {"lat":-33.9249,"lng":18.4241},
+    dna: { adventure: 43, culture: 63, food: 54, nature: 53, nightlife: 52, budgetFriendly: 35 },
+    budget: { accommodation: 4500, food: 2700, transport: 1800 },
+    travelTips: ["Use Uber rather than hailing taxis.","Check the wind before going up Table Mountain."],
+    hiddenGems: [
+      { title: "Kalk Bay", description: "A vibrant fishing village.", image: "go/destinations/cape-town/gem1" },
+      { title: "Woodstock", description: "A hip neighborhood known for street art.", image: "go/destinations/cape-town/gem2" }
+    ],
+    nearby: [
+      { name: "Stellenbosch", distanceKm: 50, image: "go/destinations/cape-town/near1" },
+      { name: "Cape of Good Hope", distanceKm: 70, image: "go/destinations/cape-town/near2" },
+      { name: "Franschhoek", distanceKm: 80, image: "go/destinations/cape-town/near3" }
+    ],
+    media: media("cape-town"),
+    categories: ["Nature","Beach","Adventure"],
+    bestSeason: "Nov–Mar"
+  },
+  {
+    slug: "marrakech",
+    name: "Marrakech",
+    country: "Morocco",
+    region: "Africa",
+    summary: "Souk mazes, riad courtyards, and the edge of the Sahara.",
+    description: "Marrakech is a vibrant destination blending culture, adventure, luxury. Souk mazes, riad courtyards, and the edge of the Sahara. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Morocco.",
+    coordinates: {"lat":31.6295,"lng":-7.9811},
+    dna: { adventure: 41, culture: 66, food: 69, nature: 39, nightlife: 84, budgetFriendly: 85 },
+    budget: { accommodation: 3000, food: 1800, transport: 1200 },
+    travelTips: ["Agree on taxi fares before getting in.","Get lost in the Medina, it is part of the fun."],
+    hiddenGems: [
+      { title: "Le Jardin Secret", description: "A beautifully restored palace garden.", image: "go/destinations/marrakech/gem1" },
+      { title: "Maison de la Photographie", description: "A museum showcasing Moroccan history.", image: "go/destinations/marrakech/gem2" }
+    ],
+    nearby: [
+      { name: "Atlas Mountains", distanceKm: 60, image: "go/destinations/marrakech/near1" },
+      { name: "Essaouira", distanceKm: 190, image: "go/destinations/marrakech/near2" },
+      { name: "Agafay Desert", distanceKm: 30, image: "go/destinations/marrakech/near3" }
+    ],
+    media: media("marrakech"),
+    categories: ["Culture","Adventure","Luxury"],
+    bestSeason: "Mar–May & Sep–Nov"
+  }
 ];
 
-export function getExploreDestination(
-  slug: string,
-): ExploreDestination | undefined {
+export function getExploreDestination(slug: string): Destination | undefined {
   return EXPLORE_DESTINATIONS.find((d) => d.slug === slug);
 }
 
-export function exploreToSummary(d: ExploreDestination): DestinationSummary {
-  return {
-    slug: d.slug,
-    name: d.name,
-    country: d.country,
-    region: d.region,
-    summary: d.summary,
-    thumbnail: d.thumbnail,
-    categories: d.categories,
-  };
+export function exploreToSummary(d: Destination): DestinationSummary {
+  return toSummary(d);
 }
 
 /** All destination objects (both tiers) — for deriving facets. */
-export const ALL_DESTINATIONS: Array<Destination | ExploreDestination> = [
+export const ALL_DESTINATIONS: Destination[] = [
   ...DESTINATIONS,
   ...EXPLORE_DESTINATIONS,
 ];
@@ -318,9 +771,12 @@ export const ALL_DESTINATION_SLUGS = [
   ...EXPLORE_DESTINATIONS.map((d) => d.slug),
 ];
 
+/** Unified getDestination searches ALL tiers. */
+export function getDestination(slug: string): Destination | undefined {
+  return ALL_DESTINATIONS.find((d) => d.slug === slug);
+}
+
 /** Per-day budget in cents for any tier (featured = sum of breakdown). */
-export function budgetPerDayFor(d: Destination | ExploreDestination): number {
-  return "budget" in d
-    ? d.budget.accommodation + d.budget.food + d.budget.transport
-    : d.budgetPerDay;
+export function budgetPerDayFor(d: Destination): number {
+  return d.budget.accommodation + d.budget.food + d.budget.transport;
 }
