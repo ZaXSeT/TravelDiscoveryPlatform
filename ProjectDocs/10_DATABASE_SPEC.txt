@@ -1,0 +1,25 @@
+DATABASE TABLES
+
+profiles
+destinations
+wishlists
+itineraries
+itinerary_days
+itinerary_items
+journals
+journal_images
+
+RULES
+
+Use UUID primary keys.
+
+All user-generated content references auth.users.id.
+
+Soft delete only for journals.
+
+Every table requires:
+
+created_at
+updated_at
+
+RLS enabled on all user tables.

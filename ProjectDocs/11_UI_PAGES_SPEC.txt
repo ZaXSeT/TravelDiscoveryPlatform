@@ -1,0 +1,49 @@
+HOMEPAGE
+
+1 Hero
+2 Interactive Globe
+3 Featured Destinations
+4 Categories
+5 Travel Inspiration
+6 CTA
+
+EXPLORE PAGE
+
+1 Search
+2 Filters
+3 Destination Grid
+
+DESTINATION PAGE
+
+1 Hero
+2 Overview
+3 Travel DNA
+4 Budget
+5 Gallery
+6 Hidden Gems
+7 Nearby Attractions
+8 Map
+9 Related Destinations
+
+ITINERARY PAGE
+
+1 Planner
+2 Timeline
+3 Budget Summary
+
+WISHLIST PAGE
+
+1 Saved Destinations
+2 Quick Actions
+
+JOURNAL PAGE
+
+1 Journal Feed
+2 Create Journal
+3 Edit Journal
+
+PROFILE PAGE
+
+1 User Info
+2 Saved Stats
+3 Recent Activity

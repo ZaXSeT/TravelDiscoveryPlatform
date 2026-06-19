@@ -1,0 +1,171 @@
+JUDGE DEMO FLOW
+
+Objective
+
+The platform must be demonstrable in a 5–10 minute judging session.
+
+The demo should showcase both product functionality and premium user experience.
+
+---
+
+Demo Scenario
+
+Step 1 — Landing Experience
+
+Open Homepage
+
+Judge should immediately see:
+
+* Cinematic Hero
+* Premium Visual Design
+* Interactive Globe
+* Featured Destinations
+
+Expected Impression:
+
+"This looks polished and professional."
+
+---
+
+Step 2 — Explore
+
+Navigate to Explore Page.
+
+Judge should be able to:
+
+* Search destinations
+* Filter destinations
+* Browse destination cards
+
+Expected Impression:
+
+"This is easy to use."
+
+---
+
+Step 3 — Destination Discovery
+
+Open Bali destination.
+
+Judge should see:
+
+* Hero section
+* Gallery
+* Travel DNA
+* Budget estimate
+* Hidden gems
+* Nearby attractions
+* Interactive map
+
+Expected Impression:
+
+"This contains useful travel information."
+
+---
+
+Step 4 — Authentication
+
+Register or Login.
+
+Expected Impression:
+
+"This is a real application."
+
+---
+
+Step 5 — Wishlist
+
+Save Bali to Wishlist.
+
+Navigate to Wishlist page.
+
+Refresh page.
+
+Wishlist data must persist.
+
+Expected Impression:
+
+"Data is actually stored."
+
+---
+
+Step 6 — Itinerary Planner
+
+Create a new itinerary.
+
+Add activities.
+
+Save itinerary.
+
+Reload page.
+
+Itinerary must persist.
+
+Expected Impression:
+
+"This feature is production-like."
+
+---
+
+Step 7 — Travel Journal
+
+Create journal.
+
+Upload image.
+
+Edit journal.
+
+Delete journal.
+
+Expected Impression:
+
+"CRUD operations are complete."
+
+---
+
+Step 8 — Profile
+
+View profile.
+
+See:
+
+* User information
+* Saved destinations
+* Itineraries
+* Journals
+
+Expected Impression:
+
+"The ecosystem is connected."
+
+---
+
+Demo Success Criteria
+
+The judge can:
+
+* Browse destinations
+* Save wishlist items
+* Create itineraries
+* Manage journals
+* View profile data
+
+without encountering:
+
+* broken navigation
+* missing pages
+* fake buttons
+* lost data
+* unfinished flows
+
+---
+
+Final Impression Goal
+
+The platform should feel like:
+
+* a real travel product
+* a complete user experience
+* a competition-ready submission
+
+not a UI mockup or design prototype.

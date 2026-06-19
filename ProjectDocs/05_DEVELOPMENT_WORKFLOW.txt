@@ -1,0 +1,61 @@
+WORKFLOW
+
+Phase 1
+
+Planning
+
+Generate:
+
+- PRD
+- Architecture
+- Database
+- User Flows
+- Folder Structure
+
+No code.
+
+Phase 2
+
+Frontend
+
+Generate:
+
+- complete files
+- file path
+- purpose
+- implementation
+
+Phase 3
+
+Backend
+
+Generate:
+
+- schema
+- auth
+- storage
+- CRUD
+
+Phase 4
+
+Integration
+
+Connect:
+
+- auth
+- wishlist
+- itinerary
+- journal
+
+Phase 5
+
+Deployment
+
+Generate:
+
+- SEO
+- Sitemap
+- Robots
+- Production checklist
+
+Never skip phases.

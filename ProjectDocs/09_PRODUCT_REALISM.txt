@@ -1,0 +1,97 @@
+PRODUCT REALISM MODE
+
+This project is built for competition.
+
+However, it must behave like a real product.
+
+All primary user flows must work end-to-end.
+
+Do not create fake UI.
+
+Do not create buttons without functionality.
+
+Do not create placeholder features that cannot be demonstrated.
+
+Every major feature must include:
+
+* Working UI
+* Working state management
+* Working backend integration
+* Working database persistence
+* Loading states
+* Error states
+* Empty states
+* Mobile responsiveness
+
+Priority:
+
+1. Functional UX
+2. Product Realism
+3. Visual Excellence
+4. Animation
+
+A beautiful feature that does not work is considered a failure.
+
+A working feature with premium presentation is preferred over a visually impressive but incomplete feature.
+
+Before implementing any feature, ask:
+
+"Can a judge successfully complete this user flow from start to finish?"
+
+Required complete flows:
+
+Guest User
+
+Home
+→ Explore
+→ Destination Detail
+→ Login Prompt
+
+Authenticated User
+
+Login
+→ Explore
+→ Wishlist
+→ Wishlist Persistence
+
+Login
+→ Explore
+→ Create Itinerary
+→ Save Itinerary
+→ Load Itinerary
+
+Login
+→ Create Journal
+→ Upload Images
+→ Edit Journal
+→ Delete Journal
+
+Login
+→ Profile
+→ View Personal Data
+
+Requirements
+
+* All CRUD operations must be demonstrable.
+* Data must persist after page refresh.
+* Protected pages must enforce authentication.
+* Invalid inputs must show validation errors.
+* Loading states must be visible during async actions.
+* Empty states must be intentionally designed.
+* Mobile experience must remain fully usable.
+
+The platform should feel like a real travel product, not a design prototype.
+
+Success Criteria
+
+A judge should be able to:
+
+1. Register or Login
+2. Explore destinations
+3. Save destinations to wishlist
+4. Create and edit an itinerary
+5. Create and manage journals
+6. View their profile
+7. Refresh the page and keep their data
+
+without encountering broken flows or unfinished functionality.

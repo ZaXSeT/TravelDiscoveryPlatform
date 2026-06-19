@@ -1,0 +1,28 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+
+# Next.js / build output (Phase 2+)
+.next/
+out/
+build/
+dist/
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
+
+# Playwright e2e
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log

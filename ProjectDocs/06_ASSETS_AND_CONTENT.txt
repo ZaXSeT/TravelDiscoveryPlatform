@@ -1,0 +1,54 @@
+DESTINATIONS
+
+1. Bali
+2. Tokyo
+3. Paris
+4. New York
+5. Switzerland
+
+Each destination requires:
+
+- Hero
+- Thumbnail
+- 4 Gallery Images
+- Video
+- Budget
+- Travel Tips
+- Hidden Gems
+- Nearby Attractions
+- Coordinates
+
+ASSET STRUCTURE
+
+public/
+
+images/
+destinations/
+
+bali/
+tokyo/
+paris/
+newyork/
+swiss/
+
+videos/
+hero/
+
+textures/
+
+Textures
+
+- earth-day.jpg
+- earth-bump.jpg
+- earth-clouds.png
+- stars.jpg
+
+Create:
+
+src/constants/assets.ts
+
+Rules
+
+- No hardcoded paths
+- Single source of truth
+- Easy replacement

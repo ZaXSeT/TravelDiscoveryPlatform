@@ -1,0 +1,25 @@
+Design Inspiration
+
+Apple
+Airbnb
+Lusion
+Resn
+Active Theory
+Awwwards Travel Winners
+
+Principles
+
+- Large typography
+- Cinematic imagery
+- Scroll storytelling
+- Layered depth
+- Strong visual hierarchy
+- Generous whitespace
+- Emotional presentation
+
+Avoid
+
+- Dashboard layouts
+- Dense cards
+- Enterprise UI
+- Generic SaaS patterns

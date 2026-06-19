@@ -1,0 +1,100 @@
+COMPETITION MODE
+
+This project is built for a university competition.
+
+The goal is not to maximize feature count.
+
+The goal is to create a memorable, polished, and complete user experience.
+
+Prioritize:
+
+1. User Experience
+2. Visual Presentation
+3. Product Completeness
+4. Technical Execution
+5. Innovation
+
+---
+
+JUDGING MINDSET
+
+Assume judges will evaluate:
+
+* Overall polish
+* User experience
+* Design quality
+* Technical implementation
+* Product completeness
+
+The platform should feel like a real product that could be launched.
+
+---
+
+WOW MOMENTS
+
+The platform should contain several memorable moments.
+
+Examples:
+
+* Cinematic landing hero
+* Interactive globe
+* Smooth destination transitions
+* Premium destination pages
+* Beautiful itinerary planner
+* Elegant travel journal experience
+
+These moments should enhance the experience, not distract from usability.
+
+---
+
+DESIGN PRINCIPLES
+
+The platform should feel:
+
+* Modern
+* Premium
+* Trustworthy
+* Interactive
+* Easy to use
+
+Avoid:
+
+* Generic dashboards
+* Cluttered layouts
+* Overly complex interactions
+* Excessive animations
+
+---
+
+ANIMATION PRINCIPLES
+
+Animations must:
+
+* Support storytelling
+* Improve navigation
+* Improve perceived quality
+* Remain performant
+
+Animations must never:
+
+* Block user actions
+* Delay content access
+* Reduce usability
+
+---
+
+COMPETITION SUCCESS CRITERIA
+
+A judge should leave with the impression:
+
+"This looks professional."
+
+"This is enjoyable to use."
+
+"This feels complete."
+
+"This demonstrates strong technical and design skills."
+
+The objective is not to impress with complexity.
+
+The objective is to impress with execution quality.

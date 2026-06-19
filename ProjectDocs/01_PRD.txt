@@ -1,0 +1,66 @@
+PROJECT
+
+Travel Discovery Platform
+
+Purpose:
+
+- discover destinations
+- hidden gems
+- itinerary planning
+- travel budgeting
+- wishlist
+- travel journals
+
+Goal:
+
+Users should feel:
+
+"I want to travel there."
+
+and
+
+"This is easy to use."
+
+UX has higher priority than visual complexity.
+
+Target inspiration:
+
+- Apple
+- Airbnb Editorial
+- National Geographic
+- Lusion
+- Awwwards travel websites
+
+Not a SaaS dashboard.
+
+CORE FEATURES
+
+- Explore Destinations
+- Destination Detail
+- Interactive Globe
+- Itinerary Planner
+- Wishlist
+- Travel Journal
+- User Profile
+
+USER FLOW
+
+Homepage
+→ Explore
+→ Destination
+→ Wishlist
+→ Itinerary
+→ Journal
+→ Profile
+
+Guest:
+
+Browse only
+
+User:
+
+Can save content
+
+Admin:
+
+Manage destination content

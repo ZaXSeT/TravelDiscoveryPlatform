@@ -1,0 +1,29 @@
+COMPONENT RULES
+
+Prefer reusable components.
+
+Avoid duplicate code.
+
+All sections must support:
+
+- loading state
+- error state
+- empty state
+
+Use:
+
+SectionHeader
+PageContainer
+AnimatedReveal
+DestinationCard
+BudgetCard
+TravelDNACard
+MapSection
+
+Animation logic must be separated from business logic.
+
+Keep components small and composable.
+
+Target:
+
+< 300 lines per component when possible.

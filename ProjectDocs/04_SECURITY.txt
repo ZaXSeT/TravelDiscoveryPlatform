@@ -1,0 +1,38 @@
+SECURITY REQUIREMENTS
+
+Implement:
+
+- RLS
+- RBAC
+- Route middleware
+- Auth guards
+- Zod validation
+- Input sanitization
+- XSS protection
+- CSRF protection
+- Rate limiting
+- Secure uploads
+
+Roles
+
+Guest
+
+- Read only
+
+User
+
+- CRUD own content
+
+Admin
+
+- Manage destinations
+
+Rules
+
+Users must never access other users data.
+
+Use:
+
+- signed uploads
+- secure storage
+- environment isolation

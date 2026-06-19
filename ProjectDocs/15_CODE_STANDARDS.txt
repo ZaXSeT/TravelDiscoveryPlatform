@@ -1,0 +1,22 @@
+Code Standards
+
+TypeScript strict mode
+
+Prefer:
+- server components
+- reusable hooks
+- reusable ui components
+
+Avoid:
+- duplicated code
+- inline business logic
+- large components
+
+Target:
+<300 lines/component
+<100 lines/hook
+
+Use:
+- constants
+- utilities
+- composition

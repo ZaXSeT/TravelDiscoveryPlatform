@@ -1,0 +1,55 @@
+STACK
+
+Frontend
+
+- Next.js 15
+- TypeScript
+- Tailwind
+- Shadcn
+- GSAP
+- Framer Motion
+- Lenis
+- Three.js
+- R3F
+- Drei
+
+Backend
+
+- Supabase
+- PostgreSQL
+- Supabase Auth
+- Supabase Storage
+
+Media
+
+- Cloudinary
+
+Map
+
+- Leaflet
+- OpenStreetMap
+
+Deployment
+
+- Vercel
+
+Testing
+
+- Playwright
+
+PERFORMANCE TARGET
+
+Lighthouse
+
+Performance >= 90
+Accessibility >= 95
+Best Practices >= 95
+SEO >= 95
+
+Required
+
+- Dynamic imports
+- Lazy loading
+- Code splitting
+- Image optimization
+- Video optimization

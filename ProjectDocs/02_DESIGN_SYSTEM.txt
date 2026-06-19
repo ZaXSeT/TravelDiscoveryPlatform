@@ -1,0 +1,85 @@
+DESIGN SYSTEM
+
+Theme:
+
+Modern Luxury Travel
+
+Style:
+
+- Editorial
+- Premium
+- Minimal
+- Spacious
+- Cinematic
+
+Colors
+
+Background
+
+#FFFFFF
+#F8F7F4
+#F1EFEA
+
+Text
+
+#111111
+#2A2A2A
+#555555
+
+Accent
+
+#C8A97E
+#3B82F6
+#2E8B57
+
+Typography
+
+Heading
+
+- Clash Display
+- Satoshi
+
+Body
+
+- Inter
+
+Dark Sections
+
+Only:
+
+- Hero
+- Globe
+- Cinematic Sections
+
+Navbar
+
+Desktop:
+
+- Transparent
+- Glass on scroll
+- Sticky
+
+Mobile:
+
+- Fullscreen menu
+
+Animations
+
+GSAP
+
+- Split text
+- Stagger reveal
+- Image reveal
+- Parallax
+- Pinning
+
+Framer Motion
+
+- Page transitions
+- Hover interactions
+
+Lenis
+
+- Smooth scrolling
+
+Animations must improve UX.

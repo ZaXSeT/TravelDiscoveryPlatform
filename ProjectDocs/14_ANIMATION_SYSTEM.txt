@@ -1,0 +1,18 @@
+GSAP Standards
+
+Hero:
+- split text
+- stagger reveal
+
+Scroll:
+- parallax
+- pinning
+- image reveal
+
+Page transitions:
+- Framer Motion
+
+Rules:
+- animation supports UX
+- animation never blocks interaction
+- mobile uses reduced motion when necessary
