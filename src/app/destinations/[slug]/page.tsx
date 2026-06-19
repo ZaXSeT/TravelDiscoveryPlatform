@@ -12,16 +12,19 @@ import { NearbyList } from "@/features/destinations/components/nearby-list";
 import { RelatedDestinations } from "@/features/destinations/components/related-destinations";
 import { MapSection } from "@/features/destinations/components/map-section";
 import { SaveButton } from "@/features/wishlist/components/save-button";
+import { ExploreDestinationDetail } from "@/features/destinations/components/explore-destination-detail";
 import {
-  DESTINATION_SLUGS,
+  ALL_DESTINATION_SLUGS,
   getDestination,
+  getExploreDestination,
+  getFeatured,
   getRelated,
 } from "@/constants/destinations";
 
-export const dynamicParams = false; // only the 5 seeded slugs are valid
+export const dynamicParams = false; // only known slugs (both tiers) are valid
 
 export function generateStaticParams() {
-  return DESTINATION_SLUGS.map((slug) => ({ slug }));
+  return ALL_DESTINATION_SLUGS.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -30,7 +33,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const d = getDestination(slug);
+  const d = getDestination(slug) ?? getExploreDestination(slug);
   if (!d) return {};
   return {
     title: `${d.name}, ${d.country}`,
@@ -50,7 +53,15 @@ export default async function DestinationPage({
 }) {
   const { slug } = await params;
   const d = getDestination(slug);
-  if (!d) notFound();
+
+  // Tier 2 (Explore) destinations get the lightweight detail view.
+  if (!d) {
+    const explore = getExploreDestination(slug);
+    if (!explore) notFound();
+    return (
+      <ExploreDestinationDetail destination={explore} featured={getFeatured()} />
+    );
+  }
 
   const related = getRelated(slug);
 

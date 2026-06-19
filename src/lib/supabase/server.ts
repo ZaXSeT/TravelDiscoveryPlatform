@@ -37,3 +37,10 @@ export async function createSupabaseServerClient() {
 export type SupabaseServerClient = Awaited<
   ReturnType<typeof createSupabaseServerClient>
 >;
+
+// True only when Supabase env vars are present. Lets public pages degrade gracefully
+// (e.g. show an empty journal feed) when running locally without a configured project.
+export const isSupabaseConfigured = Boolean(
+  process.env.NEXT_PUBLIC_SUPABASE_URL &&
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+);

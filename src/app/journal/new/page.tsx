@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/auth/require-user";
 import { routes } from "@/constants/routes";
 
 export const metadata: Metadata = { title: "New journal" };
+export const dynamic = "force-dynamic"; // auth-protected
 
 export default async function NewJournalPage() {
   await requireUser(routes.journalNew);

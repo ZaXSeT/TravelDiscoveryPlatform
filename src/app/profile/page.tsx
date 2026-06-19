@@ -19,6 +19,7 @@ import { routes } from "@/constants/routes";
 import type { Destination } from "@/types";
 
 export const metadata: Metadata = { title: "Profile" };
+export const dynamic = "force-dynamic"; // per-user, auth-protected
 
 function Stat({ label, value }: { label: string; value: number }) {
   return (

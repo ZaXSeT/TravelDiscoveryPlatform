@@ -6,7 +6,10 @@ import { SectionHeader } from "@/components/layout/section-header";
 import { Button } from "@/components/ui/button";
 import { JournalFeed } from "@/features/journal/components/journal-feed";
 import type { JournalSummary } from "@/features/journal/types";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import {
+  createSupabaseServerClient,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import { routes } from "@/constants/routes";
 
 export const metadata: Metadata = {
@@ -15,16 +18,19 @@ export const metadata: Metadata = {
 };
 
 export default async function JournalPage() {
-  const supabase = await createSupabaseServerClient();
-  // Explicit public + non-deleted filter so a signed-in user's own drafts never leak in.
-  const { data } = await supabase
-    .from("journals")
-    .select("id, slug, title, excerpt, author_label, cover_path, is_seed")
-    .eq("visibility", "public")
-    .is("deleted_at", null)
-    .order("published_at", { ascending: false });
+  let journals: JournalSummary[] = [];
 
-  const journals: JournalSummary[] = data ?? [];
+  if (isSupabaseConfigured) {
+    const supabase = await createSupabaseServerClient();
+    // Explicit public + non-deleted filter so a signed-in user's own drafts never leak in.
+    const { data } = await supabase
+      .from("journals")
+      .select("id, slug, title, excerpt, author_label, cover_path, is_seed")
+      .eq("visibility", "public")
+      .is("deleted_at", null)
+      .order("published_at", { ascending: false });
+    journals = data ?? [];
+  }
 
   return (
     <div className="pt-16 md:pt-20">

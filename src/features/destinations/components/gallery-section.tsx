@@ -8,23 +8,32 @@ export function GallerySection({
   name: string;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-      {images.map((id, i) => (
-        <div
-          key={id}
-          className="relative aspect-[3/4] overflow-hidden rounded-lg bg-surface-2"
-        >
-          <CldImage
-            publicId={id}
-            alt={`${name} — photo ${i + 1}`}
-            width={500}
-            height={667}
-            fill
-            sizes="(max-width: 768px) 50vw, 25vw"
-            className="object-cover transition-transform duration-700 hover:scale-105 motion-reduce:transition-none"
-          />
-        </div>
-      ))}
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
+      {images.map((id, i) => {
+        // Magazine spread pattern: Large, Small, Small, Large
+        const isLarge = i % 4 === 0 || i % 4 === 3;
+        const colSpan = isLarge ? "md:col-span-2" : "md:col-span-1";
+        const aspect = isLarge ? "aspect-[4/3] md:aspect-[16/9]" : "aspect-[4/5]";
+
+        return (
+          <div
+            key={id}
+            className={`group relative overflow-hidden rounded-xl bg-surface-2 ${colSpan} ${aspect}`}
+          >
+            <CldImage
+              publicId={id}
+              alt={`${name} — photo ${i + 1}`}
+              fill
+              sizes={
+                isLarge
+                  ? "(max-width: 768px) 100vw, 66vw"
+                  : "(max-width: 768px) 100vw, 33vw"
+              }
+              className="object-cover transition-transform duration-1000 ease-out group-hover:scale-[1.03] motion-reduce:transition-none"
+            />
+          </div>
+        );
+      })}
     </div>
   );
 }

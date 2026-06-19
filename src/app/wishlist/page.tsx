@@ -9,6 +9,7 @@ import { routes } from "@/constants/routes";
 import type { Destination } from "@/types";
 
 export const metadata: Metadata = { title: "Wishlist" };
+export const dynamic = "force-dynamic"; // per-user, auth-protected
 
 export default async function WishlistPage() {
   await requireUser(routes.wishlist);

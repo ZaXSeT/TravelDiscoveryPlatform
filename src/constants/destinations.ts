@@ -1,4 +1,8 @@
-import type { Destination, DestinationSummary } from "@/types";
+import type {
+  Destination,
+  DestinationSummary,
+  ExploreDestination,
+} from "@/types";
 import { destinationImageId, galleryIds } from "@/constants/assets";
 
 // Static, seeded destinations (D1). Values mirror supabase/seed.sql so the rendered
@@ -238,4 +242,85 @@ export function getFeatured(): DestinationSummary[] {
   return FEATURED_SLUGS.map(getDestination)
     .filter((d): d is Destination => Boolean(d))
     .map(toSummary);
+}
+
+// =============================================================================
+// TIER 2 — EXPLORE DESTINATIONS (lightweight, frontend-only)
+// Thumbnail/hero ids resolve through the image resolver (Cloudinary in prod, a
+// varied placeholder pool in dev). budgetPerDay is integer cents/day (USD).
+// =============================================================================
+
+const ex = (
+  d: Omit<ExploreDestination, "thumbnail" | "hero">,
+): ExploreDestination => ({
+  ...d,
+  thumbnail: `go/destinations/${d.slug}/thumbnail`,
+  hero: `go/destinations/${d.slug}/hero`,
+});
+
+export const EXPLORE_DESTINATIONS: ExploreDestination[] = [
+  // --- Asia ---
+  ex({ slug: "kyoto", name: "Kyoto", country: "Japan", region: "Asia", summary: "Temple gardens, geisha districts, and centuries of refined tradition.", coordinates: { lat: 35.0116, lng: 135.7681 }, categories: ["City", "Culture", "Food"], bestSeason: "Mar–May & Oct–Nov", budgetPerDay: 9000 }),
+  ex({ slug: "seoul", name: "Seoul", country: "South Korea", region: "Asia", summary: "Hyper-modern energy, palace courtyards, and late-night street food.", coordinates: { lat: 37.5665, lng: 126.978 }, categories: ["City", "Food", "Culture"], bestSeason: "Apr–Jun & Sep–Nov", budgetPerDay: 8000 }),
+  ex({ slug: "bangkok", name: "Bangkok", country: "Thailand", region: "Asia", summary: "Golden temples, canal markets, and the world's best street eats.", coordinates: { lat: 13.7563, lng: 100.5018 }, categories: ["City", "Food", "Culture"], bestSeason: "Nov–Feb", budgetPerDay: 4500 }),
+  ex({ slug: "singapore", name: "Singapore", country: "Singapore", region: "Asia", summary: "A garden city of futuristic skylines and hawker-stall flavor.", coordinates: { lat: 1.3521, lng: 103.8198 }, categories: ["City", "Food", "Luxury"], bestSeason: "Feb–Apr", budgetPerDay: 11000 }),
+  ex({ slug: "hanoi", name: "Hanoi", country: "Vietnam", region: "Asia", summary: "Old-quarter lanes, lakeside calm, and unforgettable pho.", coordinates: { lat: 21.0278, lng: 105.8342 }, categories: ["City", "Culture", "Food"], bestSeason: "Oct–Dec", budgetPerDay: 3500 }),
+  // --- Europe ---
+  ex({ slug: "rome", name: "Rome", country: "Italy", region: "Europe", summary: "An open-air museum of ruins, piazzas, and perfect pasta.", coordinates: { lat: 41.9028, lng: 12.4964 }, categories: ["City", "Culture", "Food"], bestSeason: "Apr–Jun & Sep–Oct", budgetPerDay: 9500 }),
+  ex({ slug: "amsterdam", name: "Amsterdam", country: "Netherlands", region: "Europe", summary: "Canal rings, world-class museums, and a bicycle's pace of life.", coordinates: { lat: 52.3676, lng: 4.9041 }, categories: ["City", "Culture"], bestSeason: "Apr–May & Sep", budgetPerDay: 11000 }),
+  ex({ slug: "barcelona", name: "Barcelona", country: "Spain", region: "Europe", summary: "Gaudí fantasy, tapas crawls, and Mediterranean beaches.", coordinates: { lat: 41.3851, lng: 2.1734 }, categories: ["City", "Beach", "Food"], bestSeason: "May–Jun & Sep", budgetPerDay: 9000 }),
+  ex({ slug: "prague", name: "Prague", country: "Czechia", region: "Europe", summary: "Fairytale spires, cobbled lanes, and riverside beer gardens.", coordinates: { lat: 50.0755, lng: 14.4378 }, categories: ["City", "Culture"], bestSeason: "May–Sep", budgetPerDay: 6000 }),
+  ex({ slug: "vienna", name: "Vienna", country: "Austria", region: "Europe", summary: "Imperial palaces, coffee houses, and effortless old-world elegance.", coordinates: { lat: 48.2082, lng: 16.3738 }, categories: ["City", "Culture", "Luxury"], bestSeason: "Apr–May & Sep–Oct", budgetPerDay: 9000 }),
+  // --- North America ---
+  ex({ slug: "san-francisco", name: "San Francisco", country: "United States", region: "North America", summary: "Fog-wrapped hills, the Golden Gate, and a serious food scene.", coordinates: { lat: 37.7749, lng: -122.4194 }, categories: ["City", "Nature", "Food"], bestSeason: "Sep–Nov", budgetPerDay: 15000 }),
+  ex({ slug: "vancouver", name: "Vancouver", country: "Canada", region: "North America", summary: "Where rainforest, ocean, and mountains meet a glass skyline.", coordinates: { lat: 49.2827, lng: -123.1207 }, categories: ["City", "Nature", "Adventure"], bestSeason: "Jun–Sep", budgetPerDay: 12000 }),
+  ex({ slug: "toronto", name: "Toronto", country: "Canada", region: "North America", summary: "Canada's most diverse city — neighborhoods, galleries, and food.", coordinates: { lat: 43.6532, lng: -79.3832 }, categories: ["City", "Culture", "Food"], bestSeason: "May–Oct", budgetPerDay: 11000 }),
+  ex({ slug: "chicago", name: "Chicago", country: "United States", region: "North America", summary: "Bold architecture, lakefront beaches, and deep-dish everything.", coordinates: { lat: 41.8781, lng: -87.6298 }, categories: ["City", "Culture", "Food"], bestSeason: "May–Oct", budgetPerDay: 11000 }),
+  // --- Oceania ---
+  ex({ slug: "sydney", name: "Sydney", country: "Australia", region: "Oceania", summary: "Iconic harbor, golden beaches, and an easy outdoor lifestyle.", coordinates: { lat: -33.8688, lng: 151.2093 }, categories: ["City", "Beach", "Nature"], bestSeason: "Sep–Nov & Mar–May", budgetPerDay: 12000 }),
+  ex({ slug: "melbourne", name: "Melbourne", country: "Australia", region: "Oceania", summary: "Laneway cafés, street art, and Australia's culture capital.", coordinates: { lat: -37.8136, lng: 144.9631 }, categories: ["City", "Culture", "Food"], bestSeason: "Mar–May & Sep–Nov", budgetPerDay: 11000 }),
+  ex({ slug: "queenstown", name: "Queenstown", country: "New Zealand", region: "Oceania", summary: "The adventure capital — alpine lakes, peaks, and adrenaline.", coordinates: { lat: -45.0312, lng: 168.6626 }, categories: ["Nature", "Adventure"], bestSeason: "Dec–Feb & Jun–Aug", budgetPerDay: 13000 }),
+  // --- Middle East ---
+  ex({ slug: "dubai", name: "Dubai", country: "United Arab Emirates", region: "Middle East", summary: "Desert futurism — record-breaking towers, malls, and beaches.", coordinates: { lat: 25.2048, lng: 55.2708 }, categories: ["City", "Luxury", "Beach"], bestSeason: "Nov–Mar", budgetPerDay: 16000 }),
+  ex({ slug: "istanbul", name: "Istanbul", country: "Türkiye", region: "Middle East", summary: "Two continents, grand bazaars, and Byzantine-Ottoman splendor.", coordinates: { lat: 41.0082, lng: 28.9784 }, categories: ["City", "Culture", "Food"], bestSeason: "Apr–May & Sep–Nov", budgetPerDay: 6000 }),
+  // --- Africa ---
+  ex({ slug: "cape-town", name: "Cape Town", country: "South Africa", region: "Africa", summary: "Table Mountain, wine country, and dramatic coastal drives.", coordinates: { lat: -33.9249, lng: 18.4241 }, categories: ["Nature", "Beach", "Adventure"], bestSeason: "Nov–Mar", budgetPerDay: 9000 }),
+  ex({ slug: "marrakech", name: "Marrakech", country: "Morocco", region: "Africa", summary: "Souk mazes, riad courtyards, and the edge of the Sahara.", coordinates: { lat: 31.6295, lng: -7.9811 }, categories: ["Culture", "Adventure", "Luxury"], bestSeason: "Mar–May & Sep–Nov", budgetPerDay: 6000 }),
+];
+
+export function getExploreDestination(
+  slug: string,
+): ExploreDestination | undefined {
+  return EXPLORE_DESTINATIONS.find((d) => d.slug === slug);
+}
+
+export function exploreToSummary(d: ExploreDestination): DestinationSummary {
+  return {
+    slug: d.slug,
+    name: d.name,
+    country: d.country,
+    region: d.region,
+    summary: d.summary,
+    thumbnail: d.thumbnail,
+    categories: d.categories,
+  };
+}
+
+/** All destination objects (both tiers) — for deriving facets. */
+export const ALL_DESTINATIONS: Array<Destination | ExploreDestination> = [
+  ...DESTINATIONS,
+  ...EXPLORE_DESTINATIONS,
+];
+
+/** Every slug that has a detail page (Tier 1 + Tier 2). */
+export const ALL_DESTINATION_SLUGS = [
+  ...DESTINATION_SLUGS,
+  ...EXPLORE_DESTINATIONS.map((d) => d.slug),
+];
+
+/** Per-day budget in cents for any tier (featured = sum of breakdown). */
+export function budgetPerDayFor(d: Destination | ExploreDestination): number {
+  return "budget" in d
+    ? d.budget.accommodation + d.budget.food + d.budget.transport
+    : d.budgetPerDay;
 }

@@ -9,7 +9,7 @@ export const INSPIRATION: InspirationEntry[] = [
     title: "7 Days in Bali",
     excerpt:
       "Rice terraces at dawn, surf at noon, and temple bells at dusk — a week of slow island living.",
-    author: "GO Editorial",
+    author: "Orbis Editorial",
     cover: "go/journal/seven-days-in-bali/cover",
     destinationSlug: "bali",
   },
@@ -18,7 +18,7 @@ export const INSPIRATION: InspirationEntry[] = [
     title: "Spring in Tokyo",
     excerpt:
       "Cherry blossoms, hidden alley kitchens, and the quiet order of a city in bloom.",
-    author: "GO Editorial",
+    author: "Orbis Editorial",
     cover: "go/journal/spring-in-tokyo/cover",
     destinationSlug: "tokyo",
   },
@@ -26,7 +26,7 @@ export const INSPIRATION: InspirationEntry[] = [
     slug: "a-weekend-in-paris",
     title: "A Weekend in Paris",
     excerpt: "Two days of museums, market mornings, and long café afternoons.",
-    author: "GO Editorial",
+    author: "Orbis Editorial",
     cover: "go/journal/a-weekend-in-paris/cover",
     destinationSlug: "paris",
   },

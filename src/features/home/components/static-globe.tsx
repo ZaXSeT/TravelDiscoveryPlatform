@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import { CldImage } from "@/components/media/cld-image";
 import { PageContainer } from "@/components/layout/page-container";
 import { Reveal } from "@/components/motion/reveal";
+import { InteractiveGlobe } from "@/features/globe/components/interactive-globe";
 import { DESTINATIONS } from "@/constants/destinations";
 import { routes } from "@/constants/routes";
 
@@ -48,24 +48,10 @@ export function StaticGlobe() {
           </div>
 
           <Reveal className="order-first lg:order-last">
-            <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-full border border-white/10 bg-dark-0 shadow-card">
-              <CldImage
-                publicId="go/home/globe"
-                alt="A stylized globe highlighting featured destinations"
-                width={800}
-                height={800}
-                fill
-                sizes="(max-width: 1024px) 80vw, 40vw"
-                className="object-cover opacity-90"
-              />
-              <div
-                className="pointer-events-none absolute inset-0 rounded-full"
-                style={{
-                  boxShadow:
-                    "inset 0 0 80px rgba(200,169,126,0.25), 0 0 120px rgba(200,169,126,0.12)",
-                }}
-              />
-            </div>
+            <InteractiveGlobe
+              fallbackImageId="go/home/globe"
+              alt="A stylized globe highlighting featured destinations"
+            />
           </Reveal>
         </div>
       </PageContainer>

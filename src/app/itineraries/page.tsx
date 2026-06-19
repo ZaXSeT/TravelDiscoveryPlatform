@@ -9,6 +9,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { routes } from "@/constants/routes";
 
 export const metadata: Metadata = { title: "Trips" };
+export const dynamic = "force-dynamic"; // per-user, auth-protected
 
 export default async function ItinerariesPage() {
   await requireUser(routes.itineraries);

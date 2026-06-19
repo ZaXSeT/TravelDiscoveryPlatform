@@ -1,14 +1,21 @@
-import { DESTINATIONS } from "@/constants/destinations";
+import { ALL_DESTINATIONS } from "@/constants/destinations";
 
-// Explore facets derived from the static dataset so filters always match content.
+// Explore facets. Regions are derived from the full catalog (both tiers); categories are
+// the canonical 7 used for filtering/recommendations (destinations may carry extra tags).
 
 export const REGIONS = Array.from(
-  new Set(DESTINATIONS.map((d) => d.region)),
+  new Set(ALL_DESTINATIONS.map((d) => d.region)),
 ).sort();
 
-export const CATEGORIES = Array.from(
-  new Set(DESTINATIONS.flatMap((d) => d.categories)),
-).sort();
+export const CATEGORIES: string[] = [
+  "Beach",
+  "City",
+  "Nature",
+  "Adventure",
+  "Luxury",
+  "Culture",
+  "Food",
+];
 
 export const SORTS = [
   { value: "featured", label: "Featured" },
@@ -21,10 +28,10 @@ export type SortValue = (typeof SORTS)[number]["value"];
 
 // Homepage category tiles (curated, link into Explore with a preselected filter).
 export const HOME_CATEGORIES = [
-  { label: "Beaches", category: "Beach" },
-  { label: "Cities", category: "City" },
-  { label: "Mountains", category: "Mountains" },
-  { label: "Food", category: "Food" },
-  { label: "Culture", category: "Culture" },
-  { label: "Nature", category: "Nature" },
+  { label: "Beaches", category: "Beach", image: "go/category/bali" },
+  { label: "Cities", category: "City", image: "go/category/tokyo" },
+  { label: "Mountains", category: "Mountains", image: "go/category/switzerland" },
+  { label: "Food", category: "Food", image: "go/category/paris" },
+  { label: "Culture", category: "Culture", image: "go/category/new-york" },
+  { label: "Nature", category: "Nature", image: "go/category/landscape" },
 ] as const;

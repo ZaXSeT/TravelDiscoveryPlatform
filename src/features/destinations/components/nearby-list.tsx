@@ -4,29 +4,31 @@ import type { NearbyAttraction } from "@/types";
 
 export function NearbyList({ items }: { items: NearbyAttraction[] }) {
   return (
-    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="flex flex-col">
       {items.map((item) => (
         <li
           key={item.name}
-          className="flex items-center gap-4 rounded-lg border border-border bg-card p-3"
+          className="group flex items-center justify-between border-b border-border py-6 first:border-t"
         >
-          <div className="relative size-16 shrink-0 overflow-hidden rounded-md bg-surface-2">
-            <CldImage
-              publicId={item.image}
-              alt={item.name}
-              width={128}
-              height={128}
-              fill
-              sizes="64px"
-              className="object-cover"
-            />
-          </div>
-          <div className="min-w-0">
-            <p className="truncate font-medium">{item.name}</p>
-            <p className="text-sm text-muted-foreground">
-              {formatDistance(item.distanceKm)}
+          <div className="flex items-center gap-6 md:gap-8">
+            <div className="relative size-20 shrink-0 overflow-hidden rounded-full bg-surface-2 md:size-24">
+              <CldImage
+                publicId={item.image}
+                alt={item.name}
+                width={128}
+                height={128}
+                fill
+                sizes="96px"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05] motion-reduce:transition-none"
+              />
+            </div>
+            <p className="font-display text-2xl md:text-3xl transition-colors group-hover:text-accent-goldText">
+              {item.name}
             </p>
           </div>
+          <p className="whitespace-nowrap pl-4 text-sm font-medium uppercase tracking-[0.15em] text-muted-foreground">
+            {formatDistance(item.distanceKm)}
+          </p>
         </li>
       ))}
     </ul>

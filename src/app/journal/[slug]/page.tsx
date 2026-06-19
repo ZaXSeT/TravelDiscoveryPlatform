@@ -6,7 +6,10 @@ import { PageContainer } from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
 import { JournalBody } from "@/features/journal/components/journal-body";
 import { JournalImage } from "@/features/journal/components/journal-image";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import {
+  createSupabaseServerClient,
+  isSupabaseConfigured,
+} from "@/lib/supabase/server";
 import { getOptionalUser } from "@/lib/auth/session";
 import { routes } from "@/constants/routes";
 
@@ -15,6 +18,7 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
+  if (!isSupabaseConfigured) return {};
   const { slug } = await params;
   const supabase = await createSupabaseServerClient();
   const { data } = await supabase
@@ -32,6 +36,7 @@ export default async function JournalDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  if (!isSupabaseConfigured) notFound();
   const supabase = await createSupabaseServerClient();
 
   const { data: journal } = await supabase

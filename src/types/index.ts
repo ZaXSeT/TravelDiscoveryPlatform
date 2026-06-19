@@ -77,6 +77,26 @@ export interface DestinationSummary {
   categories: string[];
 }
 
+/**
+ * Tier 2 "Explore" destination — lightweight, frontend-only (not seeded in the DB and
+ * not saveable to wishlist/itinerary, which remain Tier 1 / featured-only). Used to make
+ * Explore feel like a real catalog without per-destination content overhead.
+ */
+export interface ExploreDestination {
+  slug: string;
+  name: string;
+  country: string;
+  region: string;
+  summary: string;
+  coordinates: { lat: number; lng: number };
+  categories: string[];
+  bestSeason: string;
+  thumbnail: string;
+  hero: string;
+  /** Estimated mid-range daily budget, integer cents (USD). */
+  budgetPerDay: number;
+}
+
 /** A static inspiration entry mirrors a seed journal for the home teaser (Phase 2). */
 export interface InspirationEntry {
   slug: string;

@@ -5,7 +5,13 @@ import { SectionHeader } from "@/components/layout/section-header";
 import { LoadingState } from "@/components/feedback/loading-state";
 import { ExploreClient } from "@/features/explore/components/explore-client";
 import type { ExploreItem } from "@/features/explore/use-explore-filters";
-import { DESTINATIONS, toSummary } from "@/constants/destinations";
+import {
+  DESTINATIONS,
+  EXPLORE_DESTINATIONS,
+  toSummary,
+  exploreToSummary,
+  budgetPerDayFor,
+} from "@/constants/destinations";
 
 export const metadata: Metadata = {
   title: "Explore",
@@ -14,10 +20,17 @@ export const metadata: Metadata = {
 };
 
 // Static page; filtering happens client-side over this data (no server round-trips).
-const items: ExploreItem[] = DESTINATIONS.map((d) => ({
-  ...toSummary(d),
-  budgetPerDay: d.budget.accommodation + d.budget.food + d.budget.transport,
-}));
+// Featured (Tier 1) listed first, then the wider Explore (Tier 2) catalog.
+const items: ExploreItem[] = [
+  ...DESTINATIONS.map((d) => ({
+    ...toSummary(d),
+    budgetPerDay: budgetPerDayFor(d),
+  })),
+  ...EXPLORE_DESTINATIONS.map((d) => ({
+    ...exploreToSummary(d),
+    budgetPerDay: budgetPerDayFor(d),
+  })),
+];
 
 export default function ExplorePage() {
   return (

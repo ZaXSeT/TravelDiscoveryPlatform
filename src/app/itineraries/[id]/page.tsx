@@ -8,6 +8,7 @@ import { routes } from "@/constants/routes";
 import type { ItineraryItemRow } from "@/types/db";
 
 export const metadata: Metadata = { title: "Trip planner" };
+export const dynamic = "force-dynamic"; // per-user, auth-protected
 
 export default async function PlannerPage({
   params,

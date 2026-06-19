@@ -6,9 +6,10 @@ import { imageUrl } from "@/lib/cloudinary/url";
 interface CldImageProps {
   publicId: string;
   alt: string;
-  /** Target render resolution (also drives the resolver's crop size). */
-  width: number;
-  height: number;
+  /** Target render resolution (also drives the resolver's crop size). Optional for
+   *  `fill` images, where next/image ignores intrinsic size. */
+  width?: number;
+  height?: number;
   sizes?: string;
   className?: string;
   priority?: boolean;
@@ -25,7 +26,9 @@ export function CldImage({
   priority,
   fill,
 }: CldImageProps) {
-  const src = imageUrl(publicId, { w: width, h: height });
+  const w = width ?? 1200;
+  const h = height ?? 800;
+  const src = imageUrl(publicId, { w, h });
 
   if (fill) {
     return (
@@ -44,8 +47,8 @@ export function CldImage({
     <Image
       src={src}
       alt={alt}
-      width={width}
-      height={height}
+      width={w}
+      height={h}
       sizes={sizes}
       priority={priority}
       className={className}

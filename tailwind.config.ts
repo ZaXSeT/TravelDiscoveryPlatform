@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 // Tokens are defined as CSS variables in src/app/globals.css and referenced here so
 // components use semantic names only (ProjectDocs/Phase0/11_DESIGN_TOKENS.md).
@@ -97,7 +98,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 };
 
 export default config;

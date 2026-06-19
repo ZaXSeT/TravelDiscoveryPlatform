@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CldImage } from "@/components/media/cld-image";
 import { PageContainer } from "@/components/layout/page-container";
 import { Reveal } from "@/components/motion/reveal";
+import { Parallax } from "@/components/motion/parallax";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/constants/routes";
 
@@ -13,16 +14,18 @@ export function Hero() {
       data-theme="dark"
       className="relative flex min-h-[100svh] items-center overflow-hidden bg-dark-0 text-white"
     >
-      <CldImage
-        publicId="go/home/hero"
-        alt="A traveler looking out over a dramatic landscape at golden hour"
-        width={1920}
-        height={1280}
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover"
-      />
+      <Parallax speed={0.12} className="absolute inset-x-0 -top-[8%] h-[116%]">
+        <CldImage
+          publicId="go/home/hero"
+          alt="A traveler looking out over a dramatic landscape at golden hour"
+          width={1920}
+          height={1280}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+      </Parallax>
       <div className="scrim pointer-events-none absolute inset-0" />
 
       <PageContainer className="relative z-10 pt-24">

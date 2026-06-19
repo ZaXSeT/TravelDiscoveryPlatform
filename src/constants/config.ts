@@ -1,8 +1,8 @@
 // Centralized tunables and feature flags (no magic numbers in components).
 
 export const siteConfig = {
-  name: "GO",
-  title: "GO — Travel Discovery",
+  name: "Orbis",
+  title: "Orbis — Travel Discovery",
   description:
     "Discover destinations, hidden gems, and plan trips worth taking. A cinematic travel discovery platform.",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",

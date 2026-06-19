@@ -1,4 +1,4 @@
-# GO — Travel Discovery Platform
+# Orbis — Travel Discovery Platform
 
 A cinematic, editorial travel discovery platform. Built with Next.js 15, TypeScript,
 Tailwind, and Supabase. See [`ProjectDocs/`](ProjectDocs/) for the full specs and
@@ -14,7 +14,11 @@ Tailwind, and Supabase. See [`ProjectDocs/`](ProjectDocs/) for the full specs an
   journal (image upload + soft delete), and the connected profile hub. The live gate
   (7 judge flows + refresh-persistence) is pending a configured Supabase instance; see
   [`ProjectDocs/PHASE3_GATE_VERIFICATION.md`](ProjectDocs/PHASE3_GATE_VERIFICATION.md).
-- Phase 4 (Visual polish), Phase 5 (Hardening/Deploy): pending.
+- **Phase 4 — Signature Visual Polish:** complete — interactive WebGL globe
+  (desktop-gated, static fallback on mobile/reduced-motion), Lenis smooth scroll + GSAP
+  scroll parallax via one provider, and Framer Motion page transitions. Additive and
+  non-breaking; Three.js/GSAP/Lenis are lazy + gated (excluded from the mobile bundle).
+- Phase 5 (Hardening/SEO/Deploy): pending.
 
 ## Getting started
 
