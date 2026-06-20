@@ -41,29 +41,26 @@ export function Header() {
     <>
       <TubelightNavBar 
         items={items} 
+        defaultDarkTheme={overHero}
         leftContent={
           <Link
             href={routes.home}
-            className={cn(
-              "font-display text-xl font-bold tracking-tight px-2 transition-colors duration-300",
-              !overHero ? "text-foreground" : "text-white"
-            )}
+            className="font-display text-xl font-bold tracking-tight px-2"
           >
             {siteConfig.name}
           </Link>
         }
         rightContent={
           <div className="flex items-center gap-2">
-            <div className={cn("hidden md:block transition-colors duration-300", !overHero ? "text-foreground" : "text-white")}>
-              <AuthNav />
+            <div className="hidden md:block transition-colors duration-300">
+              <AuthNav defaultDarkTheme={overHero} />
             </div>
             <button
               type="button"
               onClick={toggleMobile}
               aria-label="Open menu"
               className={cn(
-                "inline-flex size-9 items-center justify-center rounded-full transition-colors md:hidden",
-                !overHero ? "text-foreground hover:bg-foreground/5" : "text-white hover:bg-white/10"
+                "inline-flex size-9 items-center justify-center rounded-full transition-colors md:hidden hover:bg-foreground/5"
               )}
             >
               <Menu className="size-5" />

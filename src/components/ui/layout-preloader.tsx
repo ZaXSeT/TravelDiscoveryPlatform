@@ -166,6 +166,20 @@ export function LayoutPreloader() {
           document.body.style.overflow = "";
         },
       });
+
+      // 8. Pull up the main hero section in perfect sync
+      const mainEl = document.getElementById("main-content");
+      if (mainEl) {
+        tl.from(
+          mainEl,
+          {
+            y: "100vh",
+            duration: 0.9,
+            ease: "power4.inOut",
+          },
+          "<" // Start exactly at the same time as step 7
+        );
+      }
     },
     { scope: containerRef }
   );
