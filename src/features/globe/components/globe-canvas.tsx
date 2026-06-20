@@ -5,7 +5,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Html, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import { useRouter } from "next/navigation";
-import { DESTINATIONS } from "@/constants/destinations";
+import { ALL_DESTINATIONS } from "@/constants/destinations";
 import { routes } from "@/constants/routes";
 import { latLngToVector3 } from "@/features/globe/lib/geo";
 
@@ -84,13 +84,13 @@ function Markers() {
 
   return (
     <>
-      {DESTINATIONS.map((d) => {
+      {ALL_DESTINATIONS.map((d) => {
         const pos = latLngToVector3(d.coordinates.lat, d.coordinates.lng, R * 1.02);
         const active = hovered === d.slug;
         return (
           <group key={d.slug} position={pos}>
             <mesh
-              scale={active ? 1.7 : 1}
+              scale={active ? 1.9 : 1}
               onPointerOver={(e) => {
                 e.stopPropagation();
                 setHovered(d.slug);
@@ -105,8 +105,11 @@ function Markers() {
                 router.push(routes.destination(d.slug));
               }}
             >
-              <sphereGeometry args={[0.016, 16, 16]} />
-              <meshBasicMaterial color={active ? "#ffe3b0" : "#ffc46b"} toneMapped={false} />
+              <sphereGeometry args={[0.013, 16, 16]} />
+              <meshBasicMaterial
+                color={active ? "#eaf3ff" : "#bcd8ff"}
+                toneMapped={false}
+              />
             </mesh>
             {active && (
               <Html center position={[0, 0.05, 0]} zIndexRange={[20, 0]}>

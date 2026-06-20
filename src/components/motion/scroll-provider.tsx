@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
 // Single source of truth for smooth scroll + GSAP ScrollTrigger sync
@@ -9,8 +10,12 @@ import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 // prefers-reduced-motion (native scroll, no JS scroll work).
 export function ScrollProvider() {
   const reduced = usePrefersReducedMotion();
+  const pathname = usePathname();
 
   useEffect(() => {
+    // Immediately reset scroll to top on route change before Lenis mounts
+    window.scrollTo(0, 0);
+
     if (reduced) return;
     let active = true;
     let cleanup: (() => void) | undefined;
@@ -47,7 +52,7 @@ export function ScrollProvider() {
       active = false;
       cleanup?.();
     };
-  }, [reduced]);
+  }, [reduced, pathname]);
 
   return null;
 }

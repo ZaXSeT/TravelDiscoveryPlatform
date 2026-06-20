@@ -85,9 +85,39 @@
   * {
     @apply border-border;
   }
-  body {
+  html, body {
     @apply bg-background text-foreground font-sans antialiased;
     text-rendering: optimizeLegibility;
+  }
+
+  /* Premium Scrollbar (Visible thumb, invisible track) */
+  ::-webkit-scrollbar {
+    width: 10px; /* Wide enough for easy grabbing */
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: transparent; /* Completely invisible background track */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    /* Visible thumb but very thin and subtle */
+    background: rgba(255, 255, 255, 0.2); 
+    border-radius: 10px;
+    border: 3px solid transparent; /* Creates padding around the thumb */
+    background-clip: padding-box;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover,
+  ::-webkit-scrollbar-thumb:active {
+    background: rgba(255, 255, 255, 0.4);
+    border: 2px solid transparent; /* Thickens slightly on hover */
+  }
+
+  /* Firefox support */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
   }
   h1, h2, h3, h4 {
     @apply font-display;
@@ -98,6 +128,30 @@
   :focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
+  
+  /* Prevent focus rings on document/wrapper elements during Next.js navigation */
+  html, body {
+    border: none !important;
+    margin: 0 !important;
+  }
+  html:focus,
+  html:focus-visible,
+  body:focus,
+  body:focus-visible,
+  [data-nextjs-focus-wrapper]:focus,
+  [data-nextjs-focus-wrapper]:focus-visible,
+  next-route-announcer:focus,
+  next-route-announcer:focus-visible,
+  main:focus,
+  main:focus-visible,
+  #main-content:focus,
+  #main-content:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    border: none !important;
+  }
+  
   /* Respect OS reduced-motion: collapse animation/transition globally */
   @media (prefers-reduced-motion: reduce) {
     *,

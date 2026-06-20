@@ -1,6 +1,7 @@
 import { CldImage } from "@/components/media/cld-image";
 import { PageContainer } from "@/components/layout/page-container";
 import { Badge } from "@/components/ui/badge";
+import { Parallax } from "@/components/motion/parallax";
 import type { Destination } from "@/types";
 
 export function DestinationHero({ destination: d }: { destination: Destination }) {
@@ -9,16 +10,23 @@ export function DestinationHero({ destination: d }: { destination: Destination }
       data-theme="dark"
       className="relative flex min-h-[72svh] items-end overflow-hidden bg-dark-0 text-white"
     >
-      <CldImage
-        publicId={d.media.hero}
-        alt={`${d.name}, ${d.country}`}
-        width={1920}
-        height={1280}
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover"
-      />
+      <Parallax 
+        speed={0.15} 
+        offset={["start start", "end start"]}
+        startAtZero
+        className="absolute inset-x-0 top-0 h-[115%] w-full z-0"
+      >
+        <CldImage
+          publicId={d.media.hero}
+          alt={`${d.name}, ${d.country}`}
+          width={1920}
+          height={1280}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      </Parallax>
       <div className="scrim pointer-events-none absolute inset-0" />
       <PageContainer className="relative z-10 pb-12 pt-28">
         <p className="text-sm uppercase tracking-[0.2em] text-white/80">

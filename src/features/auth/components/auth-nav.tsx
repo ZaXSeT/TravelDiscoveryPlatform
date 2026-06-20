@@ -36,7 +36,7 @@ export function AuthNav({
         asChild
         variant={isMenu ? "default" : "gold"}
         size={isMenu ? "lg" : "sm"}
-        className={isMenu ? "w-full" : ""}
+        className={cn(isMenu ? "w-full" : "", "rounded-full transition-transform hover:scale-105 active:scale-95")}
         onClick={onNavigate}
       >
         <Link href={routes.signIn}>Sign in</Link>
@@ -77,12 +77,13 @@ export function AuthNav({
         <Link
           key={l.href}
           href={l.href}
-          className="text-sm font-medium opacity-90 transition-opacity hover:opacity-100"
+          className="group relative text-[15px] font-medium transition-colors duration-300 opacity-90 hover:opacity-100"
         >
-          {l.label}
+          <span className="relative z-10">{l.label}</span>
+          <span className="absolute inset-x-0 -bottom-1.5 h-[2px] scale-x-0 bg-current transition-transform duration-300 ease-[0.22,1,0.36,1] origin-left group-hover:scale-x-100" />
         </Link>
       ))}
-      <Button onClick={signOut} variant="outline" size="sm">
+      <Button onClick={signOut} variant="outline" size="sm" className="ml-2 rounded-full transition-transform hover:scale-105 active:scale-95">
         Sign out
       </Button>
     </div>

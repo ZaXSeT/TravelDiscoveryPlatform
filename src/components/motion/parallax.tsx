@@ -1,62 +1,45 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
-// Scroll-linked parallax via GSAP ScrollTrigger (dynamically imported). No-op under
-// prefers-reduced-motion. GSAP owns scroll motion; Framer Motion owns transitions.
 interface ParallaxProps {
   children: React.ReactNode;
   /** Fraction of element height to drift across the viewport (0–0.5 is tasteful). */
   speed?: number;
   className?: string;
+  /** Framer motion useScroll offset. Default is ["start end", "end start"] */
+  offset?: any;
+  /** If true, parallax starts at 0% translateY instead of -speed%. Ideal for Hero sections. */
+  startAtZero?: boolean;
 }
 
-export function Parallax({ children, speed = 0.15, className }: ParallaxProps) {
+export function Parallax({ children, speed = 0.15, className, offset = ["start end", "end start"], startAtZero = false }: ParallaxProps) {
   const ref = useRef<HTMLDivElement>(null);
   const reduced = usePrefersReducedMotion();
 
-  useEffect(() => {
-    if (reduced) return;
-    const el = ref.current;
-    if (!el) return;
-    let active = true;
-    let cleanup: (() => void) | undefined;
+  // Track scroll position relative to the element's position in the viewport
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: offset,
+  });
 
-    void (async () => {
-      const gsap = (await import("gsap")).default;
-      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
-      if (!active) return;
-      gsap.registerPlugin(ScrollTrigger);
-      const tween = gsap.fromTo(
-        el,
-        { yPercent: -speed * 100 },
-        {
-          yPercent: speed * 100,
-          ease: "none",
-          scrollTrigger: {
-            trigger: el,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        },
-      );
-      cleanup = () => {
-        tween.scrollTrigger?.kill();
-        tween.kill();
-      };
-    })();
-
-    return () => {
-      active = false;
-      cleanup?.();
-    };
-  }, [reduced, speed]);
+  // Map 0 -> 1 scroll progress to -speed% -> speed% translation (or 0 -> speed% if startAtZero)
+  const percentage = speed * 100;
+  const yRange = startAtZero ? ["0%", `${percentage}%`] : [`-${percentage}%`, `${percentage}%`];
+  
+  const y = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduced ? ["0%", "0%"] : yRange
+  );
 
   return (
     <div ref={ref} className={className}>
-      {children}
+      <motion.div style={{ y }} className="w-full h-full">
+        {children}
+      </motion.div>
     </div>
   );
 }

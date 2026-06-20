@@ -16,6 +16,7 @@ import { SaveButton } from "@/features/wishlist/components/save-button";
 import {
   ALL_DESTINATION_SLUGS,
   getDestination,
+  getExploreDestination,
   getRelated,
 } from "@/constants/destinations";
 
@@ -31,7 +32,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const d = getDestination(slug);
+  const d = getDestination(slug) ?? getExploreDestination(slug);
   if (!d) return {};
   return {
     title: `${d.name}, ${d.country}`,
@@ -50,7 +51,9 @@ export default async function DestinationPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const d = getDestination(slug);
+  const featured = getDestination(slug);
+  // Both tiers share the rich detail page; Tier 2 simply isn't a "featured" (DB) one.
+  const d = featured ?? getExploreDestination(slug);
   if (!d) notFound();
 
   const related = getRelated(slug);
@@ -70,9 +73,11 @@ export default async function DestinationPage({
             <p className="mt-4 text-sm font-medium text-accent-goldText">
               Best time to visit: {d.bestSeason}
             </p>
-            <div className="mt-6">
-              <SaveButton slug={d.slug} name={d.name} />
-            </div>
+            {featured && (
+              <div className="mt-6">
+                <SaveButton slug={d.slug} name={d.name} />
+              </div>
+            )}
           </div>
           <div className="rounded-lg border border-border bg-surface-1 p-6">
             <h3 className="font-display text-xl">Travel tips</h3>

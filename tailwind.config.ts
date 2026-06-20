@@ -64,6 +64,7 @@ const config: Config = {
       fontFamily: {
         display: ["var(--font-display)"],
         sans: ["var(--font-sans)"],
+        serif: ["var(--font-serif)"],
       },
       transitionTimingFunction: {
         entrance: "cubic-bezier(0.16, 1, 0.3, 1)",

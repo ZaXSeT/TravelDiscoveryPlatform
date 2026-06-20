@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { CldImage } from "@/components/media/cld-image";
 import { PageContainer } from "@/components/layout/page-container";
 import { Reveal } from "@/components/motion/reveal";
-import { Parallax } from "@/components/motion/parallax";
+import { HeroSlideshow } from "./hero-slideshow";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/constants/routes";
 
@@ -14,18 +13,15 @@ export function Hero() {
       data-theme="dark"
       className="relative flex min-h-[100svh] items-center overflow-hidden bg-dark-0 text-white"
     >
-      <Parallax speed={0.12} className="absolute inset-x-0 -top-[8%] h-[116%]">
-        <CldImage
-          publicId="go/home/hero"
-          alt="A traveler looking out over a dramatic landscape at golden hour"
-          width={1920}
-          height={1280}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-      </Parallax>
+      <HeroSlideshow
+        images={[
+          { id: "go/destinations/tokyo/hero", label: "Tokyo skyline at night" },
+          { id: "go/destinations/switzerland/hero", label: "Swiss Alps landscape" },
+          { id: "go/destinations/paris/hero", label: "Paris city view" },
+          { id: "go/destinations/new-york/hero", label: "New York city skyline" },
+          { id: "go/destinations/bali/hero", label: "Bali natural landscape" },
+        ]}
+      />
       <div className="scrim pointer-events-none absolute inset-0" />
 
       <PageContainer className="relative z-10 pt-24">

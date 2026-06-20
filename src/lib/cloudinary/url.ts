@@ -103,7 +103,7 @@ export function imageUrl(publicId: string, { w, h }: ImageOptions): string {
       'https://images.unsplash.com/photo-1686727371370-52fc74092b94'
     ],
     hero: [
-      "https://plus.unsplash.com/premium_photo-1676496046182-356a6a0ed002",
+      "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800",
       "https://images.unsplash.com/photo-1537819191377-d3305ffddce4",
       "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
     ],
@@ -112,7 +112,7 @@ export function imageUrl(publicId: string, { w, h }: ImageOptions): string {
       "https://images.unsplash.com/photo-1570459027562-4a916cc6113f"
     ],
     globe: [
-      "https://plus.unsplash.com/premium_photo-1681488277609-1806135d1126",
+      "https://images.unsplash.com/photo-1451187580459-43490279c0fa",
       "https://images.unsplash.com/photo-1451187580459-43490279c0fa",
       "https://images.unsplash.com/photo-1521295121783-8a321d551ad2"
     ],
@@ -475,12 +475,16 @@ export function imageUrl(publicId: string, { w, h }: ImageOptions): string {
   let baseUrl = "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800"; // Generic landscape fallback
   let matched = false;
 
-  // Find the first matching keyword
-  for (const [key, urls] of Object.entries(idMap)) {
+  // Find the best matching keyword (prioritize longer keys like city names over generic 'hero')
+  const keys = Object.keys(idMap).sort((a, b) => b.length - a.length);
+  for (const key of keys) {
     if (lowerId.includes(key)) {
-      baseUrl = urls[hash % urls.length] ?? baseUrl;
-      matched = true;
-      break;
+      const urls = idMap[key];
+      if (urls && urls.length > 0) {
+        baseUrl = urls[hash % urls.length] ?? baseUrl;
+        matched = true;
+        break;
+      }
     }
   }
 
