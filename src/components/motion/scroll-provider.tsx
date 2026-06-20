@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 
@@ -11,10 +11,15 @@ import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 export function ScrollProvider() {
   const reduced = usePrefersReducedMotion();
   const pathname = usePathname();
+  const lenisRef = useRef<any>(null);
 
   // 1. Reset scroll position on route changes
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, [pathname]);
 
   // 2. Initialize Lenis and GSAP globally exactly once
@@ -37,6 +42,8 @@ export function ScrollProvider() {
       gsap.registerPlugin(ScrollTrigger);
 
       const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+      lenisRef.current = lenis;
+
       const onScroll = () => ScrollTrigger.update();
       lenis.on("scroll", onScroll);
 
@@ -63,6 +70,7 @@ export function ScrollProvider() {
         document.removeEventListener("click", handleAnchorClick, { capture: true });
         gsap.ticker.remove(raf);
         lenis.destroy();
+        lenisRef.current = null;
       };
     })();
 
