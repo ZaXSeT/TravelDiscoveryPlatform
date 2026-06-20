@@ -1,7 +1,33 @@
 import type { NextConfig } from "next";
 
-// Non-CSP security headers (CSP is tuned in Phase 5 once leaflet/cloudinary/supabase
-// origins are finalized — see ProjectDocs/Phase0/05_SECURITY_AND_RLS.md §8).
+// Content-Security-Policy listing every origin the app legitimately uses:
+// Supabase (auth/storage/realtime), Cloudinary + Unsplash + picsum (images), and
+// OpenStreetMap tiles (Leaflet). Shipped as Report-Only first so it can be validated in
+// a real browser before switching to enforcing (05_SECURITY_AND_RLS.md §8).
+const csp = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "form-action 'self'",
+  // Next.js injects inline bootstrap scripts; tighten to nonces when enforcing.
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  "style-src 'self' 'unsafe-inline'",
+  "font-src 'self' data:",
+  "worker-src 'self' blob:",
+  [
+    "img-src 'self' data: blob:",
+    "https://res.cloudinary.com",
+    "https://*.supabase.co",
+    "https://images.unsplash.com",
+    "https://plus.unsplash.com",
+    "https://picsum.photos",
+    "https://fastly.picsum.photos",
+    "https://*.tile.openstreetmap.org",
+  ].join(" "),
+  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://res.cloudinary.com https://images.unsplash.com https://plus.unsplash.com",
+].join("; ");
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -10,6 +36,11 @@ const securityHeaders = [
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
   },
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains; preload",
+  },
+  { key: "Content-Security-Policy-Report-Only", value: csp },
 ];
 
 const nextConfig: NextConfig = {

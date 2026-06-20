@@ -29,38 +29,48 @@ export function ItineraryList({ initial }: { initial: ItineraryListItem[] }) {
 
   if (items.length === 0) {
     return (
-      <EmptyState
-        icon={<MapPin className="size-6" />}
-        title="No trips yet"
-        description="Create your first itinerary above to start planning."
-      />
+      <div className="flex flex-col items-center justify-center py-24 md:py-32 text-center border-t border-b border-black/5">
+        <MapPin className="size-8 md:size-12 opacity-20 mb-8" strokeWidth={1} />
+        <h3 className="font-serif text-2xl md:text-4xl font-light text-black/40">The map is blank</h3>
+        <p className="mt-4 text-xs md:text-sm uppercase tracking-[0.2em] text-black/30">Begin a new journey above</p>
+      </div>
     );
   }
 
   return (
-    <ul className="space-y-3">
+    <ul className="flex flex-col">
       {items.map((it) => (
         <li
           key={it.id}
-          className="flex items-center justify-between gap-3 rounded-lg border border-border bg-card p-4"
+          className="group relative border-b border-black/10 hover:border-black/30 transition-colors"
         >
-          <Link href={routes.itinerary(it.id)} className="min-w-0 flex-1">
-            <p className="truncate font-display text-lg">{it.title}</p>
-            <p className="text-sm text-muted-foreground">
-              {it.destinationName ? `${it.destinationName} · ` : ""}
-              {formatMoney(it.total_budget)} estimated
-            </p>
-          </Link>
-          <Button
-            type="button"
-            size="icon"
-            variant="ghost"
-            aria-label={`Delete ${it.title}`}
-            disabled={pending === it.id}
-            onClick={() => remove(it.id)}
-          >
-            <Trash2 className="size-4" />
-          </Button>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 py-10 md:py-12">
+            <Link href={routes.itinerary(it.id)} className="flex-1 min-w-0">
+              <p className="truncate font-serif text-3xl md:text-5xl font-light text-primary group-hover:text-accent-gold-text transition-colors">
+                {it.title}
+              </p>
+              <div className="mt-4 flex items-center gap-4 text-xs md:text-sm tracking-[0.2em] uppercase text-black/40 font-medium">
+                {it.destinationName && (
+                  <span className="flex items-center gap-1.5">
+                    <MapPin className="size-3.5" />
+                    {it.destinationName}
+                  </span>
+                )}
+                <span>{formatMoney(it.total_budget)} EST</span>
+              </div>
+            </Link>
+            
+            <Button
+              type="button"
+              variant="ghost"
+              aria-label={`Delete ${it.title}`}
+              disabled={pending === it.id}
+              onClick={() => remove(it.id)}
+              className="absolute right-0 top-8 md:static opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive hover:bg-destructive/10 rounded-full size-12 flex items-center justify-center"
+            >
+              <Trash2 className="size-5" />
+            </Button>
+          </div>
         </li>
       ))}
     </ul>

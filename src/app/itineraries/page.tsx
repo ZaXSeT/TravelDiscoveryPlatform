@@ -35,15 +35,21 @@ export default async function ItinerariesPage() {
   }));
 
   return (
-    <div className="pt-16 md:pt-20">
-      <PageContainer className="section-y">
-        <SectionHeader
-          eyebrow="Trips"
-          title="Your itineraries"
-          description="Plan day-by-day, track an estimated budget, and pick up where you left off."
-        />
-        <div className="mt-8 space-y-8">
-          <CreateItineraryForm />
+    <div className="pt-24 md:pt-32 pb-32 min-h-screen bg-[#FDFCF8] selection:bg-black selection:text-white">
+      <PageContainer>
+        {/* The beautiful form acts as the massive hero banner */}
+        <CreateItineraryForm />
+        
+        <div className="mt-20 md:mt-32 pt-16">
+          <div className="flex items-end justify-between border-b border-black/10 pb-8 mb-12">
+            <div>
+              <h3 className="font-serif text-3xl md:text-5xl font-light text-primary">Your Journeys</h3>
+              <p className="text-xs uppercase tracking-[0.2em] text-black/40 mt-4">Past & Upcoming adventures</p>
+            </div>
+            <div className="hidden md:block text-xs uppercase tracking-[0.2em] text-black/30">
+              {items.length} {items.length === 1 ? 'Trip' : 'Trips'}
+            </div>
+          </div>
           <ItineraryList initial={items} />
         </div>
       </PageContainer>

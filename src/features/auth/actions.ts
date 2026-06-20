@@ -9,7 +9,11 @@ import {
   updatePasswordSchema,
 } from "@/lib/validation/auth";
 import { safeReturnTo } from "@/lib/validation/common";
+import { rateLimit, clientRateKey } from "@/lib/rate-limit/limiter";
 import { siteConfig } from "@/constants/config";
+
+const TOO_MANY =
+  "Too many attempts. Please wait a minute and try again.";
 
 export interface AuthFormState {
   error?: string;
@@ -39,6 +43,10 @@ export async function signInAction(
     return { fieldErrors: firstErrors(parsed.error.flatten().fieldErrors) };
   }
 
+  if (!(await rateLimit(await clientRateKey("auth-signin"), 8, 600))) {
+    return { error: TOO_MANY };
+  }
+
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
   if (error) {
@@ -60,6 +68,10 @@ export async function signUpAction(
   });
   if (!parsed.success) {
     return { fieldErrors: firstErrors(parsed.error.flatten().fieldErrors) };
+  }
+
+  if (!(await rateLimit(await clientRateKey("auth-signup"), 5, 600))) {
+    return { error: TOO_MANY };
   }
 
   const supabase = await createSupabaseServerClient();
@@ -93,6 +105,10 @@ export async function resetRequestAction(
   const parsed = resetRequestSchema.safeParse({ email: formData.get("email") });
   if (!parsed.success) {
     return { fieldErrors: firstErrors(parsed.error.flatten().fieldErrors) };
+  }
+
+  if (!(await rateLimit(await clientRateKey("auth-reset"), 5, 600))) {
+    return { error: TOO_MANY };
   }
 
   const supabase = await createSupabaseServerClient();

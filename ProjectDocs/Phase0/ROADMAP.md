@@ -101,9 +101,14 @@ flow + persistence**:
 - All with loading / error / empty states and mobile usability.
 
 **Gate (this is the demo)**
-- [ ] **All 7 must-pass flows complete end-to-end.**
-- [ ] **Refresh test passes for every mutation** on mobile + desktop.
-- [ ] No fake buttons, no dead ends, no lost data.
+- [x] **All 7 must-pass flows complete end-to-end.**
+- [x] **Refresh test passes for every mutation** on mobile + desktop.
+- [x] No fake buttons, no dead ends, no lost data.
+
+> Phase 3 gate closed (2026-06-20): verified against a live Supabase project — connection,
+> RLS, seed (destinations + journals), protected-route redirects, and the wishlist /
+> itinerary / journal (incl. image upload + soft delete) / profile flows with
+> refresh-persistence.
 
 ---
 
