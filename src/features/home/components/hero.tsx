@@ -1,4 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect } from "react";
+import { motion, useAnimation } from "framer-motion";
+import { preloaderStore } from "@/lib/store/preloader-store";
 import { PageContainer } from "@/components/layout/page-container";
 import { Reveal } from "@/components/motion/reveal";
 import { HeroSlideshow } from "./hero-slideshow";
@@ -9,6 +14,23 @@ import { routes } from "@/constants/routes";
 // Phase 2 hero: static poster (LCP image) + premium type. Video + split-text land in
 // Phase 4 (08_PERFORMANCE_BUDGETS.md: LCP is always a static image; mobile = image only).
 export function Hero() {
+  const controls = useAnimation();
+  const premiumEase = [0.76, 0, 0.24, 1];
+
+  useEffect(() => {
+    const hasPreloaded = preloaderStore.hasRun;
+    const baseDelay = hasPreloaded ? 0.2 : 3.8;
+
+    controls.start((customDelay: number) => ({
+      y: 0,
+      transition: {
+        delay: customDelay + baseDelay,
+        duration: 1.0,
+        ease: premiumEase,
+      },
+    }));
+  }, [controls]);
+
   return (
     <section
       data-theme="dark"
@@ -30,24 +52,42 @@ export function Hero() {
           
           {/* GIANT TEXT AREA */}
           <div className="max-w-[90vw] md:max-w-[65vw]">
-            <Reveal waitForPreloader={true}>
-              <p className="mb-6 text-[12px] md:text-[14px] font-medium uppercase tracking-[0.4em] text-white/70">
+            <div className="overflow-hidden pb-1 mb-6">
+              <motion.p
+                custom={0.2} // Slight stagger after title starts
+                initial={{ y: "120%" }}
+                animate={controls}
+                className="text-[12px] md:text-[14px] font-medium uppercase tracking-[0.4em] text-white/70"
+                style={{ willChange: "transform", WebkitFontSmoothing: "antialiased" }}
+              >
                 Travel discovery, reimagined
-              </p>
-            </Reveal>
+              </motion.p>
+            </div>
             <HeroTitle />
           </div>
           
           {/* DELICATE TEXT & BUTTONS */}
           <div className="flex flex-col gap-8 md:max-w-md md:pb-6 shrink-0 text-right md:text-left items-start md:items-end">
-            <Reveal delayMs={160} waitForPreloader={true}>
-              <p className="text-[13px] md:text-[15px] font-light leading-relaxed tracking-widest text-white/70 uppercase text-left md:text-right">
-                Hidden gems, premium guides, and trips you&apos;ll actually take -
+            <div className="overflow-hidden pb-2">
+              <motion.p
+                custom={0.3} // Stagger after eyebrow
+                initial={{ y: "120%" }}
+                animate={controls}
+                className="text-[13px] md:text-[15px] font-light leading-relaxed tracking-widest text-white/70 uppercase text-left md:text-right"
+                style={{ willChange: "transform", WebkitFontSmoothing: "antialiased" }}
+              >
+                Hidden gems, premium guides, and trips you&apos;ll actually take
                 across the world&apos;s most unforgettable destinations.
-              </p>
-            </Reveal>
-            <Reveal delayMs={240} waitForPreloader={true}>
-              <div className="flex flex-wrap gap-4 justify-start md:justify-end">
+              </motion.p>
+            </div>
+            <div className="overflow-hidden pb-2 pt-2 -mt-2">
+              <motion.div
+                custom={0.4} // Final stagger for buttons
+                initial={{ y: "120%" }}
+                animate={controls}
+                className="flex flex-wrap gap-4 justify-start md:justify-end"
+                style={{ willChange: "transform", WebkitFontSmoothing: "antialiased" }}
+              >
                 <Button asChild variant="gold" className="rounded-full px-10 py-8 text-[12px] md:text-[13px] uppercase tracking-[0.2em] font-medium transition-transform hover:scale-105">
                   <Link href={routes.explore}>Explore</Link>
                 </Button>
@@ -58,8 +98,8 @@ export function Hero() {
                 >
                   <Link href="#featured">Discover</Link>
                 </Button>
-              </div>
-            </Reveal>
+              </motion.div>
+            </div>
           </div>
 
         </div>

@@ -9,9 +9,9 @@ export function HeroTitle() {
   const line2 = ["the", "journey."];
   const controls = useAnimation();
 
-  // Smooth and elegant ease-out (easeOutQuart) that matches the user's provided curve.
-  // Gives a very premium, fluid "Awwwards" floating effect.
-  const premiumEase = [0.25, 1, 0.5, 1];
+  // The quintessential "Awwwards" premium ease (easeInOutQuart variant).
+  // Extremely snappy initial acceleration with a very long, buttery smooth tail.
+  const premiumEase = [0.76, 0, 0.24, 1];
 
   useEffect(() => {
     // If preloader hasn't run yet this session, it will take ~3.8s to finish.
@@ -21,8 +21,8 @@ export function HeroTitle() {
     controls.start((i) => ({
       y: 0,
       transition: {
-        delay: i * 0.2 + baseDelay, // Stagger delay (0.2s per word for 1-by-1 effect)
-        duration: 1.2,
+        delay: i * 0.12 + baseDelay, // Fast, overlapping stagger (0.12s per word)
+        duration: 1.0,
         ease: premiumEase,
       },
     }));
