@@ -22,7 +22,7 @@ function FooterContent() {
   const y = useTransform(scrollYProgress, [0, 1], ["-20%", "0%"]);
 
   return (
-    <footer ref={containerRef} className="relative flex flex-col min-h-[90svh] md:min-h-[95svh] overflow-hidden bg-dark-0 text-white mt-auto">
+    <footer ref={containerRef} data-theme="dark" className="relative flex flex-col min-h-[90svh] md:min-h-[95svh] overflow-hidden bg-dark-0 text-white mt-auto">
       {/* Background Image with Parallax */}
       <motion.div style={{ y }} className="absolute inset-0 z-0 h-[120%] -top-[20%] w-full">
         <Image

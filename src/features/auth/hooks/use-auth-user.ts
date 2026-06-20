@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import type { User } from "@supabase/supabase-js";
 import {
   getSupabaseBrowserClient,
@@ -11,6 +12,7 @@ import {
 export function useAuthUser() {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(!isSupabaseConfigured);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isSupabaseConfigured) return;
@@ -35,7 +37,7 @@ export function useAuthUser() {
       active = false;
       subscription.unsubscribe();
     };
-  }, []);
+  }, [pathname]);
 
   return { user, ready };
 }

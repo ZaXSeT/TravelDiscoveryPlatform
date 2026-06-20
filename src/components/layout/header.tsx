@@ -31,7 +31,7 @@ export function Header() {
   const toggleMobile = useUiStore((s) => s.toggleMobileNav);
   const { user } = useAuthUser();
   const overHero =
-    pathname === routes.home || pathname.startsWith("/destinations/");
+    pathname === routes.home || pathname === routes.explore || pathname.startsWith("/destinations/");
 
   const items = user 
     ? [...PUBLIC_NAV_ITEMS, ...AUTHED_NAV_ITEMS] 
