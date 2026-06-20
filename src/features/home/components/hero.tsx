@@ -80,7 +80,7 @@ export function Hero() {
                 across the world&apos;s most unforgettable destinations.
               </motion.p>
             </div>
-            <div className="overflow-hidden pb-2 pt-2 -mt-2">
+            <div className="overflow-hidden p-4 -m-4">
               <motion.div
                 custom={0.4} // Final stagger for buttons
                 initial={{ y: "120%" }}
