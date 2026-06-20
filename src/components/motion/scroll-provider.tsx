@@ -12,10 +12,13 @@ export function ScrollProvider() {
   const reduced = usePrefersReducedMotion();
   const pathname = usePathname();
 
+  // 1. Reset scroll position on route changes
   useEffect(() => {
-    // Immediately reset scroll to top on route change before Lenis mounts
     window.scrollTo(0, 0);
+  }, [pathname]);
 
+  // 2. Initialize Lenis and GSAP globally exactly once
+  useEffect(() => {
     if (reduced) return;
     let active = true;
     let cleanup: (() => void) | undefined;
@@ -41,10 +44,25 @@ export function ScrollProvider() {
       gsap.ticker.add(raf);
       gsap.ticker.lagSmoothing(0);
 
+      // Intercept anchor links for smooth scrolling via Lenis
+      const handleAnchorClick = (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        const anchor = target.closest("a");
+        if (!anchor) return;
+
+        const href = anchor.getAttribute("href");
+        if (href?.startsWith("#") && href.length > 1) {
+          e.preventDefault();
+          e.stopPropagation();
+          lenis.scrollTo(href);
+        }
+      };
+      document.addEventListener("click", handleAnchorClick, { capture: true });
+
       cleanup = () => {
+        document.removeEventListener("click", handleAnchorClick, { capture: true });
         gsap.ticker.remove(raf);
         lenis.destroy();
-        ScrollTrigger.getAll().forEach((t) => t.kill());
       };
     })();
 
@@ -52,7 +70,7 @@ export function ScrollProvider() {
       active = false;
       cleanup?.();
     };
-  }, [reduced, pathname]);
+  }, [reduced]);
 
   return null;
 }

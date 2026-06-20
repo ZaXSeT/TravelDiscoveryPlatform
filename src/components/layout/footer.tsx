@@ -5,11 +5,22 @@ import { routes } from "@/constants/routes";
 import { siteConfig } from "@/constants/config";
 import Image from "next/image";
 import { LocalTime } from "@/components/ui/local-time";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 export function Footer() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  // Fix Framer Motion useScroll stale measurements on Next.js route change
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      window.dispatchEvent(new Event("resize"));
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [pathname]);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end end"]

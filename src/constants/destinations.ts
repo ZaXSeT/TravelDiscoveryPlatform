@@ -22,7 +22,7 @@ export const DESTINATIONS: Destination[] = [
     country: "Indonesia",
     region: "Asia",
     summary:
-      "Lush rice terraces, surf breaks, and temple-dotted hills — an island built for slow, soulful travel.",
+      "Lush rice terraces, surf breaks, and temple-dotted hills. An island built for slow, soulful travel.",
     description:
       "Bali pairs spiritual calm with everyday adventure. Mornings begin in the misted rice terraces of Ubud, afternoons drift toward Canggu's surf, and evenings end with temple bells over the cliffs of Uluwatu. It rewards travelers who slow down.",
     coordinates: { lat: -8.4095, lng: 115.1889 },
@@ -30,13 +30,13 @@ export const DESTINATIONS: Destination[] = [
     budget: { accommodation: 4000, food: 1500, transport: 1000 },
     travelTips: [
       "Rent a scooter for the hills, but hire a driver for long cross-island days.",
-      "Carry a sarong — many temples require covered legs to enter.",
+      "Carry a sarong, as many temples require covered legs to enter.",
       "Visit popular temples at sunrise to beat both heat and crowds.",
     ],
     hiddenGems: [
       {
         title: "Sidemen Valley",
-        description: "Ubud's quieter cousin — emerald terraces without the tour buses.",
+        description: "Ubud's quieter cousin with emerald terraces without the tour buses.",
         image: "go/destinations/bali/gem-sidemen",
       },
       {
@@ -60,16 +60,16 @@ export const DESTINATIONS: Destination[] = [
     country: "Japan",
     region: "Asia",
     summary:
-      "Neon-lit precision meets centuries-old ritual — the world's most electric culinary capital.",
+      "Neon-lit precision meets centuries-old ritual in the world's most electric culinary capital.",
     description:
       "Tokyo runs on contrast: a hush at a shrine one block, a wall of light in Shinjuku the next. It is a city to eat your way through, from basement department-store delicacies to seven-seat counters down unmarked stairs.",
     coordinates: { lat: 35.6762, lng: 139.6503 },
     dna: { adventure: 55, culture: 95, food: 98, nature: 50, nightlife: 85, budgetFriendly: 40 },
     budget: { accommodation: 9000, food: 3500, transport: 1200 },
     travelTips: [
-      "Get a rechargeable Suica/Pasmo card — it works on nearly every train and many shops.",
+      "Get a rechargeable Suica/Pasmo card. It works on nearly every train and many shops.",
       "Cash still matters; carry some for small restaurants and shrines.",
-      "Last trains run around midnight — plan your night out around them.",
+      "Last trains run around midnight, so plan your night out around them.",
     ],
     hiddenGems: [
       {
@@ -98,14 +98,14 @@ export const DESTINATIONS: Destination[] = [
     country: "France",
     region: "Europe",
     summary:
-      "Boulevards, ateliers, and patisseries — an open-air museum of art, fashion, and food.",
+      "Boulevards, ateliers, and patisseries. An open-air museum of art, fashion, and food.",
     description:
       "Paris is best walked. Market mornings in the Marais, long café afternoons, and the slow gold of evening on the Seine. The headline sights are worth it, but the city's real pleasure is its unhurried everyday rhythm.",
     coordinates: { lat: 48.8566, lng: 2.3522 },
     dna: { adventure: 45, culture: 98, food: 95, nature: 40, nightlife: 75, budgetFriendly: 35 },
     budget: { accommodation: 11000, food: 4000, transport: 1500 },
     travelTips: [
-      "Many museums are free on the first Sunday of the month — go early.",
+      "Many museums are free on the first Sunday of the month, so go early.",
       "A carnet of metro tickets (or a Navigo pass) beats buying singles.",
       "Lunch menus (formule) are the best value at otherwise pricey restaurants.",
     ],
@@ -136,7 +136,7 @@ export const DESTINATIONS: Destination[] = [
     country: "United States",
     region: "North America",
     summary:
-      "A city of relentless reinvention — skyline, stages, and a restaurant for every craving.",
+      "A city of relentless reinvention with a skyline, stages, and a restaurant for every craving.",
     description:
       "New York compresses the world into a grid. Gallery mornings downtown, a slice eaten standing up, a Broadway curtain at night, and a skyline that never quite lets you sleep. Every neighborhood is its own country.",
     coordinates: { lat: 40.7128, lng: -74.006 },
@@ -144,7 +144,7 @@ export const DESTINATIONS: Destination[] = [
     budget: { accommodation: 15000, food: 5000, transport: 1500 },
     travelTips: [
       "An unlimited MetroCard/OMNY pays off fast if you ride more than a few times a day.",
-      "Lunch in Midtown, dinner in the outer boroughs — better food, lower prices.",
+      "Lunch in Midtown, dinner in the outer boroughs. Better food and lower prices.",
       "Many museums are 'pay what you wish' for NY State residents; check entry rules.",
     ],
     hiddenGems: [
@@ -174,14 +174,14 @@ export const DESTINATIONS: Destination[] = [
     country: "Switzerland",
     region: "Europe",
     summary:
-      "Alpine cinema in every direction — glacial lakes, peak railways, and pristine mountain air.",
+      "Alpine cinema in every direction with glacial lakes, peak railways, and pristine mountain air.",
     description:
-      "Switzerland is engineered for wonder: trains that climb into the clouds, lakes the color of glass, and trails that open onto impossible valleys. Slow, scenic, and spotless — it rewards travelers who look up.",
+      "Switzerland is engineered for wonder: trains that climb into the clouds, lakes the color of glass, and trails that open onto impossible valleys. Slow, scenic, and spotless. It rewards travelers who look up.",
     coordinates: { lat: 46.8182, lng: 8.2275 },
     dna: { adventure: 95, culture: 70, food: 75, nature: 99, nightlife: 45, budgetFriendly: 20 },
     budget: { accommodation: 13000, food: 4500, transport: 2000 },
     travelTips: [
-      "A Swiss Travel Pass can cover trains, boats, and many cable cars — do the math first.",
+      "A Swiss Travel Pass can cover trains, boats, and many cable cars - do the math first.",
       "Mountain weather turns fast; pack layers even on clear summer days.",
       "Supermarket picnics keep food costs sane in an expensive country.",
     ],
@@ -240,7 +240,7 @@ export function getFeatured(): DestinationSummary[] {
 }
 
 // =============================================================================
-// TIER 2 — EXPLORE DESTINATIONS (now full Destination objects)
+// TIER 2 - EXPLORE DESTINATIONS (now full Destination objects)
 // =============================================================================
 
 export const EXPLORE_DESTINATIONS: Destination[] = [
@@ -538,8 +538,8 @@ export const EXPLORE_DESTINATIONS: Destination[] = [
     name: "Toronto",
     country: "Canada",
     region: "North America",
-    summary: "Canada's most diverse city — neighborhoods, galleries, and food.",
-    description: "Toronto is a vibrant destination blending city, culture, food. Canada's most diverse city — neighborhoods, galleries, and food. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Canada.",
+    summary: "Canada's most diverse city with vibrant neighborhoods, galleries, and food.",
+    description: "Toronto is a vibrant destination blending city, culture, food. Canada's most diverse city - neighborhoods, galleries, and food. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Canada.",
     coordinates: {"lat":43.6532,"lng":-79.3832},
     dna: { adventure: 57, culture: 60, food: 78, nature: 76, nightlife: 74, budgetFriendly: 35 },
     budget: { accommodation: 5500, food: 3300, transport: 2200 },
@@ -634,8 +634,8 @@ export const EXPLORE_DESTINATIONS: Destination[] = [
     name: "Queenstown",
     country: "New Zealand",
     region: "Oceania",
-    summary: "The adventure capital — alpine lakes, peaks, and adrenaline.",
-    description: "Queenstown is a vibrant destination blending nature, adventure. The adventure capital — alpine lakes, peaks, and adrenaline. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in New Zealand.",
+    summary: "The adventure capital featuring alpine lakes, peaks, and adrenaline.",
+    description: "Queenstown is a vibrant destination blending nature, adventure. The adventure capital - alpine lakes, peaks, and adrenaline. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in New Zealand.",
     coordinates: {"lat":-45.0312,"lng":168.6626},
     dna: { adventure: 64, culture: 87, food: 69, nature: 66, nightlife: 81, budgetFriendly: 35 },
     budget: { accommodation: 6500, food: 3900, transport: 2600 },
@@ -658,8 +658,8 @@ export const EXPLORE_DESTINATIONS: Destination[] = [
     name: "Dubai",
     country: "United Arab Emirates",
     region: "Middle East",
-    summary: "Desert futurism — record-breaking towers, malls, and beaches.",
-    description: "Dubai is a vibrant destination blending city, luxury, beach. Desert futurism — record-breaking towers, malls, and beaches. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in United Arab Emirates.",
+    summary: "Desert futurism with record-breaking towers, malls, and beaches.",
+    description: "Dubai is a vibrant destination blending city, luxury, beach. Desert futurism - record-breaking towers, malls, and beaches. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in United Arab Emirates.",
     coordinates: {"lat":25.2048,"lng":55.2708},
     dna: { adventure: 48, culture: 77, food: 52, nature: 70, nightlife: 41, budgetFriendly: 35 },
     budget: { accommodation: 8000, food: 4800, transport: 3200 },
@@ -759,7 +759,7 @@ export function exploreToSummary(d: Destination): DestinationSummary {
   return toSummary(d);
 }
 
-/** All destination objects (both tiers) — for deriving facets. */
+/** All destination objects (both tiers) - for deriving facets. */
 export const ALL_DESTINATIONS: Destination[] = [
   ...DESTINATIONS,
   ...EXPLORE_DESTINATIONS,

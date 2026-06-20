@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Preloader noise texture animation */
+@keyframes noise-animation {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-2%, -3%); }
+  20% { transform: translate(-4%, 2%); }
+  30% { transform: translate(2%, -4%); }
+  40% { transform: translate(-2%, 5%); }
+  50% { transform: translate(-4%, 2%); }
+  60% { transform: translate(3%, 0); }
+  70% { transform: translate(0, 3%); }
+  80% { transform: translate(-3%, 0); }
+  90% { transform: translate(2%, 2%); }
+  100% { transform: translate(1%, 0); }
+}
+
 /* =============================================================================
    Design tokens — ProjectDocs/Phase0/11_DESIGN_TOKENS.md
    Contrast corrected per 09_ACCESSIBILITY_BASELINE.md (gold text uses --accent-gold-text)
@@ -102,7 +117,7 @@
   
   ::-webkit-scrollbar-thumb {
     /* Visible thumb but very thin and subtle */
-    background: rgba(255, 255, 255, 0.2); 
+    background: rgba(128, 128, 128, 0.4); 
     border-radius: 10px;
     border: 3px solid transparent; /* Creates padding around the thumb */
     background-clip: padding-box;
@@ -110,14 +125,14 @@
   
   ::-webkit-scrollbar-thumb:hover,
   ::-webkit-scrollbar-thumb:active {
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(128, 128, 128, 0.6);
     border: 2px solid transparent; /* Thickens slightly on hover */
   }
 
   /* Firefox support */
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    scrollbar-color: rgba(128, 128, 128, 0.4) transparent;
   }
   h1, h2, h3, h4 {
     @apply font-display;

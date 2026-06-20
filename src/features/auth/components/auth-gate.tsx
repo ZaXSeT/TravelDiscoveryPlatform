@@ -81,7 +81,7 @@ export function AuthGate() {
         if (err) return setError("Invalid email or password.");
       }
 
-      // Authed — replay the pending action, then sync server components.
+      // Authed - replay the pending action, then sync server components.
       const cb = onAuthed;
       close();
       await cb?.();

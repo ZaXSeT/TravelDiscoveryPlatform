@@ -11,7 +11,7 @@ import { latLngToVector3 } from "@/features/globe/lib/geo";
 
 const R = 1;
 
-// Direction the (invisible) sunlight comes from — drives the day/night terminator.
+// Direction the (invisible) sunlight comes from - drives the day/night terminator.
 const LIGHT_POS = new THREE.Vector3(7, 3, 2);
 const LIGHT_DIR = LIGHT_POS.clone().normalize();
 
@@ -37,7 +37,7 @@ const earthFragmentShader = /* glsl */ `
     float cosAngle = dot(normalize(vWorldNormal), normalize(sunDirection));
 
     // Diffuse (Lambert) shading: the lit hemisphere brightens toward the sub-solar point
-    // and fades toward the terminator — this is what makes the sphere read as a 3D planet
+    // and fades toward the terminator - this is what makes the sphere read as a 3D planet
     // photo instead of a flat map.
     float diffuse = clamp(cosAngle, 0.0, 1.0);
     vec3 litDay = day * (0.10 + 1.05 * pow(diffuse, 0.8));

@@ -5,6 +5,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { AuthGate } from "@/features/auth/components/auth-gate";
 import { ScrollProvider } from "@/components/motion/scroll-provider";
+import { LayoutPreloader } from "@/components/ui/layout-preloader";
 import { siteConfig } from "@/constants/config";
 import { Inter, DM_Sans, Cormorant_Garamond } from "next/font/google";
 
@@ -57,6 +58,7 @@ export default function RootLayout({
     <html lang={siteConfig.locale} suppressHydrationWarning className={`${inter.variable} ${dmSans.variable} ${cormorant.variable}`}>
       <body className="flex min-h-dvh flex-col bg-background text-foreground">
         <SkipLink />
+        <LayoutPreloader />
         <ScrollProvider />
         <Header />
         <main id="main-content" className="flex-1">

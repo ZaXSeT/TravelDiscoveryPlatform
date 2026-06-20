@@ -37,7 +37,7 @@ export default async function WishlistPage() {
         <SectionHeader
           eyebrow="Wishlist"
           title="Saved destinations"
-          description="The places you're dreaming about — saved and synced to your account."
+          description="The places you're dreaming about, saved and synced to your account."
         />
         <div className="mt-10">
           <WishlistGrid initial={summaries} />

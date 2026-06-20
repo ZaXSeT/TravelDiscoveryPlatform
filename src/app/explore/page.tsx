@@ -18,7 +18,7 @@ import {
 export const metadata: Metadata = {
   title: "Explore",
   description:
-    "Search and filter destinations by region, vibe, and budget — find your next trip.",
+    "Search and filter destinations by region, vibe, and budget to find your next trip.",
 };
 
 // Static page; filtering happens client-side over this data (no server round-trips).

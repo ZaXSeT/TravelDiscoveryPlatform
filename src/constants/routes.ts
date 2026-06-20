@@ -1,4 +1,4 @@
-// Typed route map — no hardcoded path strings in components.
+// Typed route map - no hardcoded path strings in components.
 
 export const routes = {
   home: "/",
@@ -10,7 +10,7 @@ export const routes = {
   journalNew: "/journal/new",
   journalEdit: (slug: string) => `/journal/${slug}/edit`,
 
-  // Authenticated (built in Phase 3) — referenced by guards/nav only when relevant.
+  // Authenticated (built in Phase 3) - referenced by guards/nav only when relevant.
   wishlist: "/wishlist",
   itineraries: "/itineraries",
   itinerary: (id: string) => `/itineraries/${id}`,

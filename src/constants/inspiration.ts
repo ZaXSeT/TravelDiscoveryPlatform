@@ -8,7 +8,7 @@ export const INSPIRATION: InspirationEntry[] = [
     slug: "seven-days-in-bali",
     title: "7 Days in Bali",
     excerpt:
-      "Rice terraces at dawn, surf at noon, and temple bells at dusk — a week of slow island living.",
+      "Rice terraces at dawn, surf at noon, and temple bells at dusk. A week of slow island living.",
     author: "Orbis Editorial",
     cover: "go/journal/seven-days-in-bali/cover",
     destinationSlug: "bali",

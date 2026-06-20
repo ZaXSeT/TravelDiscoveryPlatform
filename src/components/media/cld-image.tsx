@@ -14,6 +14,7 @@ interface CldImageProps {
   className?: string;
   priority?: boolean;
   fill?: boolean;
+  onLoad?: () => void;
 }
 
 export function CldImage({
@@ -25,6 +26,7 @@ export function CldImage({
   className,
   priority,
   fill,
+  onLoad,
 }: CldImageProps) {
   const w = width ?? 1200;
   const h = height ?? 800;
@@ -39,6 +41,7 @@ export function CldImage({
         sizes={sizes}
         priority={priority}
         className={className}
+        onLoad={onLoad}
       />
     );
   }
@@ -52,6 +55,7 @@ export function CldImage({
       sizes={sizes}
       priority={priority}
       className={className}
+      onLoad={onLoad}
     />
   );
 }

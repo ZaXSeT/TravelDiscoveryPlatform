@@ -42,7 +42,7 @@ export async function signInAction(
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
   if (error) {
-    // Generic message — no user enumeration.
+    // Generic message, no user enumeration.
     return { error: "Invalid email or password." };
   }
 
@@ -79,7 +79,7 @@ export async function signUpAction(
   if (!data.session) {
     return {
       notice:
-        "Almost there — check your email to confirm your account, then sign in.",
+        "Almost there. Check your email to confirm your account, then sign in.",
     };
   }
 

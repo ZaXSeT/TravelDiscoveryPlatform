@@ -43,7 +43,7 @@ export function CtaSection() {
           
           <Reveal delayMs={200}>
             <p className="mt-8 max-w-xl text-lg text-white/80 leading-relaxed md:text-xl">
-              Explore destinations now — create a free account to save favorites and
+              Explore destinations now. Create a free account to save favorites and
               plan itineraries that you will remember forever.
             </p>
           </Reveal>

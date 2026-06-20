@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { CldImage } from "@/components/media/cld-image";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
+import { preloaderStore } from "@/lib/store/preloader-store";
 
 // Three.js is loaded only when the capability gate passes (so it never ships to mobile
 // or low-end devices). ssr:false keeps it out of server render entirely.
@@ -43,12 +44,23 @@ export function InteractiveGlobe({ fallbackImageId, alt }: InteractiveGlobeProps
       navigator as Navigator & { deviceMemory?: number }
     ).deviceMemory;
     const cores = navigator.hardwareConcurrency ?? 4;
-    setEnabled(
+    
+    const isCapable = 
       wide &&
-        webglAvailable() &&
-        (deviceMemory === undefined || deviceMemory >= 4) &&
-        cores >= 4,
-    );
+      webglAvailable() &&
+      (deviceMemory === undefined || deviceMemory >= 4) &&
+      cores >= 4;
+
+    if (isCapable) {
+      // Delay mounting WebGL during initial load to prevent freezing the preloader animation.
+      // Trigger it exactly at 2000ms, which is when the preloader counter reaches 90% and intentionally slows down.
+      if (!preloaderStore.hasRun) {
+        const timer = setTimeout(() => setEnabled(true), 2000);
+        return () => clearTimeout(timer);
+      } else {
+        setEnabled(true);
+      }
+    }
   }, [reduced]);
 
   if (enabled) {
@@ -59,7 +71,7 @@ export function InteractiveGlobe({ fallbackImageId, alt }: InteractiveGlobeProps
     );
   }
 
-  // Static fallback (mobile / reduced-motion / low-end / no WebGL) — identical to the
+  // Static fallback (mobile / reduced-motion / low-end / no WebGL) - identical to the
   // Phase 2/3 static globe so nothing regresses.
   return (
     <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-full border border-white/10 bg-dark-0 shadow-card">

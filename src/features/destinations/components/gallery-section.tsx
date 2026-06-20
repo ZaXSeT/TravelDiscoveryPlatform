@@ -22,7 +22,7 @@ export function GallerySection({
           >
             <CldImage
               publicId={id}
-              alt={`${name} — photo ${i + 1}`}
+              alt={`${name} photo ${i + 1}`}
               fill
               sizes={
                 isLarge

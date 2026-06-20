@@ -26,7 +26,7 @@ export function StaticGlobe() {
               {total} destinations. One journey.
             </h2>
             <p className="mt-4 max-w-md text-white/80">
-              From Bali&apos;s rice terraces to Cape Town&apos;s coast — explore{" "}
+              From Bali&apos;s rice terraces to Cape Town&apos;s coast, explore{" "}
               {total} destinations across {regionCount} regions, with guides,
               budgets, and hidden gems.
             </p>

@@ -1,0 +1,65 @@
+"use client";
+
+import { useEffect } from "react";
+import { motion, useAnimation } from "framer-motion";
+import { preloaderStore } from "@/lib/store/preloader-store";
+
+export function HeroTitle() {
+  const line1 = ["Places", "worth"];
+  const line2 = ["the", "journey."];
+  const controls = useAnimation();
+
+  // Smooth and elegant ease-out (easeOutQuart) that matches the user's provided curve.
+  // Gives a very premium, fluid "Awwwards" floating effect.
+  const premiumEase = [0.25, 1, 0.5, 1];
+
+  useEffect(() => {
+    // If preloader hasn't run yet this session, it will take ~3.8s to finish.
+    const hasPreloaded = preloaderStore.hasRun;
+    const baseDelay = hasPreloaded ? 0.2 : 3.8;
+
+    controls.start((i) => ({
+      y: 0,
+      transition: {
+        delay: i * 0.2 + baseDelay, // Stagger delay (0.2s per word for 1-by-1 effect)
+        duration: 1.2,
+        ease: premiumEase,
+      },
+    }));
+  }, [controls]);
+
+  return (
+    <h1 className="font-serif text-[18vw] leading-[0.85] tracking-tight md:text-[12vw] flex flex-col gap-2">
+      <span className="flex flex-wrap gap-x-[3vw] md:gap-x-[2vw]">
+        {line1.map((word, i) => (
+          <span key={i} className="inline-block overflow-hidden pb-[0.4em] -mb-[0.4em] pt-[0.2em] -mt-[0.2em] px-[0.2em] -mx-[0.2em]">
+            <motion.span
+              custom={i}
+              initial={{ y: "150%" }}
+              animate={controls}
+              className="inline-block"
+              style={{ willChange: "transform", WebkitFontSmoothing: "antialiased" }}
+            >
+              {word}
+            </motion.span>
+          </span>
+        ))}
+      </span>
+      <span className="flex flex-wrap gap-x-[3vw] md:gap-x-[2vw]">
+        {line2.map((word, i) => (
+          <span key={i} className="inline-block overflow-hidden pb-[0.4em] -mb-[0.4em] pt-[0.2em] -mt-[0.2em] px-[0.2em] -mx-[0.2em]">
+            <motion.span
+              custom={i + line1.length}
+              initial={{ y: "150%" }}
+              animate={controls}
+              className="inline-block italic text-white/90"
+              style={{ willChange: "transform", WebkitFontSmoothing: "antialiased" }}
+            >
+              {word}
+            </motion.span>
+          </span>
+        ))}
+      </span>
+    </h1>
+  );
+}

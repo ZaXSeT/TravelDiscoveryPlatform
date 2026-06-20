@@ -78,7 +78,7 @@ export interface DestinationSummary {
 }
 
 /**
- * Tier 2 "Explore" destination — lightweight, frontend-only (not seeded in the DB and
+ * Tier 2 "Explore" destination - lightweight, frontend-only (not seeded in the DB and
  * not saveable to wishlist/itinerary, which remain Tier 1 / featured-only). Used to make
  * Explore feel like a real catalog without per-destination content overhead.
  */
