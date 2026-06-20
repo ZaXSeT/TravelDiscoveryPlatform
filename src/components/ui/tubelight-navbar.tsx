@@ -69,8 +69,8 @@ export function NavBar({ items, className, leftContent, rightContent, defaultDar
       for (const section of darkSections) {
         const rect = section.getBoundingClientRect();
         const navCenter = navRect.top + navRect.height / 2;
-        // 50px tolerance accounts for the initial y: -40 fly-in animation
-        const tolerance = 50; 
+        // 120px tolerance accounts for the initial y: -100 fly-in animation
+        const tolerance = 120; 
         if (
           navCenter < rect.bottom + tolerance &&
           navCenter > rect.top - tolerance
@@ -157,7 +157,7 @@ export function NavBar({ items, className, leftContent, rightContent, defaultDar
       >
         <motion.div 
           ref={navRef}
-          initial={{ opacity: 0, y: -40 }}
+          initial={{ opacity: 0, y: -100 }}
           animate={wrapperControls}
           className={cn(
             "flex items-center justify-between sm:justify-center gap-2 sm:gap-6 backdrop-blur-xl py-1.5 px-2 sm:px-4 rounded-full shadow-lg pointer-events-auto transition-all duration-500",
