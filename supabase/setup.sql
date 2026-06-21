@@ -671,7 +671,28 @@ values
    'Two days of museums, market mornings, and long café afternoons.',
    E'## Saturday\nMorning at the Marais markets, afternoon at the Louvre.\n\n## Sunday\nA slow stroll along the Seine and a last espresso before the train.',
    'go/journal/a-weekend-in-paris/cover',
-   '33333333-3333-4333-8333-333333333333', 'public', now())
+   '33333333-3333-4333-8333-333333333333', 'public', now() - interval '1 day'),
+
+  ('10000000-0000-4000-8000-000000000004', null, true, 'GO Editorial',
+   'winter-in-new-york', 'Winter in New York',
+   'Ice skating, holiday lights, and the relentless energy of a city that never stops moving.',
+   E'## The Cold Rush\nThe air bites, but the city glows. A walk through Central Park under fresh snow.\n\n## Warm Refuges\nDucking into corner diners and world-class museums to escape the chill.',
+   'go/destinations/new-york/hero',
+   '44444444-4444-4444-8444-444444444444', 'public', now() - interval '2 days'),
+
+  ('10000000-0000-4000-8000-000000000005', null, true, 'GO Editorial',
+   'alpine-trains', 'Crossing the Swiss Alps',
+   'A visual journey aboard the Glacier Express, winding through some of Europe''s most dramatic peaks.',
+   E'## The Ascent\nLeaving the valley behind, the train slowly climbs into the clouds.\n\n## Glacial Views\nUninterrupted white landscapes stretch out as we cross the high passes.',
+   'go/destinations/switzerland/hero',
+   '55555555-5555-4555-8555-555555555555', 'public', now() - interval '3 days'),
+
+  ('10000000-0000-4000-8000-000000000006', null, true, 'GO Editorial',
+   'canggu-nomad-diaries', 'Canggu Nomad Diaries',
+   'Finding balance between late-night coding sessions and early-morning surf breaks.',
+   E'## Work and Waves\nThe rhythm of life here is simple: code, surf, eat, repeat.\n\n## Community\nMeeting creatives from every corner of the globe at sunset.',
+   'go/destinations/bali/gallery-1',
+   '11111111-1111-4111-8111-111111111111', 'public', now() - interval '4 days')
 on conflict (id) do update set
   author_label = excluded.author_label,
   slug = excluded.slug,
@@ -694,3 +715,11 @@ on conflict (id) do update set
   storage_path = excluded.storage_path,
   position = excluded.position,
   alt = excluded.alt;
+
+-- =============================================================================
+-- Travel DNA Assessment (migration 20260621120000) — persist the user's computed
+-- Travel DNA profile (6 axes, 0–100) as JSON for reuse in itinerary generation.
+-- Idempotent: safe to re-run.
+-- =============================================================================
+alter table public.profiles
+  add column if not exists travel_dna jsonb;

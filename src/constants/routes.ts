@@ -5,6 +5,7 @@ export const routes = {
   explore: "/explore",
   destination: (slug: string) => `/destinations/${slug}`,
   tripGenerator: "/trip-generator",
+  travelDna: "/travel-dna",
   journal: "/journal",
   journalEntry: (slug: string) => `/journal/${slug}`,
   journalNew: "/journal/new",

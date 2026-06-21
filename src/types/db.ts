@@ -34,17 +34,20 @@ export interface Database {
           display_name: string;
           avatar_path: string | null;
           bio: string | null;
+          travel_dna: Json | null;
         } & Timestamps;
         Insert: {
           id: string;
           display_name: string;
           avatar_path?: string | null;
           bio?: string | null;
+          travel_dna?: Json | null;
         };
         Update: {
           display_name?: string;
           avatar_path?: string | null;
           bio?: string | null;
+          travel_dna?: Json | null;
         };
         Relationships: [];
       };

@@ -1,11 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { Wand2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { DESTINATIONS } from "@/constants/destinations";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { DESTINATIONS, EXPLORE_DESTINATIONS } from "@/constants/destinations";
 import type { TravelStyle } from "@/types";
 import type { TripInput } from "@/features/trip-generator/types";
 
@@ -19,12 +27,16 @@ const STYLES: { value: TravelStyle; label: string }[] = [
 
 export function GeneratorForm({
   onGenerate,
+  pending = false,
+  defaultStyle,
 }: {
   onGenerate: (input: TripInput) => void;
+  pending?: boolean;
+  defaultStyle?: TravelStyle;
 }) {
   const [budget, setBudget] = useState("1500");
   const [days, setDays] = useState("7");
-  const [style, setStyle] = useState<TravelStyle>("culture");
+  const [style, setStyle] = useState<TravelStyle>(defaultStyle ?? "culture");
   const [destinationSlug, setDestinationSlug] = useState("");
 
   const submit = (e: React.FormEvent) => {
@@ -43,11 +55,14 @@ export function GeneratorForm({
   };
 
   return (
-    <form
+    <motion.form
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
       onSubmit={submit}
-      className="rounded-lg border border-border bg-surface-1 p-6"
+      className="rounded-2xl border border-border bg-card p-6 shadow-2xl shadow-black/5 sm:p-8"
     >
-      <h2 className="font-display text-xl">Plan your trip</h2>
+      <h2 className="font-display text-2xl tracking-tight">Plan your trip</h2>
 
       <div className="mt-5 space-y-4">
         <div className="grid grid-cols-2 gap-4">
@@ -78,42 +93,50 @@ export function GeneratorForm({
 
         <div className="space-y-1.5">
           <Label htmlFor="tg-style">Travel style</Label>
-          <select
-            id="tg-style"
+          <Select
             value={style}
-            onChange={(e) => setStyle(e.target.value as TravelStyle)}
-            className="h-11 w-full rounded-md border border-input bg-card px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            onValueChange={(val) => setStyle(val as TravelStyle)}
           >
-            {STYLES.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger id="tg-style" className="h-11 w-full bg-card">
+              <SelectValue placeholder="Select travel style" />
+            </SelectTrigger>
+            <SelectContent>
+              {STYLES.map((s) => (
+                <SelectItem key={s.value} value={s.value}>
+                  {s.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-1.5">
           <Label htmlFor="tg-destination">Destination</Label>
-          <select
-            id="tg-destination"
-            value={destinationSlug}
-            onChange={(e) => setDestinationSlug(e.target.value)}
-            className="h-11 w-full rounded-md border border-input bg-card px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          <Select
+            value={destinationSlug || "auto"}
+            onValueChange={(val) => setDestinationSlug(val === "auto" ? "" : val)}
           >
-            <option value="">Auto-pick for my style</option>
-            {DESTINATIONS.map((d) => (
-              <option key={d.slug} value={d.slug}>
-                {d.name}
-              </option>
-            ))}
-          </select>
+            <SelectTrigger id="tg-destination" className="h-11 w-full bg-card">
+              <SelectValue placeholder="Select destination" />
+            </SelectTrigger>
+            <SelectContent className="max-h-60">
+              <SelectItem value="auto">Auto-pick for my style</SelectItem>
+              {[...DESTINATIONS, ...EXPLORE_DESTINATIONS]
+                .sort((a, b) => a.name.localeCompare(b.name))
+                .map((d) => (
+                  <SelectItem key={d.slug} value={d.slug}>
+                    {d.name}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
         </div>
 
-        <Button type="submit" size="lg" className="w-full gap-2">
+        <Button type="submit" size="lg" disabled={pending} className="w-full gap-2">
           <Wand2 className="size-4" />
-          Generate itinerary
+          {pending ? "Generating…" : "Generate itinerary"}
         </Button>
       </div>
-    </form>
+    </motion.form>
   );
 }

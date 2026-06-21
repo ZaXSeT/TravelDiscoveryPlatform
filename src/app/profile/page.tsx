@@ -7,6 +7,8 @@ import { EmptyState } from "@/components/feedback/empty-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ProfileHeader } from "@/features/profile/components/profile-header";
+import { ProfileTravelDna } from "@/features/travel-dna/components/profile-travel-dna";
+import { sanitizeDna } from "@/features/travel-dna/scoring";
 import { WishlistGrid } from "@/features/wishlist/components/wishlist-grid";
 import { ItineraryList } from "@/features/itinerary/components/itinerary-list";
 import { JournalCard } from "@/features/journal/components/journal-card";
@@ -36,6 +38,7 @@ export default async function ProfilePage() {
 
   const [
     { data: profile },
+    { data: dnaRow },
     { data: wlRows },
     { data: dests },
     { data: itinRows },
@@ -44,6 +47,13 @@ export default async function ProfilePage() {
     supabase
       .from("profiles")
       .select("display_name, bio, avatar_path")
+      .eq("id", user.id)
+      .maybeSingle(),
+    // Separate query: if the travel_dna column isn't migrated yet, only this fails (null),
+    // leaving the rest of the profile intact.
+    supabase
+      .from("profiles")
+      .select("travel_dna")
       .eq("id", user.id)
       .maybeSingle(),
     supabase
@@ -84,6 +94,7 @@ export default async function ProfilePage() {
   }));
 
   const journals = journalRows ?? [];
+  const travelDna = sanitizeDna(dnaRow?.travel_dna);
 
   const displayName =
     profile?.display_name ??
@@ -104,6 +115,23 @@ export default async function ProfilePage() {
           <Stat label="Trips" value={itineraries.length} />
           <Stat label="Journals" value={journals.length} />
         </div>
+
+        <section>
+          <SectionHeader
+            eyebrow="Travel DNA"
+            title="Your traveler profile"
+            action={
+              <Button asChild variant="outline">
+                <Link href={routes.travelDna}>
+                  {travelDna ? "Retake" : "Take assessment"}
+                </Link>
+              </Button>
+            }
+          />
+          <div className="mt-8">
+            <ProfileTravelDna dna={travelDna} />
+          </div>
+        </section>
 
         <section>
           <SectionHeader eyebrow="Wishlist" title="Saved destinations" />

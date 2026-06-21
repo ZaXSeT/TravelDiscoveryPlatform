@@ -1,5 +1,6 @@
-import type { Destination, DnaKey, TravelStyle } from "@/types";
-import { DESTINATIONS, getDestination } from "@/constants/destinations";
+import type { Destination, Dna, DnaKey, TravelStyle } from "@/types";
+import { ALL_DESTINATIONS } from "@/constants/destinations";
+import { compatibilityScore } from "@/features/travel-dna/scoring";
 import type {
   GeneratedDay,
   GeneratedItem,
@@ -63,6 +64,16 @@ function seedFrom(input: string): number {
   return h;
 }
 
+// Deterministic small offset around the city centre so map markers spread out (~a few km).
+function jitter(
+  c: { lat: number; lng: number },
+  n: number,
+): { lat: number; lng: number } {
+  const a = ((n * 9301 + 49297) % 233280) / 233280;
+  const b = ((n * 4096 + 150889) % 233280) / 233280;
+  return { lat: c.lat + (a - 0.5) * 0.06, lng: c.lng + (b - 0.5) * 0.06 };
+}
+
 function scoreDestination(d: Destination, style: TravelStyle): number {
   const axes = STYLE_AXES[style];
   let affinity =
@@ -74,13 +85,28 @@ function scoreDestination(d: Destination, style: TravelStyle): number {
   return affinity;
 }
 
-function pickDestination(input: TripInput): Destination {
+// Destination data is the source of truth: resolve the trip's destination from our
+// catalog — the user's explicit pick, else the best match for their saved Travel DNA, else
+// their chosen style. Shared by both the Gemini path and the deterministic fallback so they
+// target the same place.
+export function resolveDestination(
+  input: TripInput,
+  userDna?: Dna | null,
+): Destination {
   if (input.destinationSlug) {
-    const preferred = getDestination(input.destinationSlug);
+    const preferred = ALL_DESTINATIONS.find(
+      (d) => d.slug === input.destinationSlug,
+    );
     if (preferred) return preferred;
   }
-  // Highest style affinity; deterministic tie-break by slug.
-  return [...DESTINATIONS].sort((a, b) => {
+  if (userDna) {
+    return [...ALL_DESTINATIONS].sort((a, b) => {
+      const diff =
+        compatibilityScore(userDna, b.dna) - compatibilityScore(userDna, a.dna);
+      return diff !== 0 ? diff : a.slug.localeCompare(b.slug);
+    })[0]!;
+  }
+  return [...ALL_DESTINATIONS].sort((a, b) => {
     const diff = scoreDestination(b, input.style) - scoreDestination(a, input.style);
     return diff !== 0 ? diff : a.slug.localeCompare(b.slug);
   })[0]!;
@@ -108,8 +134,11 @@ const STYLE_LABEL: Record<TravelStyle, string> = {
   luxury: "Luxury",
 };
 
-export function generateTrip(input: TripInput): GeneratedTrip {
-  const d = pickDestination(input);
+export function generateTrip(
+  input: TripInput,
+  destination: Destination,
+): GeneratedTrip {
+  const d = destination;
   const pool = activityPool(d, input.style);
   const seed = seedFrom(`${d.slug}:${input.style}:${input.days}`);
 
@@ -121,12 +150,18 @@ export function generateTrip(input: TripInput): GeneratedTrip {
       const items: GeneratedItem[] = [];
       for (let i = 0; i < perDay; i++) {
         const tpl = pool[cursor % pool.length]!;
+        const gi = cursor;
         cursor += 1;
+        const coords = jitter(d.coordinates, seed + gi);
         items.push({
           title: tpl.title,
           startTime: tpl.startTime,
           cost: tpl.cost,
           note: null,
+          description: `A ${STYLE_LABEL[input.style].toLowerCase()} stop in ${d.name}.`,
+          lat: coords.lat,
+          lng: coords.lng,
+          image: `go/destinations/${d.slug}/plan-${gi}`,
         });
       }
       // sort the day's items by time for a natural schedule
@@ -177,6 +212,8 @@ export function generateTrip(input: TripInput): GeneratedTrip {
       vsBudget: input.budget - total,
     },
     notes: Array.from(new Set(notes)),
+    center: { lat: d.coordinates.lat, lng: d.coordinates.lng },
+    source: "rules",
   };
 }
 

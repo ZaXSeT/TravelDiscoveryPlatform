@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, BookOpen, Wand2, Menu } from "lucide-react";
+import { Compass, BookOpen, Wand2, Fingerprint, Menu } from "lucide-react";
 import { AuthNav } from "@/features/auth/components/auth-nav";
 import { NavBar as TubelightNavBar } from "@/components/ui/tubelight-navbar";
 import { MobileMenu } from "@/components/layout/mobile-menu";
@@ -16,6 +16,7 @@ import { useAuthUser } from "@/features/auth/hooks/use-auth-user";
 
 const PUBLIC_NAV_ITEMS = [
   { name: "Explore", url: routes.explore, icon: Compass },
+  { name: "Travel DNA", url: routes.travelDna, icon: Fingerprint },
   { name: "Plan", url: routes.tripGenerator, icon: Wand2 },
   { name: "Journal", url: routes.journal, icon: BookOpen },
 ];
@@ -31,7 +32,11 @@ export function Header() {
   const toggleMobile = useUiStore((s) => s.toggleMobileNav);
   const { user } = useAuthUser();
   const overHero =
-    pathname === routes.home || pathname === routes.explore || pathname.startsWith("/destinations/");
+    pathname === routes.home ||
+    pathname === routes.explore ||
+    pathname === routes.tripGenerator ||
+    pathname === routes.travelDna ||
+    pathname.startsWith("/destinations/");
 
   const items = user 
     ? [...PUBLIC_NAV_ITEMS, ...AUTHED_NAV_ITEMS] 

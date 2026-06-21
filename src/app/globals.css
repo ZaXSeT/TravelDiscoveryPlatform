@@ -212,3 +212,20 @@ html.lenis body {
     );
   }
 }
+
+html {
+  scrollbar-gutter: stable;
+}
+
+/* 
+  Override Radix UI's scroll-lock behavior for Select dropdowns and Dialogs.
+  This prevents the scrollbar from disappearing and causing layout shifts when opened.
+  Using 'html body' increases specificity to override dynamically injected <style> tags.
+*/
+html body[data-scroll-locked] {
+  overflow: visible !important;
+  overflow-y: auto !important;
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+  pointer-events: auto !important;
+}
