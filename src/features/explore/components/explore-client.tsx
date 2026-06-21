@@ -20,7 +20,7 @@ export function ExploreClient({ items }: { items: ExploreItem[] }) {
     <div className="space-y-12">
       {/* Top Controls */}
       <Reveal delayMs={150} className="relative z-50">
-        <div className="mx-auto max-w-5xl space-y-10 rounded-3xl border border-border/50 bg-background/80 p-6 shadow-xl backdrop-blur-xl sm:p-10">
+        <div className="mx-auto max-w-5xl space-y-10 rounded-3xl border border-border/50 bg-background p-6 shadow-xl sm:p-10">
           <SearchBar value={f.query} onChange={f.setQuery} />
           
           <div className="h-px w-full bg-border/50" />

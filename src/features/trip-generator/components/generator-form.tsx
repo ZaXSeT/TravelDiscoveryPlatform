@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DestinationPicker } from "@/features/trip-generator/components/destination-picker";
 import { DESTINATIONS, EXPLORE_DESTINATIONS } from "@/constants/destinations";
 import type { TravelStyle } from "@/types";
 import type { TripInput } from "@/features/trip-generator/types";
@@ -112,24 +113,13 @@ export function GeneratorForm({
 
         <div className="space-y-1.5">
           <Label htmlFor="tg-destination">Destination</Label>
-          <Select
-            value={destinationSlug || "auto"}
-            onValueChange={(val) => setDestinationSlug(val === "auto" ? "" : val)}
-          >
-            <SelectTrigger id="tg-destination" className="h-11 w-full bg-card">
-              <SelectValue placeholder="Select destination" />
-            </SelectTrigger>
-            <SelectContent className="max-h-60">
-              <SelectItem value="auto">Auto-pick for my style</SelectItem>
-              {[...DESTINATIONS, ...EXPLORE_DESTINATIONS]
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .map((d) => (
-                  <SelectItem key={d.slug} value={d.slug}>
-                    {d.name}
-                  </SelectItem>
-                ))}
-            </SelectContent>
-          </Select>
+          <DestinationPicker
+            value={destinationSlug}
+            onChange={setDestinationSlug}
+            options={[...DESTINATIONS, ...EXPLORE_DESTINATIONS]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((d) => ({ slug: d.slug, name: d.name }))}
+          />
         </div>
 
         <Button type="submit" size="lg" disabled={pending} className="w-full gap-2">

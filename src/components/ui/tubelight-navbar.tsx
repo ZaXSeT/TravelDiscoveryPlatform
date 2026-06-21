@@ -115,6 +115,10 @@ export function NavBar({ items, className, leftContent, rightContent, defaultDar
 
     const hasPreloaded = preloaderStore.hasRun
     const baseDelay = hasPreloaded ? 0.2 : 4.4
+    const isMobileDevice = window.innerWidth < 640;
+
+    // Set initial position based on device (bottom-to-top for mobile, top-to-bottom for desktop)
+    wrapperControls.set({ opacity: 0, y: isMobileDevice ? 100 : -100 });
 
     wrapperControls.start({
       opacity: 1,
@@ -157,10 +161,10 @@ export function NavBar({ items, className, leftContent, rightContent, defaultDar
       >
         <motion.div 
           ref={navRef}
-          initial={{ opacity: 0, y: -100 }}
+          initial={{ opacity: 0 }}
           animate={wrapperControls}
           className={cn(
-            "flex items-center justify-between sm:justify-center gap-2 sm:gap-6 backdrop-blur-xl py-1.5 px-2 sm:px-4 rounded-full shadow-lg pointer-events-auto transition-all duration-500",
+            "flex items-center justify-between sm:justify-center gap-2 sm:gap-6 backdrop-blur-xl py-1.5 px-2 sm:px-4 rounded-full shadow-none sm:shadow-lg pointer-events-auto transition-all duration-500",
             useWhiteText 
               ? "bg-black/20 border border-white/10" 
               : "bg-white/70 border border-black/5"

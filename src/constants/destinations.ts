@@ -748,6 +748,486 @@ export const EXPLORE_DESTINATIONS: Destination[] = [
     media: media("marrakech"),
     categories: ["Culture","Adventure","Luxury"],
     bestSeason: "Mar–May & Sep–Nov"
+  },
+  {
+    slug: "london",
+    name: "London",
+    country: "United Kingdom",
+    region: "Europe",
+    summary: "Royal pageantry, world-class museums, and a pub on every corner.",
+    description: "London is a vibrant destination blending city, culture, food. Royal pageantry, world-class museums, and a pub on every corner. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in the United Kingdom.",
+    coordinates: { lat: 51.5074, lng: -0.1278 },
+    dna: { adventure: 45, culture: 90, food: 80, nature: 40, nightlife: 85, budgetFriendly: 30 },
+    budget: { accommodation: 7000, food: 3000, transport: 2000 },
+    travelTips: ["Get a contactless or Oyster card for the Tube.","Many of the best museums are free to enter."],
+    hiddenGems: [
+      { title: "Leadenhall Market", description: "An ornate Victorian covered market.", image: "go/destinations/london/gem1" },
+      { title: "Daunt Books Marylebone", description: "A galleried Edwardian travel bookshop.", image: "go/destinations/london/gem2" }
+    ],
+    nearby: [
+      { name: "Windsor", distanceKm: 40, image: "go/destinations/london/near1" },
+      { name: "Oxford", distanceKm: 90, image: "go/destinations/london/near2" },
+      { name: "Brighton", distanceKm: 85, image: "go/destinations/london/near3" }
+    ],
+    media: media("london"),
+    categories: ["City","Culture","Food","Nightlife"],
+    bestSeason: "May–Sep"
+  },
+  {
+    slug: "lisbon",
+    name: "Lisbon",
+    country: "Portugal",
+    region: "Europe",
+    summary: "Tiled facades, hilltop miradouros, and soulful fado nights.",
+    description: "Lisbon is a vibrant destination blending city, food, culture. Tiled facades, hilltop miradouros, and soulful fado nights. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Portugal.",
+    coordinates: { lat: 38.7223, lng: -9.1393 },
+    dna: { adventure: 55, culture: 80, food: 85, nature: 55, nightlife: 78, budgetFriendly: 65 },
+    budget: { accommodation: 4000, food: 2000, transport: 1200 },
+    travelTips: ["Wear good shoes for the steep cobbled hills.","Ride Tram 28 early to beat the crowds."],
+    hiddenGems: [
+      { title: "LX Factory", description: "A creative hub of shops under a bridge.", image: "go/destinations/lisbon/gem1" },
+      { title: "Miradouro da Senhora do Monte", description: "The city's finest sunset viewpoint.", image: "go/destinations/lisbon/gem2" }
+    ],
+    nearby: [
+      { name: "Sintra", distanceKm: 30, image: "go/destinations/lisbon/near1" },
+      { name: "Cascais", distanceKm: 30, image: "go/destinations/lisbon/near2" },
+      { name: "Setúbal", distanceKm: 50, image: "go/destinations/lisbon/near3" }
+    ],
+    media: media("lisbon"),
+    categories: ["City","Culture","Food"],
+    bestSeason: "Mar–Oct"
+  },
+  {
+    slug: "santorini",
+    name: "Santorini",
+    country: "Greece",
+    region: "Europe",
+    summary: "Whitewashed cliffs, caldera sunsets, and volcanic beaches.",
+    description: "Santorini is a vibrant destination blending beach, romance, luxury. Whitewashed cliffs, caldera sunsets, and volcanic beaches. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Greece.",
+    coordinates: { lat: 36.3932, lng: 25.4615 },
+    dna: { adventure: 45, culture: 60, food: 75, nature: 80, nightlife: 65, budgetFriendly: 35 },
+    budget: { accommodation: 6000, food: 2800, transport: 1500 },
+    travelTips: ["Book sunset dinners in Oia well ahead.","Rent an ATV to reach the quieter beaches."],
+    hiddenGems: [
+      { title: "Pyrgos Village", description: "A quiet hilltop town above the crowds.", image: "go/destinations/santorini/gem1" },
+      { title: "Red Beach", description: "Dramatic crimson volcanic cliffs.", image: "go/destinations/santorini/gem2" }
+    ],
+    nearby: [
+      { name: "Oia", distanceKm: 11, image: "go/destinations/santorini/near1" },
+      { name: "Thirassia", distanceKm: 5, image: "go/destinations/santorini/near2" },
+      { name: "Ios", distanceKm: 25, image: "go/destinations/santorini/near3" }
+    ],
+    media: media("santorini"),
+    categories: ["Beach","Romance","Luxury"],
+    bestSeason: "Apr–Oct"
+  },
+  {
+    slug: "venice",
+    name: "Venice",
+    country: "Italy",
+    region: "Europe",
+    summary: "Canal labyrinths, Byzantine domes, and timeless romance.",
+    description: "Venice is a vibrant destination blending city, culture, romance. Canal labyrinths, Byzantine domes, and timeless romance. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Italy.",
+    coordinates: { lat: 45.4408, lng: 12.3155 },
+    dna: { adventure: 35, culture: 92, food: 80, nature: 45, nightlife: 55, budgetFriendly: 35 },
+    budget: { accommodation: 6500, food: 2800, transport: 1500 },
+    travelTips: ["Validate vaporetto tickets before boarding.","Wander away from San Marco for the real Venice."],
+    hiddenGems: [
+      { title: "Libreria Acqua Alta", description: "A bookshop that stores books in gondolas.", image: "go/destinations/venice/gem1" },
+      { title: "Cannaregio", description: "A local canal district with cicchetti bars.", image: "go/destinations/venice/gem2" }
+    ],
+    nearby: [
+      { name: "Murano", distanceKm: 2, image: "go/destinations/venice/near1" },
+      { name: "Burano", distanceKm: 7, image: "go/destinations/venice/near2" },
+      { name: "Padua", distanceKm: 40, image: "go/destinations/venice/near3" }
+    ],
+    media: media("venice"),
+    categories: ["City","Culture","Romance"],
+    bestSeason: "Apr–Jun & Sep–Oct"
+  },
+  {
+    slug: "reykjavik",
+    name: "Reykjavik",
+    country: "Iceland",
+    region: "Europe",
+    summary: "Northern lights, geothermal lagoons, and raw volcanic wilderness.",
+    description: "Reykjavik is a vibrant destination blending nature, adventure, scenic. Northern lights, geothermal lagoons, and raw volcanic wilderness. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Iceland.",
+    coordinates: { lat: 64.1466, lng: -21.9426 },
+    dna: { adventure: 85, culture: 60, food: 65, nature: 95, nightlife: 60, budgetFriendly: 25 },
+    budget: { accommodation: 7000, food: 3200, transport: 2500 },
+    travelTips: ["Rent a car to chase waterfalls and auroras.","Weather changes fast — pack warm layers."],
+    hiddenGems: [
+      { title: "Sky Lagoon", description: "An oceanfront geothermal spa.", image: "go/destinations/reykjavik/gem1" },
+      { title: "Grótta Lighthouse", description: "A quiet aurora-watching spot.", image: "go/destinations/reykjavik/gem2" }
+    ],
+    nearby: [
+      { name: "Golden Circle", distanceKm: 60, image: "go/destinations/reykjavik/near1" },
+      { name: "Blue Lagoon", distanceKm: 50, image: "go/destinations/reykjavik/near2" },
+      { name: "Reynisfjara", distanceKm: 180, image: "go/destinations/reykjavik/near3" }
+    ],
+    media: media("reykjavik"),
+    categories: ["Nature","Adventure","Scenic"],
+    bestSeason: "Jun–Aug & Sep–Mar (auroras)"
+  },
+  {
+    slug: "berlin",
+    name: "Berlin",
+    country: "Germany",
+    region: "Europe",
+    summary: "Cold-war history, world-class techno, and fearless street art.",
+    description: "Berlin is a vibrant destination blending city, culture, nightlife. Cold-war history, world-class techno, and fearless street art. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Germany.",
+    coordinates: { lat: 52.52, lng: 13.405 },
+    dna: { adventure: 50, culture: 85, food: 75, nature: 45, nightlife: 95, budgetFriendly: 55 },
+    budget: { accommodation: 4500, food: 2200, transport: 1400 },
+    travelTips: ["Carry some cash — many spots are card-averse.","Sundays, browse the Mauerpark flea market."],
+    hiddenGems: [
+      { title: "Teufelsberg", description: "An abandoned cold-war spy station.", image: "go/destinations/berlin/gem1" },
+      { title: "Markthalle Neun", description: "A historic hall famed for street food.", image: "go/destinations/berlin/gem2" }
+    ],
+    nearby: [
+      { name: "Potsdam", distanceKm: 35, image: "go/destinations/berlin/near1" },
+      { name: "Dresden", distanceKm: 190, image: "go/destinations/berlin/near2" },
+      { name: "Leipzig", distanceKm: 190, image: "go/destinations/berlin/near3" }
+    ],
+    media: media("berlin"),
+    categories: ["City","Culture","Nightlife"],
+    bestSeason: "May–Sep"
+  },
+  {
+    slug: "hong-kong",
+    name: "Hong Kong",
+    country: "China",
+    region: "Asia",
+    summary: "Neon skylines, dim sum dynasties, and peaks above the harbor.",
+    description: "Hong Kong is a vibrant destination blending city, food, nightlife. Neon skylines, dim sum dynasties, and peaks above the harbor. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in China.",
+    coordinates: { lat: 22.3193, lng: 114.1694 },
+    dna: { adventure: 55, culture: 78, food: 92, nature: 50, nightlife: 85, budgetFriendly: 45 },
+    budget: { accommodation: 5500, food: 2500, transport: 1500 },
+    travelTips: ["Get an Octopus card for transit and shops.","Ride the Star Ferry across the harbor at dusk."],
+    hiddenGems: [
+      { title: "Tai Kwun", description: "A heritage prison turned arts hub.", image: "go/destinations/hong-kong/gem1" },
+      { title: "Cat Street", description: "An antiques-and-curios lane.", image: "go/destinations/hong-kong/gem2" }
+    ],
+    nearby: [
+      { name: "Lantau Island", distanceKm: 30, image: "go/destinations/hong-kong/near1" },
+      { name: "Macau", distanceKm: 60, image: "go/destinations/hong-kong/near2" },
+      { name: "Shenzhen", distanceKm: 35, image: "go/destinations/hong-kong/near3" }
+    ],
+    media: media("hong-kong"),
+    categories: ["City","Food","Nightlife"],
+    bestSeason: "Oct–Dec"
+  },
+  {
+    slug: "taipei",
+    name: "Taipei",
+    country: "Taiwan",
+    region: "Asia",
+    summary: "Night-market feasts, hot springs, and mountain temples.",
+    description: "Taipei is a vibrant destination blending city, food, culture. Night-market feasts, hot springs, and mountain temples. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Taiwan.",
+    coordinates: { lat: 25.033, lng: 121.5654 },
+    dna: { adventure: 55, culture: 75, food: 90, nature: 60, nightlife: 80, budgetFriendly: 65 },
+    budget: { accommodation: 3800, food: 1800, transport: 1200 },
+    travelTips: ["Use an EasyCard on the metro, buses, and shops.","Graze the night markets for cheap, great eats."],
+    hiddenGems: [
+      { title: "Treasure Hill", description: "An artist village on the river's edge.", image: "go/destinations/taipei/gem1" },
+      { title: "Beitou Hot Springs", description: "Geothermal baths in a leafy valley.", image: "go/destinations/taipei/gem2" }
+    ],
+    nearby: [
+      { name: "Jiufen", distanceKm: 30, image: "go/destinations/taipei/near1" },
+      { name: "Yangmingshan", distanceKm: 20, image: "go/destinations/taipei/near2" },
+      { name: "Tamsui", distanceKm: 25, image: "go/destinations/taipei/near3" }
+    ],
+    media: media("taipei"),
+    categories: ["City","Food","Culture"],
+    bestSeason: "Oct–Apr"
+  },
+  {
+    slug: "chiang-mai",
+    name: "Chiang Mai",
+    country: "Thailand",
+    region: "Asia",
+    summary: "Lantern festivals, jungle temples, and gentle northern charm.",
+    description: "Chiang Mai is a vibrant destination blending culture, nature, budget. Lantern festivals, jungle temples, and gentle northern charm. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Thailand.",
+    coordinates: { lat: 18.7883, lng: 98.9853 },
+    dna: { adventure: 75, culture: 82, food: 85, nature: 80, nightlife: 60, budgetFriendly: 88 },
+    budget: { accommodation: 2500, food: 1200, transport: 800 },
+    travelTips: ["Visit during Yi Peng for the lantern festival.","Respect dress codes when entering temples."],
+    hiddenGems: [
+      { title: "Wat Pha Lat", description: "A serene temple hidden in the forest.", image: "go/destinations/chiang-mai/gem1" },
+      { title: "Nimmanhaemin", description: "A leafy district of cafes and design shops.", image: "go/destinations/chiang-mai/gem2" }
+    ],
+    nearby: [
+      { name: "Doi Inthanon", distanceKm: 90, image: "go/destinations/chiang-mai/near1" },
+      { name: "Pai", distanceKm: 130, image: "go/destinations/chiang-mai/near2" },
+      { name: "Chiang Rai", distanceKm: 190, image: "go/destinations/chiang-mai/near3" }
+    ],
+    media: media("chiang-mai"),
+    categories: ["Culture","Nature","Budget"],
+    bestSeason: "Nov–Feb"
+  },
+  {
+    slug: "siem-reap",
+    name: "Siem Reap",
+    country: "Cambodia",
+    region: "Asia",
+    summary: "Sunrise over Angkor, jungle ruins, and Khmer warmth.",
+    description: "Siem Reap is a vibrant destination blending culture, adventure, budget. Sunrise over Angkor, jungle ruins, and Khmer warmth. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Cambodia.",
+    coordinates: { lat: 13.3671, lng: 103.8448 },
+    dna: { adventure: 65, culture: 95, food: 70, nature: 65, nightlife: 55, budgetFriendly: 85 },
+    budget: { accommodation: 2500, food: 1300, transport: 900 },
+    travelTips: ["Buy a multi-day Angkor pass to avoid the rush.","Start at Angkor Wat before dawn for sunrise."],
+    hiddenGems: [
+      { title: "Ta Prohm", description: "A temple wrapped in giant tree roots.", image: "go/destinations/siem-reap/gem1" },
+      { title: "Kompong Khleang", description: "A stilted floating village on the lake.", image: "go/destinations/siem-reap/gem2" }
+    ],
+    nearby: [
+      { name: "Angkor Wat", distanceKm: 6, image: "go/destinations/siem-reap/near1" },
+      { name: "Banteay Srei", distanceKm: 30, image: "go/destinations/siem-reap/near2" },
+      { name: "Tonlé Sap", distanceKm: 15, image: "go/destinations/siem-reap/near3" }
+    ],
+    media: media("siem-reap"),
+    categories: ["Culture","Adventure","Budget"],
+    bestSeason: "Nov–Feb"
+  },
+  {
+    slug: "jaipur",
+    name: "Jaipur",
+    country: "India",
+    region: "Asia",
+    summary: "Pink-hued palaces, hilltop forts, and bazaar color.",
+    description: "Jaipur is a vibrant destination blending culture, city, budget. Pink-hued palaces, hilltop forts, and bazaar color. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in India.",
+    coordinates: { lat: 26.9124, lng: 75.7873 },
+    dna: { adventure: 55, culture: 92, food: 80, nature: 45, nightlife: 50, budgetFriendly: 85 },
+    budget: { accommodation: 2800, food: 1300, transport: 900 },
+    travelTips: ["Negotiate firmly and kindly in the bazaars.","See Amber Fort early to beat heat and crowds."],
+    hiddenGems: [
+      { title: "Panna Meena ka Kund", description: "A symmetrical ancient stepwell.", image: "go/destinations/jaipur/gem1" },
+      { title: "Anokhi Museum", description: "A museum of hand-block printing.", image: "go/destinations/jaipur/gem2" }
+    ],
+    nearby: [
+      { name: "Amber Fort", distanceKm: 11, image: "go/destinations/jaipur/near1" },
+      { name: "Pushkar", distanceKm: 145, image: "go/destinations/jaipur/near2" },
+      { name: "Ranthambore", distanceKm: 160, image: "go/destinations/jaipur/near3" }
+    ],
+    media: media("jaipur"),
+    categories: ["Culture","City","Budget"],
+    bestSeason: "Oct–Mar"
+  },
+  {
+    slug: "maldives",
+    name: "Maldives",
+    country: "Maldives",
+    region: "Asia",
+    summary: "Overwater villas, coral reefs, and impossibly clear lagoons.",
+    description: "Maldives is a vibrant destination blending beach, luxury, wellness. Overwater villas, coral reefs, and impossibly clear lagoons. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in the Maldives.",
+    coordinates: { lat: 3.2028, lng: 73.2207 },
+    dna: { adventure: 60, culture: 35, food: 60, nature: 95, nightlife: 40, budgetFriendly: 20 },
+    budget: { accommodation: 12000, food: 4000, transport: 2500 },
+    travelTips: ["Choose a resort island or a local island by budget.","Snorkel the house reef at slack tide."],
+    hiddenGems: [
+      { title: "Hanifaru Bay", description: "A famed manta-ray gathering point.", image: "go/destinations/maldives/gem1" },
+      { title: "Local-island sandbanks", description: "Empty sandbars for a private picnic.", image: "go/destinations/maldives/gem2" }
+    ],
+    nearby: [
+      { name: "Malé", distanceKm: 30, image: "go/destinations/maldives/near1" },
+      { name: "Ari Atoll", distanceKm: 80, image: "go/destinations/maldives/near2" },
+      { name: "Baa Atoll", distanceKm: 120, image: "go/destinations/maldives/near3" }
+    ],
+    media: media("maldives"),
+    categories: ["Beach","Luxury","Wellness"],
+    bestSeason: "Nov–Apr"
+  },
+  {
+    slug: "rio-de-janeiro",
+    name: "Rio de Janeiro",
+    country: "Brazil",
+    region: "South America",
+    summary: "Mountain-framed beaches, samba nights, and carnival spirit.",
+    description: "Rio de Janeiro is a vibrant destination blending beach, nightlife, nature. Mountain-framed beaches, samba nights, and carnival spirit. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Brazil.",
+    coordinates: { lat: -22.9068, lng: -43.1729 },
+    dna: { adventure: 75, culture: 75, food: 75, nature: 85, nightlife: 90, budgetFriendly: 55 },
+    budget: { accommodation: 4000, food: 2000, transport: 1300 },
+    travelTips: ["Stay aware of your belongings on the beach.","Hike Dois Irmãos for the best city view."],
+    hiddenGems: [
+      { title: "Parque Lage", description: "A jungle mansion below Corcovado.", image: "go/destinations/rio-de-janeiro/gem1" },
+      { title: "Pedra do Telégrafo", description: "A clifftop photo spot south of the city.", image: "go/destinations/rio-de-janeiro/gem2" }
+    ],
+    nearby: [
+      { name: "Petrópolis", distanceKm: 70, image: "go/destinations/rio-de-janeiro/near1" },
+      { name: "Ilha Grande", distanceKm: 150, image: "go/destinations/rio-de-janeiro/near2" },
+      { name: "Búzios", distanceKm: 170, image: "go/destinations/rio-de-janeiro/near3" }
+    ],
+    media: media("rio-de-janeiro"),
+    categories: ["Beach","Nightlife","Nature"],
+    bestSeason: "Dec–Mar"
+  },
+  {
+    slug: "cusco",
+    name: "Cusco",
+    country: "Peru",
+    region: "South America",
+    summary: "Inca stonework, Andean markets, and the gateway to Machu Picchu.",
+    description: "Cusco is a vibrant destination blending adventure, culture, nature. Inca stonework, Andean markets, and the gateway to Machu Picchu. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Peru.",
+    coordinates: { lat: -13.532, lng: -71.9675 },
+    dna: { adventure: 90, culture: 90, food: 70, nature: 88, nightlife: 55, budgetFriendly: 70 },
+    budget: { accommodation: 3000, food: 1500, transport: 1000 },
+    travelTips: ["Acclimatize for two days before any trek.","Coca tea helps with the high altitude."],
+    hiddenGems: [
+      { title: "San Blas", description: "A cobbled artisan neighborhood.", image: "go/destinations/cusco/gem1" },
+      { title: "Rainbow Mountain", description: "Striped peaks on a high-altitude trek.", image: "go/destinations/cusco/gem2" }
+    ],
+    nearby: [
+      { name: "Machu Picchu", distanceKm: 75, image: "go/destinations/cusco/near1" },
+      { name: "Sacred Valley", distanceKm: 30, image: "go/destinations/cusco/near2" },
+      { name: "Maras Salt Mines", distanceKm: 40, image: "go/destinations/cusco/near3" }
+    ],
+    media: media("cusco"),
+    categories: ["Adventure","Culture","Nature"],
+    bestSeason: "May–Sep"
+  },
+  {
+    slug: "buenos-aires",
+    name: "Buenos Aires",
+    country: "Argentina",
+    region: "South America",
+    summary: "Tango halls, grand boulevards, and late-night steak.",
+    description: "Buenos Aires is a vibrant destination blending city, food, nightlife. Tango halls, grand boulevards, and late-night steak. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Argentina.",
+    coordinates: { lat: -34.6037, lng: -58.3816 },
+    dna: { adventure: 45, culture: 85, food: 85, nature: 40, nightlife: 92, budgetFriendly: 60 },
+    budget: { accommodation: 3500, food: 1800, transport: 1100 },
+    travelTips: ["Dinner starts late — 9pm or later.","Carry cash for the best exchange rates."],
+    hiddenGems: [
+      { title: "El Ateneo Grand Splendid", description: "A grand theater turned bookstore.", image: "go/destinations/buenos-aires/gem1" },
+      { title: "Feria de Mataderos", description: "A folk market of crafts and dance.", image: "go/destinations/buenos-aires/gem2" }
+    ],
+    nearby: [
+      { name: "Tigre Delta", distanceKm: 30, image: "go/destinations/buenos-aires/near1" },
+      { name: "Colonia", distanceKm: 50, image: "go/destinations/buenos-aires/near2" },
+      { name: "La Plata", distanceKm: 60, image: "go/destinations/buenos-aires/near3" }
+    ],
+    media: media("buenos-aires"),
+    categories: ["City","Food","Nightlife"],
+    bestSeason: "Sep–Nov & Mar–May"
+  },
+  {
+    slug: "mexico-city",
+    name: "Mexico City",
+    country: "Mexico",
+    region: "North America",
+    summary: "Aztec roots, mural-lined plazas, and a fearless food scene.",
+    description: "Mexico City is a vibrant destination blending city, food, culture. Aztec roots, mural-lined plazas, and a fearless food scene. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Mexico.",
+    coordinates: { lat: 19.4326, lng: -99.1332 },
+    dna: { adventure: 55, culture: 88, food: 92, nature: 45, nightlife: 82, budgetFriendly: 70 },
+    budget: { accommodation: 3500, food: 1800, transport: 1200 },
+    travelTips: ["Eat tacos al pastor from the busiest stalls.","The altitude is real — pace your first day."],
+    hiddenGems: [
+      { title: "Mercado de San Juan", description: "A gourmet market of rare ingredients.", image: "go/destinations/mexico-city/gem1" },
+      { title: "Casa Luis Barragán", description: "The architect's luminous modernist home.", image: "go/destinations/mexico-city/gem2" }
+    ],
+    nearby: [
+      { name: "Teotihuacan", distanceKm: 50, image: "go/destinations/mexico-city/near1" },
+      { name: "Xochimilco", distanceKm: 25, image: "go/destinations/mexico-city/near2" },
+      { name: "Puebla", distanceKm: 130, image: "go/destinations/mexico-city/near3" }
+    ],
+    media: media("mexico-city"),
+    categories: ["City","Food","Culture"],
+    bestSeason: "Mar–May"
+  },
+  {
+    slug: "banff",
+    name: "Banff",
+    country: "Canada",
+    region: "North America",
+    summary: "Turquoise lakes, glacier peaks, and Rocky Mountain trails.",
+    description: "Banff is a vibrant destination blending mountains, nature, adventure. Turquoise lakes, glacier peaks, and Rocky Mountain trails. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Canada.",
+    coordinates: { lat: 51.1784, lng: -115.5708 },
+    dna: { adventure: 92, culture: 35, food: 50, nature: 98, nightlife: 35, budgetFriendly: 40 },
+    budget: { accommodation: 6000, food: 2800, transport: 1800 },
+    travelTips: ["Buy a Parks Canada pass before you arrive.","Reach Moraine Lake before sunrise for parking."],
+    hiddenGems: [
+      { title: "Johnston Canyon", description: "A catwalk trail to frozen waterfalls.", image: "go/destinations/banff/gem1" },
+      { title: "Moraine Lake", description: "Glacier-fed turquoise beneath ten peaks.", image: "go/destinations/banff/gem2" }
+    ],
+    nearby: [
+      { name: "Lake Louise", distanceKm: 60, image: "go/destinations/banff/near1" },
+      { name: "Yoho", distanceKm: 80, image: "go/destinations/banff/near2" },
+      { name: "Jasper", distanceKm: 290, image: "go/destinations/banff/near3" }
+    ],
+    media: media("banff"),
+    categories: ["Mountains","Nature","Adventure"],
+    bestSeason: "Jun–Aug & Dec–Mar (ski)"
+  },
+  {
+    slug: "auckland",
+    name: "Auckland",
+    country: "New Zealand",
+    region: "Oceania",
+    summary: "Harbor sails, volcanic cones, and island day-trips.",
+    description: "Auckland is a vibrant destination blending city, nature, adventure. Harbor sails, volcanic cones, and island day-trips. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in New Zealand.",
+    coordinates: { lat: -36.8485, lng: 174.7633 },
+    dna: { adventure: 70, culture: 60, food: 70, nature: 80, nightlife: 65, budgetFriendly: 45 },
+    budget: { accommodation: 5000, food: 2400, transport: 1600 },
+    travelTips: ["Ferry to Waiheke for wine and beaches.","Weather shifts fast — always pack a layer."],
+    hiddenGems: [
+      { title: "Waiheke Island", description: "Vineyards and coves a short ferry away.", image: "go/destinations/auckland/gem1" },
+      { title: "Mount Eden", description: "A grassy volcanic crater over the city.", image: "go/destinations/auckland/gem2" }
+    ],
+    nearby: [
+      { name: "Waiheke Island", distanceKm: 20, image: "go/destinations/auckland/near1" },
+      { name: "Piha Beach", distanceKm: 40, image: "go/destinations/auckland/near2" },
+      { name: "Rotorua", distanceKm: 230, image: "go/destinations/auckland/near3" }
+    ],
+    media: media("auckland"),
+    categories: ["City","Nature","Adventure"],
+    bestSeason: "Dec–Mar"
+  },
+  {
+    slug: "cairo",
+    name: "Cairo",
+    country: "Egypt",
+    region: "Africa",
+    summary: "Pyramids on the skyline, bazaars, and the eternal Nile.",
+    description: "Cairo is a vibrant destination blending culture, city, adventure. Pyramids on the skyline, bazaars, and the eternal Nile. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Egypt.",
+    coordinates: { lat: 30.0444, lng: 31.2357 },
+    dna: { adventure: 60, culture: 95, food: 70, nature: 40, nightlife: 55, budgetFriendly: 80 },
+    budget: { accommodation: 3000, food: 1500, transport: 1000 },
+    travelTips: ["Agree taxi fares first or use ride apps.","Visit the pyramids right at opening time."],
+    hiddenGems: [
+      { title: "Al-Muizz Street", description: "A medieval street glowing at night.", image: "go/destinations/cairo/gem1" },
+      { title: "Coptic Cairo", description: "Ancient churches and the Hanging Church.", image: "go/destinations/cairo/gem2" }
+    ],
+    nearby: [
+      { name: "Giza Pyramids", distanceKm: 20, image: "go/destinations/cairo/near1" },
+      { name: "Saqqara", distanceKm: 30, image: "go/destinations/cairo/near2" },
+      { name: "Alexandria", distanceKm: 220, image: "go/destinations/cairo/near3" }
+    ],
+    media: media("cairo"),
+    categories: ["Culture","City","Adventure"],
+    bestSeason: "Oct–Apr"
+  },
+  {
+    slug: "petra",
+    name: "Petra",
+    country: "Jordan",
+    region: "Middle East",
+    summary: "A rose-red rock city carved into desert canyons.",
+    description: "Petra is a vibrant destination blending culture, adventure, scenic. A rose-red rock city carved into desert canyons. Expect a journey full of remarkable sights, delicious local flavors, and unforgettable experiences in Jordan.",
+    coordinates: { lat: 30.3285, lng: 35.4444 },
+    dna: { adventure: 80, culture: 92, food: 55, nature: 75, nightlife: 35, budgetFriendly: 65 },
+    budget: { accommodation: 4000, food: 1800, transport: 1500 },
+    travelTips: ["Start early and carry plenty of water.","Hike to the Monastery for fewer crowds."],
+    hiddenGems: [
+      { title: "Petra by Night", description: "The Treasury lit by a thousand candles.", image: "go/destinations/petra/gem1" },
+      { title: "Ad Deir (Monastery)", description: "A vast facade up 800 rock-cut steps.", image: "go/destinations/petra/gem2" }
+    ],
+    nearby: [
+      { name: "Wadi Rum", distanceKm: 110, image: "go/destinations/petra/near1" },
+      { name: "Little Petra", distanceKm: 15, image: "go/destinations/petra/near2" },
+      { name: "Aqaba", distanceKm: 130, image: "go/destinations/petra/near3" }
+    ],
+    media: media("petra"),
+    categories: ["Culture","Adventure","Scenic"],
+    bestSeason: "Mar–May & Sep–Nov"
   }
 ];
 

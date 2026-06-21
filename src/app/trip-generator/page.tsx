@@ -13,6 +13,11 @@ export const metadata: Metadata = {
     "AI-assisted trip planning grounded in ORBIS destination data and Travel DNA — generate a personalized, editable, savable itinerary with a route map.",
 };
 
+// Grounded AI generation takes ~30–40s; allow up to Vercel's free Hobby ceiling (60s) so
+// the server action isn't killed at the default 10s. Our fetch aborts at 50s -> fallback
+// still completes within this window.
+export const maxDuration = 60;
+
 export default async function TripGeneratorPage() {
   const travelDna = await getMyTravelDna();
   const defaultStyle = travelDna ? dnaToStyle(travelDna) : undefined;

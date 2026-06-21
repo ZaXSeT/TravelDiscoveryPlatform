@@ -43,6 +43,20 @@ function normalize(input: TripInput): TripInput {
   };
 }
 
+// Gate the (paid) Gemini call. The plan feature is free to users, so the owner bears the
+// API cost — both tiers are capped to prevent spam. Over the limit, the caller falls back
+// to the free deterministic engine (the user still gets a valid itinerary).
+async function canUseGemini(userId?: string): Promise<boolean> {
+  if (userId) {
+    // Accounts: small burst guard + a bounded daily cap.
+    if (!(await rateLimit(`rl:trip-gen:u:${userId}:min`, 5, 60))) return false; // 5 / minute
+    return rateLimit(`rl:trip-gen:u:${userId}:day`, 10, 86_400); // 10 / day per account
+  }
+  // Guests: a hard daily cap (per IP) so anonymous users can try but can't spam.
+  const ipKey = await clientRateKey("trip-gen");
+  return rateLimit(`${ipKey}:day`, 3, 86_400); // 3 / day per IP
+}
+
 // Generation entry point. Order of operations:
 //   1. Load the user's saved Travel DNA (personalization).
 //   2. Resolve the destination from our catalog (source of truth).
@@ -56,8 +70,9 @@ export async function generateTripAction(
 ): Promise<GeneratedTrip> {
   const safe = normalize(input);
 
-  const { supabase, user } = await getAuthedContext();
-  let userDna: Dna | null = null;
+  try {
+    const { supabase, user } = await getAuthedContext();
+    let userDna: Dna | null = null;
   if (user) {
     const { data } = await supabase
       .from("profiles")
@@ -84,24 +99,34 @@ export async function generateTripAction(
   }
 
   if (isGeminiConfigured()) {
-    const limiterKey = user
-      ? `rl:trip-gen:u:${user.id}`
-      : await clientRateKey("trip-gen");
-    const allowed = await rateLimit(limiterKey, 10, 60); // 10 AI generations / minute
-    if (allowed) {
+    if (await canUseGemini(user?.id)) {
       try {
         const trip = await generateTripWithGemini(safe, destination, userDna);
         setCached(key, trip);
         return trip;
-      } catch {
-        // quota exceeded / error -> deterministic fallback below
+      } catch (e) {
+        // 503 / timeout / quota / parse error -> fall back (logged for diagnosis)
+        console.warn(
+          "[trip-generator] Gemini failed -> offline planner:",
+          e instanceof Error ? e.message : e,
+        );
       }
+    } else {
+      console.warn("[trip-generator] rate limit reached -> offline planner");
     }
+  } else {
+    console.warn("[trip-generator] GEMINI_API_KEY not set -> offline planner");
   }
 
-  const fallback = generateTrip(safe, destination);
-  setCached(key, fallback);
-  return fallback;
+    const fallback = generateTrip(safe, destination);
+    setCached(key, fallback);
+    return fallback;
+  } catch {
+    // Last resort: pure deterministic plan with no auth/DB/network dependency, so the
+    // user ALWAYS receives a valid itinerary (never "couldn't generate").
+    const destination = resolveDestination(safe, null);
+    return generateTrip(safe, destination);
+  }
 }
 
 // Persists an already-generated trip (Gemini output isn't deterministic, so we save the

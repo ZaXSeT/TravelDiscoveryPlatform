@@ -1,5 +1,4 @@
 import "server-only";
-import { GoogleGenAI } from "@google/genai";
 import type { Destination, Dna } from "@/types";
 import type {
   GeneratedDay,
@@ -8,9 +7,16 @@ import type {
   TripInput,
 } from "@/features/trip-generator/types";
 
-// Gemini-powered itinerary generation via the official @google/genai SDK with Google
-// Search grounding (real, current place info + coordinates). Server-only (API key never
-// reaches the client). Throws on any failure so the caller falls back to the rule engine.
+// Gemini-powered itinerary generation via the REST API (gemini-3.5-flash) with Google
+// Search grounding. Uses Node's built-in fetch with an AbortController timeout — chosen
+// over the @google/genai SDK because the SDK destabilizes Node 24 on error teardown.
+// Server-only (the API key never reaches the client). Throws on any failure so the caller
+// falls back to the deterministic rule engine.
+
+const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models";
+// Grounded (Google Search) generations realistically take ~30–40s, so the timeout must be
+// generous or every successful call gets aborted into the fallback.
+const TIMEOUT_MS = 50000;
 
 export function isGeminiConfigured(): boolean {
   return Boolean(process.env.GEMINI_API_KEY);
@@ -44,14 +50,10 @@ export async function generateTripWithGemini(
   const key = process.env.GEMINI_API_KEY;
   if (!key) throw new Error("GEMINI_API_KEY missing");
   const model = process.env.GEMINI_MODEL || "gemini-3.5-flash";
-  const ai = new GoogleGenAI({ apiKey: key });
 
   const budgetUsd = Math.round(input.budget / 100);
   const dna = destination.dna;
   const dnaLine = `adventure ${dna.adventure}/100, culture ${dna.culture}/100, food ${dna.food}/100, nature ${dna.nature}/100, nightlife ${dna.nightlife}/100, budget-friendliness ${dna.budgetFriendly}/100`;
-  const userDnaLine = userDna
-    ? `\n\nThe traveler's OWN Travel DNA (0–100): adventure ${userDna.adventure}, culture ${userDna.culture}, food ${userDna.food}, nature ${userDna.nature}, nightlife ${userDna.nightlife}, budget-friendliness ${userDna.budgetFriendly}. Prioritize experiences where the traveler's high axes overlap this destination's strengths, and explain choices accordingly.`
-    : "";
   const dailyRef = Math.round(
     (destination.budget.accommodation +
       destination.budget.food +
@@ -64,6 +66,9 @@ export async function generateTripWithGemini(
   ]
     .slice(0, 6)
     .join("; ");
+  const userDnaLine = userDna
+    ? `\n\nThe traveler's OWN Travel DNA (0–100): adventure ${userDna.adventure}, culture ${userDna.culture}, food ${userDna.food}, nature ${userDna.nature}, nightlife ${userDna.nightlife}, budget-friendliness ${userDna.budgetFriendly}. Prioritize experiences where the traveler's high axes overlap this destination's strengths, and explain choices accordingly.`
+    : "";
 
   // Destination data is the source of truth; Gemini is the assistant that enriches it.
   const prompt = `You are ORBIS's AI travel planner. Plan a ${input.days}-day trip to ${destination.name}, ${destination.country} — do NOT change the destination. Traveler style: "${input.style}". Total budget roughly $${budgetUsd} (USD, per person). Best time to visit: ${destination.bestSeason}.
@@ -82,19 +87,36 @@ Return ONLY a JSON object — no markdown, no commentary — with EXACTLY this s
 }
 Rules: exactly ${input.days} day objects; 3 items per day, ordered by startTime; "name" is a real place/landmark/restaurant in or near ${destination.name}; "lat"/"lng" are its accurate coordinates; "costUsd" approximate per person (0 if free); "imageQuery" is 2–4 words to find a representative photo; "notes" has 1–3 short practical tips.`;
 
-  const response = await ai.models.generateContent({
-    model,
-    contents: prompt,
-    config: {
-      tools: [{ googleSearch: {} }],
-      temperature: 0.6,
-    },
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  let res: Response;
+  try {
+    res = await fetch(`${ENDPOINT}/${model}:generateContent`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        tools: [{ google_search: {} }],
+        // Cap "thinking": a structured itinerary needs little reasoning, and full thinking
+        // pushed latency to ~58s (over the timeout). A small budget keeps quality while
+        // cutting latency to ~25s and cost by ~half.
+        generationConfig: { temperature: 0.6, thinkingConfig: { thinkingBudget: 512 } },
+      }),
+      cache: "no-store",
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+  if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
 
-  const text = response.text ?? "";
+  const data = (await res.json()) as {
+    candidates?: { content?: { parts?: { text?: string }[] } }[];
+  };
+  const text = (data.candidates?.[0]?.content?.parts ?? [])
+    .map((p) => p.text ?? "")
+    .join("");
   const raw = extractJson(text) as {
-    destinationName?: string;
-    destinationSlug?: string;
     dailyUsd?: { accommodation?: number; food?: number; transport?: number };
     notes?: string[];
     days?: { title?: string; items?: Record<string, unknown>[] }[];

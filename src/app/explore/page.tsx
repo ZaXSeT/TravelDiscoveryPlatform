@@ -66,7 +66,7 @@ export default function ExplorePage() {
             </Reveal>
             <Reveal delayMs={100}>
               <h1 className="mt-6 font-display text-5xl leading-[1.1] sm:text-6xl md:text-7xl">
-                Explore the world's <br className="hidden md:block" />
+                Explore the world&apos;s <br className="hidden md:block" />
                 <span className="text-white/80">most unforgettable places.</span>
               </h1>
             </Reveal>

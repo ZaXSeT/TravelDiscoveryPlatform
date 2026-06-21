@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Sparkles, Loader2, Fingerprint, ArrowRight } from "lucide-react";
+import { Sparkles, Loader2, Fingerprint, ArrowRight, Check } from "lucide-react";
 import { GeneratorForm } from "@/features/trip-generator/components/generator-form";
 import { ResultPreview } from "@/features/trip-generator/components/result-preview";
 import { generateTripAction, saveTrip } from "@/features/trip-generator/actions";
@@ -115,13 +115,7 @@ export function TripGeneratorClient({
         </div>
         <div ref={resultRef} className="relative z-0 scroll-mt-24">
           {generating ? (
-            <div className="flex h-full min-h-[400px] flex-col items-center justify-center rounded-3xl border border-border bg-card p-10 text-center shadow-xl shadow-black/5">
-              <Loader2 className="size-8 animate-spin text-accent-goldText" />
-              <h3 className="mt-6 font-display text-2xl">Planning your trip…</h3>
-              <p className="mt-2 max-w-sm text-muted-foreground">
-                Finding real places, mapping the route, and estimating your budget.
-              </p>
-            </div>
+            <GeneratingState />
           ) : trip ? (
             <ResultPreview
               trip={trip}
@@ -156,6 +150,61 @@ export function TripGeneratorClient({
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+const GEN_STEPS = [
+  "Searching real places",
+  "Mapping your route",
+  "Estimating your budget",
+  "Polishing the details",
+];
+
+// Stepped loading state: walks through the stages so the ~30s AI wait feels alive and
+// intentional rather than frozen. The last step keeps spinning until generation returns.
+function GeneratingState() {
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    const id = setInterval(
+      () => setActive((a) => Math.min(a + 1, GEN_STEPS.length - 1)),
+      7000,
+    );
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="flex h-full min-h-[400px] flex-col items-center justify-center rounded-3xl border border-border bg-card p-10 text-center shadow-xl shadow-black/5">
+      <Sparkles className="size-8 animate-pulse text-accent-goldText" />
+      <h3 className="mt-6 font-display text-2xl">Planning your trip…</h3>
+      <p className="mt-2 max-w-sm text-muted-foreground">
+        Our AI is searching real places — this usually takes 20–40 seconds.
+      </p>
+      <ul className="mt-6 space-y-2.5 text-left">
+        {GEN_STEPS.map((label, i) => {
+          const done = i < active;
+          const current = i === active;
+          return (
+            <li
+              key={label}
+              className={`flex items-center gap-2.5 text-sm transition-colors ${
+                done || current ? "text-foreground" : "text-muted-foreground/50"
+              }`}
+            >
+              <span className="flex size-5 shrink-0 items-center justify-center">
+                {done ? (
+                  <Check className="size-4 text-accent-green" />
+                ) : current ? (
+                  <Loader2 className="size-4 animate-spin text-accent-goldText" />
+                ) : (
+                  <span className="size-1.5 rounded-full bg-current" />
+                )}
+              </span>
+              {label}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

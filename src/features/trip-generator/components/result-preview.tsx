@@ -47,12 +47,20 @@ export function ResultPreview({
       (it): it is (typeof it) & { lat: number; lng: number } =>
         typeof it.lat === "number" && typeof it.lng === "number",
     )
-    .map((it) => ({ lat: it.lat, lng: it.lng, label: it.title, index: it.n }));
+    .map((it) => ({
+      lat: it.lat,
+      lng: it.lng,
+      label: it.title,
+      index: it.n,
+      description: it.description,
+      cost: it.cost,
+      startTime: it.startTime,
+    }));
 
   const dest = ALL_DESTINATIONS.find((d) => d.slug === trip.destinationSlug);
 
   return (
-    <div className="space-y-8 rounded-3xl border border-border bg-card p-6 shadow-xl shadow-black/5 sm:p-10">
+    <div className="space-y-6 rounded-3xl border border-border bg-card p-6 shadow-xl shadow-black/5 sm:p-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
@@ -164,8 +172,9 @@ export function ResultPreview({
         </ul>
       )}
 
-      {/* Day-by-day with places, photos & descriptions */}
-      <div className="space-y-6">
+      {/* Day-by-day with places, photos & descriptions (2 columns on wide screens to
+          keep the plan from running too long) */}
+      <div className="grid gap-4 md:grid-cols-2">
         {numbered.map((day) => (
           <section
             key={day.dayIndex}
