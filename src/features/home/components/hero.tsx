@@ -34,7 +34,7 @@ export function Hero() {
   return (
     <section
       data-theme="dark"
-      className="relative flex min-h-[100svh] w-full flex-col justify-end overflow-hidden bg-dark-0 text-white pb-16 md:pb-20"
+      className="relative flex min-h-[100svh] w-full flex-col justify-center md:justify-end overflow-hidden bg-dark-0 text-white pb-16 md:pb-20"
     >
       <HeroSlideshow
         images={[

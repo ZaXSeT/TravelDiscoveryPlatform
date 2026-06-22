@@ -25,16 +25,16 @@ export function DestinationCard({
           height={800}
           fill
           priority={priority}
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          sizes="(max-width: 1024px) 50vw, 33vw"
           className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04] motion-reduce:transition-none"
         />
         <div className="scrim pointer-events-none absolute inset-0" />
-        <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-          <p className="text-xs uppercase tracking-[0.16em] opacity-85">
+        <div className="absolute inset-x-0 bottom-0 p-3 text-white sm:p-5">
+          <p className="text-[10px] uppercase tracking-[0.16em] opacity-85 sm:text-xs">
             {d.region}
           </p>
-          <h3 className="mt-1 font-display text-2xl">{d.name}</h3>
-          <p className="text-sm opacity-90">{d.country}</p>
+          <h3 className="mt-0.5 font-display text-lg sm:mt-1 sm:text-2xl">{d.name}</h3>
+          <p className="text-xs opacity-90 sm:text-sm">{d.country}</p>
         </div>
       </div>
     </Link>

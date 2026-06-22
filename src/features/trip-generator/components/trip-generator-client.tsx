@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import { Sparkles, Loader2, Fingerprint, ArrowRight, Check } from "lucide-react";
 import { GeneratorForm } from "@/features/trip-generator/components/generator-form";
 import { ResultPreview } from "@/features/trip-generator/components/result-preview";
@@ -17,9 +18,11 @@ import { routes } from "@/constants/routes";
 export function TripGeneratorClient({
   hasTravelDna = false,
   defaultStyle,
+  initialDestination,
 }: {
   hasTravelDna?: boolean;
   defaultStyle?: TravelStyle;
+  initialDestination?: string;
 }) {
   const router = useRouter();
   const { user } = useAuthUser();
@@ -65,8 +68,10 @@ export function TripGeneratorClient({
     setError(null);
     const res = await saveTrip(t);
     setSaving(false);
-    if (res.ok) router.push(routes.itinerary(res.data.id));
-    else setError(res.error.message);
+    if (res.ok) {
+      toast.success("Trip saved — opening your planner…");
+      router.push(routes.itinerary(res.data.id));
+    } else setError(res.error.message);
   };
 
   const save = () => {
@@ -82,6 +87,18 @@ export function TripGeneratorClient({
     void doSave(trip);
   };
 
+  // Explain a fallback result. Daily limit is user-aware (3/day guest, 10/day signed in).
+  const dailyLimit = user ? 10 : 3;
+  const aiLimitNote = `Up to ${dailyLimit} AI plans/day${
+    user ? "" : " — sign in for more"
+  }.`;
+  const offlineNote =
+    trip?.source === "rules" && trip.fallbackReason === "rate_limited"
+      ? `Daily AI limit reached (${dailyLimit}/day). This is an offline plan — ${
+          user ? "try again later." : "sign in for a higher limit, or try again later."
+        }`
+      : undefined;
+
   return (
     <div className="space-y-6">
       {/* Travel DNA personalization banner */}
@@ -93,7 +110,7 @@ export function TripGeneratorClient({
           <Fingerprint className="size-4 text-accent-goldText" />
           {hasTravelDna ? (
             <span className="text-foreground">
-              Personalized with your <strong>Travel DNA</strong> — picks are matched to you.
+              Personalized with your <strong>Travel DNA</strong> - picks are matched to you.
             </span>
           ) : (
             <span className="text-muted-foreground">
@@ -105,12 +122,14 @@ export function TripGeneratorClient({
         <ArrowRight className="size-4 shrink-0 text-muted-foreground" />
       </Link>
 
-      <div className="grid gap-10 lg:grid-cols-[360px_1fr]">
-        <div className="relative z-10">
+      <div className="grid gap-10 lg:grid-cols-[360px_1fr] lg:items-start">
+        <div className="relative z-10 lg:sticky lg:top-24">
           <GeneratorForm
             onGenerate={generate}
             pending={generating}
             defaultStyle={defaultStyle}
+            initialDestination={initialDestination}
+            aiLimitNote={aiLimitNote}
           />
         </div>
         <div ref={resultRef} className="relative z-0 scroll-mt-24">
@@ -126,6 +145,7 @@ export function TripGeneratorClient({
               saving={saving}
               error={error}
               personalized={hasTravelDna}
+              offlineNote={offlineNote}
             />
           ) : (
             <motion.div
@@ -178,7 +198,7 @@ function GeneratingState() {
       <Sparkles className="size-8 animate-pulse text-accent-goldText" />
       <h3 className="mt-6 font-display text-2xl">Planning your trip…</h3>
       <p className="mt-2 max-w-sm text-muted-foreground">
-        Our AI is searching real places — this usually takes 20–40 seconds.
+        Our AI is searching real places - this usually takes 20–40 seconds.
       </p>
       <ul className="mt-6 space-y-2.5 text-left">
         {GEN_STEPS.map((label, i) => {

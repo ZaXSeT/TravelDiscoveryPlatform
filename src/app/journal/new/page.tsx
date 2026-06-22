@@ -11,7 +11,7 @@ export default async function NewJournalPage() {
   await requireUser(routes.journalNew);
 
   return (
-    <div className="pt-16 md:pt-20">
+    <div className="pt-4 md:pt-20">
       <PageContainer width="default" className="section-y max-w-2xl">
         <h1 className="font-display text-3xl">Write a journal</h1>
         <p className="mt-2 text-muted-foreground">

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
+import { BookOpen, MapPin } from "lucide-react";
 import { PageContainer } from "@/components/layout/page-container";
 import { SectionHeader } from "@/components/layout/section-header";
 import { EmptyState } from "@/components/feedback/empty-state";
@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ProfileHeader } from "@/features/profile/components/profile-header";
 import { ProfileTravelDna } from "@/features/travel-dna/components/profile-travel-dna";
+import { DeleteAccountButton } from "@/features/profile/components/delete-account-button";
 import { sanitizeDna } from "@/features/travel-dna/scoring";
 import { WishlistGrid } from "@/features/wishlist/components/wishlist-grid";
 import { ItineraryList } from "@/features/itinerary/components/itinerary-list";
@@ -23,14 +24,7 @@ import type { Destination } from "@/types";
 export const metadata: Metadata = { title: "Profile" };
 export const dynamic = "force-dynamic"; // per-user, auth-protected
 
-function Stat({ label, value }: { label: string; value: number }) {
-  return (
-    <div className="rounded-lg border border-border bg-card p-4 text-center">
-      <p className="font-display text-3xl tabular-nums">{value}</p>
-      <p className="text-sm text-muted-foreground">{label}</p>
-    </div>
-  );
-}
+// Stat component removed, integrated into ProfileHeader for premium design.
 
 export default async function ProfilePage() {
   const user = await requireUser(routes.profile);
@@ -102,31 +96,23 @@ export default async function ProfilePage() {
     "Traveler";
 
   return (
-    <div className="pt-16 md:pt-20">
-      <PageContainer className="section-y space-y-16">
+    <div className="pt-4 md:pt-20">
+      <PageContainer width="full" className="section-y space-y-16">
         <ProfileHeader
           displayName={displayName}
           bio={profile?.bio ?? null}
           avatarPath={profile?.avatar_path ?? null}
+          stats={{
+            saved: wishlist.length,
+            trips: itineraries.length,
+            journals: journals.length,
+          }}
         />
-
-        <div className="grid grid-cols-3 gap-3">
-          <Stat label="Saved" value={wishlist.length} />
-          <Stat label="Trips" value={itineraries.length} />
-          <Stat label="Journals" value={journals.length} />
-        </div>
 
         <section>
           <SectionHeader
             eyebrow="Travel DNA"
             title="Your traveler profile"
-            action={
-              <Button asChild variant="outline">
-                <Link href={routes.travelDna}>
-                  {travelDna ? "Retake" : "Take assessment"}
-                </Link>
-              </Button>
-            }
           />
           <div className="mt-8">
             <ProfileTravelDna dna={travelDna} />
@@ -134,16 +120,49 @@ export default async function ProfilePage() {
         </section>
 
         <section>
-          <SectionHeader eyebrow="Wishlist" title="Saved destinations" />
+          <SectionHeader
+            eyebrow="Wishlist"
+            title="Saved destinations"
+            action={
+              wishlist.length > 0 ? (
+                <Button asChild variant="outline">
+                  <Link href={routes.wishlist}>View all</Link>
+                </Button>
+              ) : undefined
+            }
+          />
           <div className="mt-8">
             <WishlistGrid initial={wishlist} />
           </div>
         </section>
 
         <section>
-          <SectionHeader eyebrow="Trips" title="Your itineraries" />
+          <SectionHeader
+            eyebrow="Trips"
+            title="Your itineraries"
+            action={
+              itineraries.length > 0 ? (
+                <Button asChild variant="outline">
+                  <Link href={routes.itineraries}>View all</Link>
+                </Button>
+              ) : undefined
+            }
+          />
           <div className="mt-8">
-            <ItineraryList initial={itineraries} />
+            {itineraries.length === 0 ? (
+              <EmptyState
+                icon={<MapPin className="size-6" />}
+                title="No trips yet"
+                description="Plan a personalized trip with AI, then fine-tune the days and activities yourself."
+                action={
+                  <Button variant="gold" asChild>
+                    <Link href={routes.tripGenerator}>Plan a trip</Link>
+                  </Button>
+                }
+              />
+            ) : (
+              <ItineraryList initial={itineraries} />
+            )}
           </div>
         </section>
 
@@ -164,13 +183,13 @@ export default async function ProfilePage() {
                 title="No journals yet"
                 description="Write your first travel story."
                 action={
-                  <Button asChild>
+                  <Button variant="gold" asChild>
                     <Link href={routes.journalNew}>Write a journal</Link>
                   </Button>
                 }
               />
             ) : (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {journals.map((j) => (
                   <div key={j.id} className="space-y-2">
                     <JournalCard journal={j as JournalSummary} />
@@ -191,6 +210,13 @@ export default async function ProfilePage() {
                 ))}
               </div>
             )}
+          </div>
+        </section>
+
+        <section>
+          <SectionHeader eyebrow="Account" title="Danger zone" />
+          <div className="mt-8 max-w-2xl">
+            <DeleteAccountButton />
           </div>
         </section>
       </PageContainer>

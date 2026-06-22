@@ -8,15 +8,16 @@ import type {
 } from "@/features/trip-generator/types";
 
 // Gemini-powered itinerary generation via the REST API (gemini-3.5-flash) with Google
-// Search grounding. Uses Node's built-in fetch with an AbortController timeout — chosen
+// Search grounding. Uses Node's built-in fetch with an AbortController timeout - chosen
 // over the @google/genai SDK because the SDK destabilizes Node 24 on error teardown.
 // Server-only (the API key never reaches the client). Throws on any failure so the caller
 // falls back to the deterministic rule engine.
 
 const ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models";
-// Grounded (Google Search) generations realistically take ~30–40s, so the timeout must be
-// generous or every successful call gets aborted into the fallback.
-const TIMEOUT_MS = 50000;
+// Grounded (Google Search) generations take ~25–40s warm, but the first/cold call can run
+// past 50s. Allow up to ~58s — just under Vercel's 60s Hobby function ceiling — so cold
+// calls succeed instead of aborting into the fallback.
+const TIMEOUT_MS = 58000;
 
 export function isGeminiConfigured(): boolean {
   return Boolean(process.env.GEMINI_API_KEY);
@@ -71,11 +72,11 @@ export async function generateTripWithGemini(
     : "";
 
   // Destination data is the source of truth; Gemini is the assistant that enriches it.
-  const prompt = `You are ORBIS's AI travel planner. Plan a ${input.days}-day trip to ${destination.name}, ${destination.country} — do NOT change the destination. Traveler style: "${input.style}". Total budget roughly $${budgetUsd} (USD, per person). Best time to visit: ${destination.bestSeason}.
+  const prompt = `You are ORBIS's AI travel planner. Plan a ${input.days}-day trip to ${destination.name}, ${destination.country} - do NOT change the destination. Traveler style: "${input.style}". Total budget roughly $${budgetUsd} (USD, per person). Best time to visit: ${destination.bestSeason}.
 
 This destination's Travel DNA (0–100): ${dnaLine}. Tailor the pace and mix of activities to it (e.g. high food = more culinary stops; high nature = more outdoors). Typical mid-range cost here is about $${dailyRef}/day. Weave in these notable local places where they fit: ${localPlaces}. Add current, specific, real places (with accurate coordinates) using search.${userDnaLine}
 
-Return ONLY a JSON object — no markdown, no commentary — with EXACTLY this shape:
+Return ONLY a JSON object - no markdown, no commentary - with EXACTLY this shape:
 {
   "dailyUsd": { "accommodation": number, "food": number, "transport": number },
   "notes": string[],
@@ -85,7 +86,15 @@ Return ONLY a JSON object — no markdown, no commentary — with EXACTLY this s
     ] }
   ]
 }
-Rules: exactly ${input.days} day objects; 3 items per day, ordered by startTime; "name" is a real place/landmark/restaurant in or near ${destination.name}; "lat"/"lng" are its accurate coordinates; "costUsd" approximate per person (0 if free); "imageQuery" is 2–4 words to find a representative photo; "notes" has 1–3 short practical tips.`;
+Rules:
+- exactly ${input.days} day objects, in order (Day 1 first); 3 items per day.
+- Within each day, list items in strict chronological order by startTime, flowing morning → afternoon → evening (e.g. ~09:00, ~13:00, ~19:00). Times must increase down the day. Use "HH:MM" 24-hour, realistic for when each place is actually open.
+- Each day should cover ONE area/cluster: group places that are geographically close together so the route flows without long back-and-forth. Different days can cover different parts.
+- every item must be a real, currently-operating, visitable place or experience (landmark, museum, temple, market, restaurant, café, park, beach, viewpoint, tour or activity) in or near ${destination.name}, with accurate "lat"/"lng".
+- "title" names the day's area or theme (e.g. "Day 1 · Old Town & Markets").
+- "costUsd" approximate per person (0 if free); "imageQuery" 2–4 words; "notes" 1–3 short practical tips.
+
+Do NOT include logistics as items: no flights, airport arrivals/departures, train/bus transfers, hotel check-in/check-out, "free time", "relax at hotel", or generic transit — only actual things to see and do. Put any arrival/transport tips in "notes" instead.`;
 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -137,6 +146,10 @@ Rules: exactly ${input.days} day objects; 3 items per day, ordered by startTime;
       lng: num(it.lng),
       image: String(it.imageQuery ?? it.name ?? "travel"),
     }));
+    // Guarantee chronological order within the day (timed items first, by time).
+    items.sort(
+      (a, b) => (a.startTime ?? "99:99").localeCompare(b.startTime ?? "99:99"),
+    );
     return { dayIndex: di + 1, title: String(d.title ?? `Day ${di + 1}`), items };
   });
 

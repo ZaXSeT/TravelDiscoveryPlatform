@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import "./globals.css";
 import { SkipLink } from "@/components/layout/skip-link";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { AuthGate } from "@/features/auth/components/auth-gate";
+import { WelcomeToast } from "@/features/auth/components/welcome-toast";
+import { Toaster } from "sonner";
 import { ScrollProvider } from "@/components/motion/scroll-provider";
 import { LayoutPreloader } from "@/components/ui/layout-preloader";
 import { siteConfig } from "@/constants/config";
@@ -66,6 +69,10 @@ export default function RootLayout({
         </main>
         <Footer />
         <AuthGate />
+        <Toaster position="bottom-right" closeButton />
+        <Suspense fallback={null}>
+          <WelcomeToast />
+        </Suspense>
       </body>
     </html>
   );

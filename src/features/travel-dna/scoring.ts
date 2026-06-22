@@ -2,7 +2,7 @@ import type { Destination, Dna, DnaKey, TravelStyle } from "@/types";
 import { ALL_DESTINATIONS } from "@/constants/destinations";
 import { DNA_QUESTIONS } from "@/features/travel-dna/questions";
 
-// Pure Travel DNA math — shared by the assessment UI, the destination matcher, and the
+// Pure Travel DNA math - shared by the assessment UI, the destination matcher, and the
 // itinerary generator (no server-only deps so it can run anywhere).
 
 export const DNA_KEYS: DnaKey[] = [
@@ -109,7 +109,7 @@ export function matchReasons(user: Dna, destination: Destination): string[] {
     .slice(0, 3)
     .map(
       (x) =>
-        `You're both strong on ${DNA_LABEL[x.k]} — ${destination.name} scores ${destination.dna[x.k]}/100, you ${user[x.k]}/100`,
+        `You're both strong on ${DNA_LABEL[x.k]} - ${destination.name} scores ${destination.dna[x.k]}/100, you ${user[x.k]}/100`,
     );
 }
 
@@ -135,7 +135,7 @@ export function rankDestinations(user: Dna): DnaMatch[] {
 const ARCHETYPES: Record<DnaKey, { title: string; blurb: string }> = {
   adventure: {
     title: "The Thrill Seeker",
-    blurb: "You travel for the rush — trails, peaks, and the next adrenaline hit.",
+    blurb: "You travel for the rush - trails, peaks, and the next adrenaline hit.",
   },
   culture: {
     title: "The Culture Seeker",
@@ -155,7 +155,7 @@ const ARCHETYPES: Record<DnaKey, { title: string; blurb: string }> = {
   },
   budgetFriendly: {
     title: "The Savvy Explorer",
-    blurb: "You go further for less — value-rich trips with nothing wasted.",
+    blurb: "You go further for less - value-rich trips with nothing wasted.",
   },
 };
 

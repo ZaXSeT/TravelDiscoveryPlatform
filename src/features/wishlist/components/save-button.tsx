@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { useAuthUser } from "@/features/auth/hooks/use-auth-user";
 import { useAuthGate } from "@/stores/use-auth-gate";
@@ -23,8 +24,13 @@ export function SaveButton({ slug, name }: { slug: string; name: string }) {
   const doToggle = async () => {
     setPending(true);
     try {
-      if (saved) await remove(slug);
-      else await add(slug);
+      if (saved) {
+        await remove(slug);
+        toast.success(`Removed ${name} from your wishlist`);
+      } else {
+        await add(slug);
+        toast.success(`Saved ${name} to your wishlist`);
+      }
     } finally {
       setPending(false);
     }
@@ -39,6 +45,7 @@ export function SaveButton({ slug, name }: { slug: string; name: string }) {
         onAuthed: async () => {
           await load();
           await add(slug);
+          toast.success(`Saved ${name} to your wishlist`);
         },
       });
       return;

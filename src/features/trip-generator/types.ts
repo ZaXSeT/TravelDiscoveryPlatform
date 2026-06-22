@@ -43,6 +43,8 @@ export interface GeneratedTrip {
   center?: { lat: number; lng: number };
   /** "gemini" when AI-generated, else "rules". */
   source?: "gemini" | "rules";
+  /** Why we fell back to the rule engine (so the UI can explain it). */
+  fallbackReason?: "rate_limited" | "unavailable";
 }
 
 export interface TripInput {

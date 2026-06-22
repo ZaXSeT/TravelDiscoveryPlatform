@@ -3,7 +3,7 @@ import { siteConfig } from "@/constants/config";
 import { ALL_DESTINATIONS } from "@/constants/destinations";
 import { REGIONS } from "@/constants/categories";
 
-export const alt = `${siteConfig.name} — Travel Discovery`;
+export const alt = `${siteConfig.name} - Travel Discovery`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

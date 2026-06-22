@@ -31,33 +31,24 @@ export function ItineraryList({ initial }: { initial: ItineraryListItem[] }) {
     return (
       <div className="flex flex-col items-center justify-center py-24 md:py-32 text-center border-t border-b border-black/5">
         <MapPin className="size-8 md:size-12 opacity-20 mb-8" strokeWidth={1} />
-        <h3 className="font-serif text-2xl md:text-4xl font-light text-black/40">The map is blank</h3>
-        <p className="mt-4 text-xs md:text-sm uppercase tracking-[0.2em] text-black/30">Begin a new journey above</p>
+        <h3 className="text-2xl md:text-3xl font-semibold text-muted-foreground">The map is blank</h3>
+        <p className="mt-2 text-base text-muted-foreground/70">Begin a new journey above</p>
       </div>
     );
   }
 
   return (
-    <ul className="flex flex-col">
+    <ul className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 sm:gap-6">
       {items.map((it) => (
         <li
           key={it.id}
-          className="group relative border-b border-black/10 hover:border-black/30 transition-colors"
+          className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/40 bg-surface-1/50 p-6 md:p-8 transition-all duration-300 hover:-translate-y-1 hover:border-border hover:bg-surface-1 hover:shadow-xl"
         >
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 py-10 md:py-12">
-            <Link href={routes.itinerary(it.id)} className="flex-1 min-w-0">
-              <p className="truncate font-serif text-3xl md:text-5xl font-light text-primary group-hover:text-accent-gold-text transition-colors">
+          <div className="mb-8 flex items-start justify-between gap-4">
+            <Link href={routes.itinerary(it.id)} className="min-w-0 flex-1 outline-none">
+              <h3 className="font-display text-2xl md:text-3xl font-medium tracking-tight text-primary transition-colors group-hover:text-accent-goldText">
                 {it.title}
-              </p>
-              <div className="mt-4 flex items-center gap-4 text-xs md:text-sm tracking-[0.2em] uppercase text-black/40 font-medium">
-                {it.destinationName && (
-                  <span className="flex items-center gap-1.5">
-                    <MapPin className="size-3.5" />
-                    {it.destinationName}
-                  </span>
-                )}
-                <span>{formatMoney(it.total_budget)} EST</span>
-              </div>
+              </h3>
             </Link>
             
             <Button
@@ -66,11 +57,25 @@ export function ItineraryList({ initial }: { initial: ItineraryListItem[] }) {
               aria-label={`Delete ${it.title}`}
               disabled={pending === it.id}
               onClick={() => remove(it.id)}
-              className="absolute right-0 top-8 md:static opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive hover:bg-destructive/10 rounded-full size-12 flex items-center justify-center"
+              className="flex size-10 shrink-0 items-center justify-center rounded-full text-muted-foreground opacity-0 transition-all hover:bg-destructive/10 hover:text-destructive focus:opacity-100 group-hover:opacity-100 md:-mr-2 md:-mt-2"
             >
-              <Trash2 className="size-5" />
+              <Trash2 className="size-4" />
             </Button>
           </div>
+          
+          <Link href={routes.itinerary(it.id)} className="mt-auto flex-1 outline-none">
+            <div className="flex flex-wrap items-center gap-2">
+              {it.destinationName && (
+                <div className="flex items-center gap-1.5 rounded-full border border-border/60 bg-background/50 px-3 py-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground backdrop-blur-sm">
+                  <MapPin className="size-3.5 text-accent-goldText" />
+                  <span>{it.destinationName}</span>
+                </div>
+              )}
+              <div className="rounded-full border border-border/60 bg-background/50 px-3 py-1.5 text-xs font-medium uppercase tracking-widest text-muted-foreground backdrop-blur-sm">
+                <span className="text-foreground">{formatMoney(it.total_budget)}</span> EST
+              </div>
+            </div>
+          </Link>
         </li>
       ))}
     </ul>

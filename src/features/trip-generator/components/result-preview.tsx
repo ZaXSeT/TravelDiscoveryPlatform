@@ -25,6 +25,7 @@ export function ResultPreview({
   saving,
   error,
   personalized = false,
+  offlineNote,
 }: {
   trip: GeneratedTrip;
   onSave: () => void;
@@ -32,7 +33,9 @@ export function ResultPreview({
   saving?: boolean;
   error?: string | null;
   personalized?: boolean;
+  offlineNote?: string;
 }) {
+  const rateLimited = trip.fallbackReason === "rate_limited";
   const overBudget = trip.budget.vsBudget < 0;
 
   // Number every place sequentially across the whole trip so the list and the map agree.
@@ -69,6 +72,11 @@ export function ResultPreview({
                 <Sparkles className="size-3.5" />
                 AI-generated · Gemini
               </span>
+            ) : rateLimited ? (
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/15 px-2.5 py-1 text-xs font-medium text-amber-700">
+                <Wand2 className="size-3.5" />
+                Daily limit reached
+              </span>
             ) : (
               <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-2 px-2.5 py-1 text-xs font-medium text-muted-foreground">
                 <Wand2 className="size-3.5" />
@@ -86,8 +94,11 @@ export function ResultPreview({
             {trip.days} days in {trip.destinationName}
           </h2>
           {trip.source === "rules" && (
-            <p className="mt-1 text-xs text-muted-foreground">
-              AI was unavailable — generated with the built-in planner.
+            <p
+              className={`mt-1 text-xs ${rateLimited ? "text-amber-700" : "text-muted-foreground"}`}
+            >
+              {offlineNote ??
+                "AI was unavailable - generated with the built-in planner."}
             </p>
           )}
         </div>
@@ -127,7 +138,7 @@ export function ResultPreview({
               Travel DNA
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Tuned to {dest.name}&apos;s character and your {trip.style} style — the AI
+              Tuned to {dest.name}&apos;s character and your {trip.style} style - the AI
               weighted activities against this destination&apos;s Travel DNA.
             </p>
           </div>

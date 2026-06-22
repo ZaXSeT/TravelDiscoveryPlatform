@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { Save, RotateCcw, Wand2, Check, MapPin } from "lucide-react";
+import { Save, RotateCcw, Wand2, Check, MapPin, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CldImage } from "@/components/media/cld-image";
 import { DnaRadar } from "@/features/destinations/components/dna-radar";
@@ -44,6 +46,7 @@ export function DnaResult({
     setSaving(false);
     if (res.ok) {
       setSaved(true);
+      toast.success("Travel DNA saved to your profile");
       return true;
     }
     setError(res.error.message);
@@ -117,52 +120,72 @@ export function DnaResult({
       <div>
         <h3 className="font-display text-2xl">Your top destination matches</h3>
         <p className="mt-1 text-sm text-muted-foreground">
-          Ranked by how well each destination&apos;s Travel DNA fits yours — with the why.
+          Ranked by how well each destination&apos;s Travel DNA fits yours - with the why.
         </p>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">
           {matches.map((m, i) => (
-            <motion.article
+            <motion.div
               key={m.destination.slug}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: i * 0.06 }}
-              className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm"
+              className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-sm transition-all hover:-translate-y-1 hover:border-accent-gold hover:shadow-lg"
             >
-              <div className="relative h-36 w-full bg-surface-2">
-                <CldImage
-                  publicId={m.destination.media.thumbnail}
-                  alt={m.destination.name}
-                  width={640}
-                  height={360}
-                  fill
-                  sizes="(max-width: 640px) 100vw, 320px"
-                  className="object-cover"
-                />
-                <div className="absolute right-3 top-3 rounded-full bg-black/70 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
-                  {m.score}% match
+              <Link
+                href={routes.destination(m.destination.slug)}
+                className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <div className="relative h-36 w-full overflow-hidden bg-surface-2">
+                  <CldImage
+                    publicId={m.destination.media.thumbnail}
+                    alt={m.destination.name}
+                    width={640}
+                    height={360}
+                    fill
+                    sizes="(max-width: 640px) 100vw, 320px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none"
+                  />
+                  <div className="absolute right-3 top-3 rounded-full bg-black/70 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
+                    {m.score}% match
+                  </div>
                 </div>
-              </div>
-              <div className="p-4">
-                <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                  <MapPin className="size-3.5" />
-                  {m.destination.country}
-                </div>
-                <h4 className="mt-0.5 font-display text-xl">{m.destination.name}</h4>
-                <ul className="mt-2 space-y-1">
-                  {m.reasons.length > 0 ? (
-                    m.reasons.map((r) => (
-                      <li key={r} className="text-sm text-muted-foreground">
-                        • {r}
+                <div className="p-4">
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <MapPin className="size-3.5" />
+                    {m.destination.country}
+                  </div>
+                  <h4 className="mt-0.5 font-display text-xl">{m.destination.name}</h4>
+                  <ul className="mt-2 space-y-1">
+                    {m.reasons.length > 0 ? (
+                      m.reasons.map((r) => (
+                        <li key={r} className="text-sm text-muted-foreground">
+                          • {r}
+                        </li>
+                      ))
+                    ) : (
+                      <li className="text-sm text-muted-foreground">
+                        • A well-rounded match for your travel style
                       </li>
-                    ))
-                  ) : (
-                    <li className="text-sm text-muted-foreground">
-                      • A well-rounded match for your travel style
-                    </li>
-                  )}
-                </ul>
+                    )}
+                  </ul>
+                </div>
+              </Link>
+              <div className="mt-auto flex border-t border-border text-sm font-medium">
+                <Link
+                  href={routes.destination(m.destination.slug)}
+                  className="flex flex-1 items-center justify-center gap-1 py-2.5 text-muted-foreground transition-colors hover:bg-surface-1 hover:text-foreground"
+                >
+                  View details
+                </Link>
+                <Link
+                  href={`${routes.tripGenerator}?to=${m.destination.slug}`}
+                  className="flex flex-1 items-center justify-center gap-1 border-l border-border py-2.5 text-accent-goldText transition-colors hover:bg-surface-1"
+                >
+                  Plan a trip
+                  <ArrowRight className="size-3.5" />
+                </Link>
               </div>
-            </motion.article>
+            </motion.div>
           ))}
         </div>
       </div>

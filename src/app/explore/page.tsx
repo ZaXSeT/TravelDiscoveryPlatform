@@ -40,7 +40,7 @@ export default function ExplorePage() {
       {/* Cinematic Hero Header */}
       <section
         data-theme="dark"
-        className="relative flex min-h-[50svh] items-center overflow-hidden bg-dark-0 pt-20 text-white"
+        className="relative flex min-h-[50svh] items-center overflow-hidden bg-dark-0 pt-8 md:pt-20 text-white"
       >
         <Parallax speed={0.15} className="absolute inset-x-0 -top-[20%] h-[140%]">
           <CldImage
@@ -55,23 +55,23 @@ export default function ExplorePage() {
         </Parallax>
         
         {/* Clean dark overlay for text readability without muddy gradients */}
-        <div className="absolute inset-0 bg-dark-0/40" />
+        <div className="absolute inset-0 bg-dark-0/60" />
 
-        <PageContainer className="relative z-10 w-full py-20 pb-16">
-          <div className="max-w-3xl">
+        <PageContainer width="full" className="relative z-10 w-full pt-10 pb-16 md:py-20 md:pb-16">
+          <div className="max-w-3xl drop-shadow-md">
             <Reveal>
-              <span className="text-sm font-medium uppercase tracking-[0.25em] text-accent-gold">
+              <span className="text-xs font-semibold uppercase tracking-[0.25em] text-white drop-shadow-md">
                 Destinations
               </span>
             </Reveal>
             <Reveal delayMs={100}>
-              <h1 className="mt-6 font-display text-5xl leading-[1.1] sm:text-6xl md:text-7xl">
+              <h1 className="mt-4 font-serif text-6xl leading-[1] font-light tracking-tight sm:text-7xl md:text-8xl text-white drop-shadow-lg">
                 Explore the world&apos;s <br className="hidden md:block" />
-                <span className="text-white/80">most unforgettable places.</span>
+                <span className="italic text-white/90">most unforgettable places.</span>
               </h1>
             </Reveal>
             <Reveal delayMs={200}>
-              <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/70">
+              <p className="mt-6 max-w-xl text-lg md:text-xl font-light leading-relaxed text-white/80 drop-shadow-md">
                 Search, filter, and compare unique travel experiences carefully curated
                 to inspire your next grand adventure.
               </p>
@@ -81,7 +81,7 @@ export default function ExplorePage() {
       </section>
 
       {/* Main Filter and Grid Content */}
-      <PageContainer className="pb-24">
+      <PageContainer width="full" className="pb-24">
         {/* We lift the search bar to slightly overlap the hero section using a negative margin */}
         <div className="relative z-20 -mt-8">
           <Suspense fallback={<LoadingState variant="grid" />}>

@@ -33,21 +33,29 @@ export default async function JournalPage() {
   }
 
   return (
-    <div className="pt-16 md:pt-20">
-      <PageContainer className="section-y">
-        <SectionHeader
-          eyebrow="Travel journal"
-          title="Stories from the road"
-          description="Published journals from our community and editors."
-          action={
-            <Button asChild className="gap-1.5">
+    <div className="pt-8 md:pt-32 pb-32 min-h-screen bg-background">
+      <PageContainer width="full" className="section-y">
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-border pb-8 mb-10 md:mb-12">
+          <div className="max-w-5xl">
+            <p className="mb-1 text-[11px] md:text-xs font-semibold uppercase tracking-[0.25em] text-accent-goldText">
+              Travel journal
+            </p>
+            <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl font-light tracking-tight text-primary leading-[1]">
+              Stories from <span className="italic text-muted-foreground">the road</span>
+            </h1>
+            <p className="mt-3 max-w-lg text-lg md:text-xl text-muted-foreground font-light leading-relaxed">
+              Published journals from our community and editors.
+            </p>
+          </div>
+          <div className="mt-6 md:mt-0 shrink-0">
+            <Button variant="gold" asChild className="gap-1.5 rounded-full px-6">
               <Link href={routes.journalNew}>
                 <PenLine className="size-4" />
                 Write a journal
               </Link>
             </Button>
-          }
-        />
+          </div>
+        </div>
         <div className="mt-10">
           <JournalFeed journals={journals} />
         </div>

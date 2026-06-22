@@ -23,7 +23,7 @@ export function FeaturedDestinations() {
             </Button>
           }
         />
-        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
           {featured.map((d, i) => (
             <Reveal key={d.slug} delayMs={i * 80}>
               <DestinationCard destination={d} priority={i === 0} />

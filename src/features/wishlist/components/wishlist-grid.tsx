@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Heart, MapPin } from "lucide-react";
+import { toast } from "sonner";
 import { DestinationCard } from "@/features/destinations/components/destination-card";
 import { EmptyState } from "@/components/feedback/empty-state";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,12 @@ export function WishlistGrid({ initial }: { initial: DestinationSummary[] }) {
     setPending(slug);
     setItems((cur) => cur.filter((d) => d.slug !== slug)); // optimistic
     const res = await wishlistRemove(slug);
-    if (!res.ok) setItems(prev); // revert
+    if (!res.ok) {
+      setItems(prev); // revert
+      toast.error("Couldn't remove that — please try again.");
+    } else {
+      toast.success("Removed from your wishlist");
+    }
     setPending(null);
   };
 
@@ -30,7 +36,7 @@ export function WishlistGrid({ initial }: { initial: DestinationSummary[] }) {
         title="Your wishlist is empty"
         description="Save destinations you love and they'll show up here."
         action={
-          <Button asChild>
+          <Button asChild variant="gold" className="rounded-full px-6">
             <Link href={routes.explore}>Explore destinations</Link>
           </Button>
         }
@@ -39,7 +45,7 @@ export function WishlistGrid({ initial }: { initial: DestinationSummary[] }) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
       {items.map((d) => (
         <div key={d.slug} className="relative">
           <DestinationCard destination={d} />

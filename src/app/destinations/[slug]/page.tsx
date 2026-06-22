@@ -73,11 +73,10 @@ export default async function DestinationPage({
             <p className="mt-4 text-sm font-medium text-accent-goldText">
               Best time to visit: {d.bestSeason}
             </p>
-            {featured && (
-              <div className="mt-6">
-                <SaveButton slug={d.slug} name={d.name} />
-              </div>
-            )}
+            <div className="mt-6">
+              {/* All 46 destinations are seeded, so every one is saveable. */}
+              <SaveButton slug={d.slug} name={d.name} />
+            </div>
           </div>
           <div className="rounded-lg border border-border bg-surface-1 p-6">
             <h3 className="font-display text-xl">Travel tips</h3>

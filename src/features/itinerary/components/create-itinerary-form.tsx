@@ -61,108 +61,110 @@ export function CreateItineraryForm() {
   return (
     <form
       onSubmit={submit}
-      className="py-12 md:py-16"
+      className="py-8 md:py-12 w-full"
     >
-      <div className="flex flex-col gap-2 mb-12 md:mb-16">
-        <h2 className="text-[10px] md:text-xs font-semibold uppercase tracking-[0.3em] text-accent-gold-text">
+      <div className="flex flex-col gap-2 mb-8">
+        <h2 className="text-sm font-medium uppercase tracking-[0.18em] text-accent-goldText">
           Begin a new journey
         </h2>
-        <p className="font-serif text-3xl md:text-5xl lg:text-6xl text-primary font-light tracking-tight">
+        <p className="text-3xl md:text-4xl font-bold tracking-tight text-primary">
           Where to next?
         </p>
       </div>
       
       {error && (
-        <p role="alert" className="mb-8 text-sm text-destructive bg-destructive/10 p-4 rounded-lg border border-destructive/20">
+        <p role="alert" className="mb-6 text-sm text-destructive bg-destructive/10 p-4 rounded-lg border border-destructive/20">
           {error}
         </p>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 lg:gap-24 items-end">
-        
-        {/* TRIP NAME INPUT */}
-        <div className="space-y-4 group">
-          <Label htmlFor="trip-title" className="text-[10px] uppercase tracking-[0.2em] text-black/40 font-medium group-focus-within:text-accent-gold-text transition-colors">
-            Give it a name
-          </Label>
-          <Input
-            id="trip-title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. Summer in Kyoto"
-            required
-            aria-invalid={fieldErrors.title ? true : undefined}
-            className="h-auto py-2 w-full rounded-none border-0 border-b-2 border-black/10 bg-transparent px-0 text-2xl md:text-4xl font-serif font-light placeholder:text-black/20 focus-visible:border-black focus-visible:ring-0 transition-all"
-          />
-          {fieldErrors.title && (
-            <p className="text-sm text-destructive mt-2">{fieldErrors.title}</p>
-          )}
-        </div>
-
-        {/* CUSTOM PREMIUM DROPDOWN */}
-        <div className="space-y-4 group relative" ref={dropdownRef}>
-          <Label className="text-[10px] uppercase tracking-[0.2em] text-black/40 font-medium group-focus-within:text-accent-gold-text transition-colors">
-            Choose destination
-          </Label>
-          <button
-            type="button"
-            onClick={() => setIsOpen(!isOpen)}
-            className="flex items-center justify-between h-auto py-2 w-full rounded-none border-0 border-b-2 border-black/10 bg-transparent px-0 text-2xl md:text-4xl font-serif font-light focus:outline-none focus:border-black transition-all"
-          >
-            <span className={destinationSlug ? "text-primary" : "text-black/30"}>
-              {selectedName}
-            </span>
-            <motion.div 
-              animate={{ rotate: isOpen ? 180 : 0 }} 
-              transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
-            >
-              <ChevronDown className="size-6 md:size-8 opacity-30" />
-            </motion.div>
-          </button>
-
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.98 }}
-                transition={{ duration: 0.4, ease: [0.76, 0, 0.24, 1] }}
-                className="absolute top-[calc(100%+8px)] left-0 z-50 w-full max-h-[60vh] overflow-y-auto overscroll-contain rounded-2xl border border-black/5 bg-white/95 backdrop-blur-2xl shadow-[0_30px_60px_rgb(0,0,0,0.12)] p-2"
-                data-lenis-prevent="true"
-              >
-                <div 
-                  onClick={() => { setDestinationSlug(""); setIsOpen(false); }}
-                  className="font-serif text-lg md:text-xl font-light text-black/60 hover:bg-black/5 hover:text-black cursor-pointer py-4 px-4 rounded-xl transition-colors"
-                >
-                  Anywhere
-                </div>
-                {ALL_DESTINATIONS.map((d) => (
-                  <div 
-                    key={d.slug}
-                    onClick={() => { setDestinationSlug(d.slug); setIsOpen(false); }}
-                    className="font-serif text-lg md:text-xl font-light hover:bg-black/5 hover:text-black cursor-pointer py-4 px-4 rounded-xl transition-colors"
-                  >
-                    {d.name}
-                  </div>
-                ))}
-              </motion.div>
+      <div className="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-black/5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+          
+          {/* TRIP NAME INPUT */}
+          <div className="space-y-3 group">
+            <Label htmlFor="trip-title" className="text-sm font-medium text-foreground">
+              Give it a name
+            </Label>
+            <Input
+              id="trip-title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g. Summer in Kyoto"
+              required
+              aria-invalid={fieldErrors.title ? true : undefined}
+              className="h-14 w-full rounded-xl bg-surface/50 border-black/10 px-4 text-lg placeholder:text-black/30 focus-visible:bg-surface focus-visible:border-black/30 focus-visible:ring-0 transition-all"
+            />
+            {fieldErrors.title && (
+              <p className="text-sm text-destructive mt-2">{fieldErrors.title}</p>
             )}
-          </AnimatePresence>
-        </div>
+          </div>
 
-      </div>
-      
-      {/* BUTTON */}
-      <div className="mt-12 md:mt-16 flex justify-start">
-        <Button 
-          type="submit" 
-          disabled={pending} 
-          variant="default"
-          className="rounded-full bg-primary px-10 py-8 text-[11px] md:text-xs uppercase tracking-[0.25em] text-white font-medium transition-transform hover:scale-105 hover:bg-black gap-3"
-        >
-          <Plus className="size-4" />
-          {pending ? "Crafting..." : "Create Itinerary"}
-        </Button>
+          {/* CUSTOM PREMIUM DROPDOWN */}
+          <div className="space-y-3 group relative" ref={dropdownRef}>
+            <Label className="text-sm font-medium text-foreground">
+              Choose destination
+            </Label>
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              className="flex items-center justify-between h-14 w-full rounded-xl bg-surface/50 border border-black/10 px-4 text-lg focus:outline-none focus:bg-surface focus:border-black/30 transition-all text-left"
+            >
+              <span className={destinationSlug ? "text-primary" : "text-black/30"}>
+                {selectedName}
+              </span>
+              <motion.div 
+                animate={{ rotate: isOpen ? 180 : 0 }} 
+                transition={{ duration: 0.3 }}
+              >
+                <ChevronDown className="size-5 opacity-40" />
+              </motion.div>
+            </button>
+
+            <AnimatePresence>
+              {isOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 5, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 5, scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-[calc(100%+8px)] left-0 z-50 w-full max-h-[300px] overflow-y-auto overscroll-contain rounded-xl border border-black/5 bg-white shadow-lg p-2"
+                  data-lenis-prevent="true"
+                >
+                  <div 
+                    onClick={() => { setDestinationSlug(""); setIsOpen(false); }}
+                    className="text-base font-medium text-muted-foreground hover:bg-black/5 hover:text-black cursor-pointer py-2.5 px-4 rounded-lg transition-colors"
+                  >
+                    Anywhere
+                  </div>
+                  {ALL_DESTINATIONS.map((d) => (
+                    <div 
+                      key={d.slug}
+                      onClick={() => { setDestinationSlug(d.slug); setIsOpen(false); }}
+                      className="text-base font-medium hover:bg-black/5 hover:text-black cursor-pointer py-2.5 px-4 rounded-lg transition-colors"
+                    >
+                      {d.name}
+                    </div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+        </div>
+        
+        {/* BUTTON */}
+        <div className="mt-10 pt-8 border-t border-black/5 flex justify-end">
+          <Button 
+            type="submit" 
+            disabled={pending} 
+            variant="gold"
+            className="rounded-full px-8 py-6 text-sm font-medium transition-transform hover:scale-105 gap-2"
+          >
+            <Plus className="size-4" />
+            {pending ? "Crafting..." : "Create Itinerary"}
+          </Button>
+        </div>
       </div>
     </form>
   );

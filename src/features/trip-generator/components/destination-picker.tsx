@@ -14,10 +14,12 @@ export function DestinationPicker({
   options,
   value,
   onChange,
+  emptyLabel = "Auto-pick for my style",
 }: {
   options: Option[];
   value: string;
   onChange: (slug: string) => void;
+  emptyLabel?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -28,7 +30,7 @@ export function DestinationPicker({
 
   const selectedLabel =
     value === ""
-      ? "Auto-pick for my style"
+      ? emptyLabel
       : (options.find((o) => o.slug === value)?.name ?? "Select destination");
 
   const updateCoords = useCallback(() => {
@@ -138,7 +140,7 @@ export function DestinationPicker({
                   onClick={() => select("")}
                   className={rowClass(value === "")}
                 >
-                  Auto-pick for my style
+                  {emptyLabel}
                   {value === "" && <Check className="size-4" />}
                 </button>
               </li>

@@ -56,32 +56,35 @@ export default async function JournalDetailPage({
   const isOwner = user?.id === journal.user_id;
 
   return (
-    <article className="pt-16 md:pt-20">
+    <article className="pt-4 md:pt-20">
       <PageContainer width="default" className="section-y">
-        <div className="mx-auto max-w-prose">
-          <p className="text-xs uppercase tracking-[0.18em] text-accent-goldText">
+        <div className="mx-auto max-w-3xl text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent-goldText">
             {journal.author_label}
           </p>
-          <h1 className="mt-3 font-display text-4xl md:text-5xl">
+          <h1 className="mt-6 font-display text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight text-primary">
             {journal.title}
           </h1>
           {journal.excerpt && (
-            <p className="mt-3 text-lg text-muted-foreground">{journal.excerpt}</p>
+            <p className="mx-auto mt-6 max-w-2xl text-lg md:text-xl font-light text-muted-foreground leading-relaxed">
+              {journal.excerpt}
+            </p>
           )}
           {isOwner && (
-            <div className="mt-4">
-              <Button asChild variant="outline" size="sm" className="gap-1.5">
+            <div className="mt-8 flex justify-center">
+              <Button asChild variant="outline" size="sm" className="gap-1.5 rounded-full px-6">
                 <Link href={routes.journalEdit(journal.slug)}>
                   <Pencil className="size-4" />
-                  Edit
+                  Edit Journal
                 </Link>
               </Button>
             </div>
           )}
         </div>
+        <div className="mx-auto mt-12 w-16 border-t-2 border-accent-gold" />
 
         {journal.cover_path && (
-          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-lg bg-surface-2">
+          <div className="group relative mt-8 aspect-[16/9] overflow-hidden rounded-lg bg-surface-2">
             <JournalImage
               path={journal.cover_path}
               isSeed={journal.is_seed}
@@ -91,7 +94,7 @@ export default async function JournalDetailPage({
               fill
               priority
               sizes="(max-width: 1024px) 100vw, 1024px"
-              className="object-cover"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
           </div>
         )}
@@ -105,7 +108,7 @@ export default async function JournalDetailPage({
             {images.map((img) => (
               <div
                 key={img.id}
-                className="relative aspect-square overflow-hidden rounded-md bg-surface-2"
+                className="group relative aspect-square overflow-hidden rounded-md bg-surface-2"
               >
                 <JournalImage
                   path={img.storage_path}
@@ -115,7 +118,7 @@ export default async function JournalDetailPage({
                   height={500}
                   fill
                   sizes="(max-width: 768px) 50vw, 320px"
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
             ))}

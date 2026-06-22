@@ -9,7 +9,7 @@ import { getMyTravelDna } from "@/features/travel-dna/actions";
 export const metadata: Metadata = {
   title: "Travel DNA",
   description:
-    "Discover your Travel DNA — a personalized traveler profile matched against every ORBIS destination and used to power AI-assisted itineraries.",
+    "Discover your Travel DNA - a personalized traveler profile matched against every ORBIS destination and used to power AI-assisted itineraries.",
 };
 
 export default async function TravelDnaPage() {
@@ -19,7 +19,7 @@ export default async function TravelDnaPage() {
     <div className="min-h-screen bg-background">
       <section
         data-theme="dark"
-        className="relative flex min-h-[42svh] items-center overflow-hidden bg-dark-0 pt-20 text-white"
+        className="relative flex min-h-[42svh] items-center overflow-hidden bg-dark-0 pt-8 md:pt-20 text-white"
       >
         <Parallax speed={0.15} className="absolute inset-x-0 -top-[20%] h-[140%]">
           <CldImage
@@ -34,7 +34,7 @@ export default async function TravelDnaPage() {
         </Parallax>
         <div className="absolute inset-0 bg-dark-0/60" />
 
-        <PageContainer className="relative z-10 w-full pt-16 pb-28">
+        <PageContainer className="relative z-10 w-full pt-8 pb-20 md:pt-16 md:pb-28">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.22em] text-white/70">
               Innovation · Personalization

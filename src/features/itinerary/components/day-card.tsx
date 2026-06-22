@@ -40,7 +40,7 @@ export function DayCard({
   return (
     <section className="rounded-lg border border-border bg-surface-1 p-4">
       <div className="flex items-center justify-between gap-3">
-        <div className="flex min-w-0 items-center gap-3">
+        <div className="flex flex-1 min-w-0 items-center gap-3">
           <span className="shrink-0 rounded-md bg-primary px-2.5 py-1 text-sm font-medium text-primary-foreground">
             Day {day.day_index}
           </span>

@@ -2,7 +2,7 @@ import "server-only";
 import type { GeneratedTrip } from "@/features/trip-generator/types";
 
 // Best-effort in-memory itinerary cache (per server process). Identical inputs return a
-// cached plan instead of re-invoking Gemini — controls cost + latency and guarantees the
+// cached plan instead of re-invoking Gemini - controls cost + latency and guarantees the
 // AI is never called repeatedly for the same request within the TTL.
 
 interface Entry {

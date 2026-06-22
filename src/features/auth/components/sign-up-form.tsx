@@ -46,6 +46,14 @@ export function SignUpForm({ returnTo }: { returnTo?: string }) {
       <p className="text-xs text-muted-foreground">
         At least 8 characters, including a letter and a number.
       </p>
+      <AuthField
+        id="confirm"
+        label="Confirm password"
+        type="password"
+        autoComplete="new-password"
+        required
+        error={state?.fieldErrors?.confirm}
+      />
 
       <Button type="submit" className="w-full" size="lg" disabled={pending}>
         {pending ? "Creating account…" : "Create account"}

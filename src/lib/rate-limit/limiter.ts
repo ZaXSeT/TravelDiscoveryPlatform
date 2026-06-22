@@ -2,7 +2,7 @@ import "server-only";
 import { headers } from "next/headers";
 
 // Fail-open rate limiter (05_SECURITY_AND_RLS.md §5). Uses Upstash Redis REST when
-// configured; otherwise a best-effort in-memory window (per-process — fine for dev/demo).
+// configured; otherwise a best-effort in-memory window (per-process - fine for dev/demo).
 // On any error it allows the request (availability over strictness for non-critical paths).
 
 const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;

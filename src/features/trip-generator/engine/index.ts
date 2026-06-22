@@ -9,7 +9,7 @@ import type {
 } from "@/features/trip-generator/types";
 
 // =============================================================================
-// Rule-based, DETERMINISTIC trip engine (D4 — no LLM). Same input -> same output, so the
+// Rule-based, DETERMINISTIC trip engine (D4 - no LLM). Same input -> same output, so the
 // server can re-run it at save time for integrity. Selection uses Travel DNA; days are
 // filled from the destination's gems/nearby + style activity templates.
 // Works over the 5 featured (DB-backed) destinations so saved trips have a valid FK.
@@ -86,7 +86,7 @@ function scoreDestination(d: Destination, style: TravelStyle): number {
 }
 
 // Destination data is the source of truth: resolve the trip's destination from our
-// catalog — the user's explicit pick, else the best match for their saved Travel DNA, else
+// catalog - the user's explicit pick, else the best match for their saved Travel DNA, else
 // their chosen style. Shared by both the Gemini path and the deterministic fallback so they
 // target the same place.
 export function resolveDestination(
@@ -189,10 +189,10 @@ export function generateTrip(
   }
   if (total > input.budget) {
     notes.push(
-      `This trip is ambitious for the budget — a realistic minimum is about ${formatCents(total)}.`,
+      `This trip is ambitious for the budget - a realistic minimum is about ${formatCents(total)}.`,
     );
   } else if (input.budget - total > dailyBase) {
-    notes.push(`You're comfortably under budget — room to upgrade stays or add experiences.`);
+    notes.push(`You're comfortably under budget - room to upgrade stays or add experiences.`);
   }
 
   const activities = activitiesOf(itinerary);

@@ -30,7 +30,7 @@ export type SortValue = (typeof SORTS)[number]["value"];
 export const HOME_CATEGORIES = [
   { label: "Beaches", category: "Beach", image: "go/category/bali" },
   { label: "Cities", category: "City", image: "go/category/tokyo" },
-  { label: "Mountains", category: "Mountains", image: "go/category/switzerland" },
+  { label: "Adventure", category: "Adventure", image: "go/category/switzerland" },
   { label: "Food", category: "Food", image: "go/category/paris" },
   { label: "Culture", category: "Culture", image: "go/category/new-york" },
   { label: "Nature", category: "Nature", image: "go/category/landscape" },

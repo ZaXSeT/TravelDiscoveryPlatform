@@ -5,11 +5,17 @@ import {
   passwordSchema,
 } from "@/lib/validation/common";
 
-export const signUpSchema = z.object({
-  email: emailSchema,
-  password: passwordSchema,
-  displayName: displayNameSchema,
-});
+export const signUpSchema = z
+  .object({
+    email: emailSchema,
+    password: passwordSchema,
+    displayName: displayNameSchema,
+    confirm: z.string(),
+  })
+  .refine((d) => d.password === d.confirm, {
+    message: "Passwords do not match",
+    path: ["confirm"],
+  });
 export type SignUpInput = z.infer<typeof signUpSchema>;
 
 export const signInSchema = z.object({

@@ -15,7 +15,7 @@ export function JournalFeed({ journals }: { journals: JournalSummary[] }) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
       {journals.map((j, i) => (
         <JournalCard key={j.id} journal={j} priority={i < 3} />
       ))}

@@ -35,18 +35,19 @@ export default async function ItinerariesPage() {
   }));
 
   return (
-    <div className="pt-24 md:pt-32 pb-32 min-h-screen bg-[#FDFCF8] selection:bg-black selection:text-white">
+    <div className="pt-24 md:pt-32 pb-32 min-h-screen bg-background">
       <PageContainer>
-        {/* The beautiful form acts as the massive hero banner */}
-        <CreateItineraryForm />
+        <div className="max-w-4xl mx-auto">
+          <CreateItineraryForm />
+        </div>
         
-        <div className="mt-20 md:mt-32 pt-16">
+        <div className="mt-16 md:mt-24 pt-8 max-w-4xl mx-auto">
           <div className="flex items-end justify-between border-b border-black/10 pb-8 mb-12">
             <div>
-              <h3 className="font-serif text-3xl md:text-5xl font-light text-primary">Your Journeys</h3>
-              <p className="text-xs uppercase tracking-[0.2em] text-black/40 mt-4">Past & Upcoming adventures</p>
+              <h3 className="text-3xl md:text-4xl font-semibold">Your Journeys</h3>
+              <p className="mt-3 text-base text-muted-foreground md:text-lg">Past & upcoming adventures</p>
             </div>
-            <div className="hidden md:block text-xs uppercase tracking-[0.2em] text-black/30">
+            <div className="hidden md:block text-sm font-medium text-muted-foreground">
               {items.length} {items.length === 1 ? 'Trip' : 'Trips'}
             </div>
           </div>

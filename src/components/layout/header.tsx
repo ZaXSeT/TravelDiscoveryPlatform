@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Compass, BookOpen, Wand2, Fingerprint, Menu } from "lucide-react";
+import { Compass, BookOpen, Wand2, Menu } from "lucide-react";
 import { AuthNav } from "@/features/auth/components/auth-nav";
 import { NavBar as TubelightNavBar } from "@/components/ui/tubelight-navbar";
 import { MobileMenu } from "@/components/layout/mobile-menu";
@@ -11,19 +11,20 @@ import { routes } from "@/constants/routes";
 import { siteConfig } from "@/constants/config";
 import { cn } from "@/lib/utils";
 
-import { Heart, Map, User } from "lucide-react";
+import { User } from "lucide-react";
 import { useAuthUser } from "@/features/auth/hooks/use-auth-user";
 
+// Travel DNA is reached contextually (home AI section, the Plan banner, Profile) rather
+// than as a permanent nav item, keeping the bar lean.
 const PUBLIC_NAV_ITEMS = [
   { name: "Explore", url: routes.explore, icon: Compass },
-  { name: "Travel DNA", url: routes.travelDna, icon: Fingerprint },
   { name: "Plan", url: routes.tripGenerator, icon: Wand2 },
   { name: "Journal", url: routes.journal, icon: BookOpen },
 ];
 
+// Wishlist & Trips live inside the Profile hub (which already lists them), so the navbar
+// stays lean: just Profile for signed-in users.
 const AUTHED_NAV_ITEMS = [
-  { name: "Wishlist", url: routes.wishlist, icon: Heart },
-  { name: "Trips", url: routes.itineraries, icon: Map },
   { name: "Profile", url: routes.profile, icon: User },
 ];
 

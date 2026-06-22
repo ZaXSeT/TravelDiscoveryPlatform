@@ -65,7 +65,7 @@ export function TravelDnaClient({ initialDna }: { initialDna: Dna | null }) {
           Destination match scores
         </span>
       </div>
-      <Button size="lg" className="mt-8 gap-2" onClick={() => setPhase("quiz")}>
+      <Button variant="gold" size="lg" className="mt-8 gap-2" onClick={() => setPhase("quiz")}>
         <Fingerprint className="size-4" />
         Start the assessment
       </Button>

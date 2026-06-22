@@ -44,7 +44,7 @@ function normalize(input: TripInput): TripInput {
 }
 
 // Gate the (paid) Gemini call. The plan feature is free to users, so the owner bears the
-// API cost — both tiers are capped to prevent spam. Over the limit, the caller falls back
+// API cost - both tiers are capped to prevent spam. Over the limit, the caller falls back
 // to the free deterministic engine (the user still gets a valid itinerary).
 async function canUseGemini(userId?: string): Promise<boolean> {
   if (userId) {
@@ -98,6 +98,7 @@ export async function generateTripAction(
     if (cached) return cached;
   }
 
+  let fallbackReason: "rate_limited" | "unavailable" = "unavailable";
   if (isGeminiConfigured()) {
     if (await canUseGemini(user?.id)) {
       try {
@@ -112,6 +113,7 @@ export async function generateTripAction(
         );
       }
     } else {
+      fallbackReason = "rate_limited";
       console.warn("[trip-generator] rate limit reached -> offline planner");
     }
   } else {
@@ -119,7 +121,9 @@ export async function generateTripAction(
   }
 
     const fallback = generateTrip(safe, destination);
-    setCached(key, fallback);
+    fallback.fallbackReason = fallbackReason;
+    // Don't cache a rate-limited result — once the limit resets we want a fresh AI try.
+    if (fallbackReason !== "rate_limited") setCached(key, fallback);
     return fallback;
   } catch {
     // Last resort: pure deterministic plan with no auth/DB/network dependency, so the

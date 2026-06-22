@@ -45,7 +45,7 @@ export default async function EditJournalPage({
     : null;
 
   return (
-    <div className="pt-16 md:pt-20">
+    <div className="pt-4 md:pt-20">
       <PageContainer width="default" className="section-y max-w-2xl">
         <div className="flex items-center justify-between">
           <Link

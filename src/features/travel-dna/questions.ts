@@ -1,6 +1,6 @@
 import type { DnaKey } from "@/types";
 
-// Travel DNA Assessment — 8 questions. Each option contributes weighted points to one or
+// Travel DNA Assessment - 8 questions. Each option contributes weighted points to one or
 // two of the six DNA axes; scoring.ts normalizes the totals to 0–100 per axis.
 
 export interface DnaOption {
@@ -41,14 +41,14 @@ export const DNA_QUESTIONS: DnaQuestion[] = [
       { label: "An eco-lodge out in the wild", weights: { nature: 2, adventure: 1 } },
       { label: "A boutique hotel in the cultural quarter", weights: { culture: 2 } },
       { label: "An apartment by the food markets", weights: { food: 2 } },
-      { label: "A budget stay — spend it on experiences", weights: { budgetFriendly: 2 } },
+      { label: "A budget stay - spend it on experiences", weights: { budgetFriendly: 2 } },
     ],
   },
   {
     id: "budget",
     prompt: "Your money mindset on the road?",
     options: [
-      { label: "Every dollar counts — maximize value", weights: { budgetFriendly: 2 } },
+      { label: "Every dollar counts - maximize value", weights: { budgetFriendly: 2 } },
       { label: "Mid-range with the odd treat", weights: { budgetFriendly: 1, food: 1 } },
       { label: "Comfort matters, I'll pay for it", weights: { food: 1, culture: 1 } },
       { label: "Splurge freely for the memories", weights: { nightlife: 1, food: 1 } },
@@ -56,7 +56,7 @@ export const DNA_QUESTIONS: DnaQuestion[] = [
   },
   {
     id: "afternoon",
-    prompt: "A free afternoon — you choose…",
+    prompt: "A free afternoon - you choose…",
     options: [
       { label: "Kayak, zipline, or bike something", weights: { adventure: 2 } },
       { label: "A gallery or temple visit", weights: { culture: 2 } },

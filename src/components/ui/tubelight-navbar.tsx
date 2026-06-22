@@ -108,7 +108,7 @@ export function NavBar({ items, className, leftContent, rightContent, defaultDar
 
   useEffect(() => {
     if (hasAnimated) {
-      // Already visible from a previous mount — snap to final state immediately
+      // Already visible from a previous mount - snap to final state immediately
       wrapperControls.set({ opacity: 1, y: 0 })
       return
     }
@@ -164,7 +164,7 @@ export function NavBar({ items, className, leftContent, rightContent, defaultDar
           initial={{ opacity: 0 }}
           animate={wrapperControls}
           className={cn(
-            "flex items-center justify-between sm:justify-center gap-2 sm:gap-6 backdrop-blur-xl py-1.5 px-2 sm:px-4 rounded-full shadow-none sm:shadow-lg pointer-events-auto transition-all duration-500",
+            "flex items-center justify-between sm:justify-center gap-1 sm:gap-6 backdrop-blur-xl py-1.5 px-2 sm:px-4 rounded-full shadow-none sm:shadow-lg pointer-events-auto transition-all duration-500",
             useWhiteText 
               ? "bg-black/20 border border-white/10" 
               : "bg-white/70 border border-black/5"
@@ -197,14 +197,14 @@ export function NavBar({ items, className, leftContent, rightContent, defaultDar
                       href={item.url}
                       onClick={() => setActiveTab(item.name)}
                       className={cn(
-                        "relative cursor-pointer text-sm font-semibold px-4 sm:px-6 py-2 rounded-full transition-all duration-500 flex-shrink-0 block",
+                        "relative cursor-pointer text-sm font-semibold px-2 sm:px-6 py-2 rounded-full transition-all duration-500 shrink block",
                         !useWhiteText 
                           ? "text-foreground/80 hover:text-primary" 
                           : "text-white/80 hover:text-white",
                         isActive && (!useWhiteText ? "bg-muted text-primary" : "bg-white/20 text-white"),
                       )}
                     >
-                      <span className="hidden md:inline">{item.name}</span>
+                      <span className="hidden md:inline whitespace-nowrap">{item.name}</span>
                       <span className="md:hidden">
                         <Icon size={18} strokeWidth={2.5} />
                       </span>

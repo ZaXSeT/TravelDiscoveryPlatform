@@ -37,7 +37,7 @@ export function ExploreClient({ items }: { items: ExploreItem[] }) {
       </Reveal>
 
       {/* Grid Header & Results */}
-      <div className="mx-auto max-w-7xl space-y-6">
+      <div className="w-full space-y-6">
         <Reveal delayMs={300}>
           <div className="flex items-center justify-between px-2">
             <p className="font-serif text-lg text-muted-foreground" aria-live="polite">

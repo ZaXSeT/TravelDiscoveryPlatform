@@ -21,7 +21,7 @@ export function ProfileTravelDna({ dna }: { dna: Dna | null }) {
           Take a quick assessment to reveal your traveler profile and unlock personalized
           destination matches and AI itineraries.
         </p>
-        <Button asChild className="mt-5 gap-2">
+        <Button variant="gold" asChild className="mt-5 gap-2">
           <Link href={routes.travelDna}>
             <Fingerprint className="size-4" />
             Take the assessment

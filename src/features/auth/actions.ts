@@ -54,7 +54,8 @@ export async function signInAction(
     return { error: "Invalid email or password." };
   }
 
-  redirect(safeReturnTo(formData.get("returnTo")?.toString()));
+  const dest = safeReturnTo(formData.get("returnTo")?.toString());
+  redirect(`${dest}${dest.includes("?") ? "&" : "?"}welcome=back`);
 }
 
 export async function signUpAction(
@@ -65,6 +66,7 @@ export async function signUpAction(
     email: formData.get("email"),
     password: formData.get("password"),
     displayName: formData.get("displayName"),
+    confirm: formData.get("confirm"),
   });
   if (!parsed.success) {
     return { fieldErrors: firstErrors(parsed.error.flatten().fieldErrors) };
@@ -83,8 +85,20 @@ export async function signUpAction(
       emailRedirectTo: `${siteConfig.url}/auth/callback`,
     },
   });
+  const ALREADY_REGISTERED =
+    "An account with this email already exists. Try signing in instead.";
+
   if (error) {
+    if (/already registered|already exists|already been registered/i.test(error.message)) {
+      return { error: ALREADY_REGISTERED };
+    }
     return { error: error.message };
+  }
+
+  // With email confirmation ON, Supabase hides duplicate emails (anti-enumeration) by
+  // returning a "user" with no identities instead of an error. Treat that as taken.
+  if (data.user && (data.user.identities?.length ?? 0) === 0) {
+    return { error: ALREADY_REGISTERED };
   }
 
   // Email confirmation ON: no active session yet.
@@ -95,7 +109,9 @@ export async function signUpAction(
     };
   }
 
-  redirect(safeReturnTo(formData.get("returnTo")?.toString()));
+  // Instant sign-in: flag the destination so the client shows a welcome toast.
+  const dest = safeReturnTo(formData.get("returnTo")?.toString());
+  redirect(`${dest}${dest.includes("?") ? "&" : "?"}welcome=1`);
 }
 
 export async function resetRequestAction(

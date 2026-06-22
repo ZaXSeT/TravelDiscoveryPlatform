@@ -855,7 +855,7 @@ export const EXPLORE_DESTINATIONS: Destination[] = [
     coordinates: { lat: 64.1466, lng: -21.9426 },
     dna: { adventure: 85, culture: 60, food: 65, nature: 95, nightlife: 60, budgetFriendly: 25 },
     budget: { accommodation: 7000, food: 3200, transport: 2500 },
-    travelTips: ["Rent a car to chase waterfalls and auroras.","Weather changes fast — pack warm layers."],
+    travelTips: ["Rent a car to chase waterfalls and auroras.","Weather changes fast - pack warm layers."],
     hiddenGems: [
       { title: "Sky Lagoon", description: "An oceanfront geothermal spa.", image: "go/destinations/reykjavik/gem1" },
       { title: "Grótta Lighthouse", description: "A quiet aurora-watching spot.", image: "go/destinations/reykjavik/gem2" }
@@ -879,7 +879,7 @@ export const EXPLORE_DESTINATIONS: Destination[] = [
     coordinates: { lat: 52.52, lng: 13.405 },
     dna: { adventure: 50, culture: 85, food: 75, nature: 45, nightlife: 95, budgetFriendly: 55 },
     budget: { accommodation: 4500, food: 2200, transport: 1400 },
-    travelTips: ["Carry some cash — many spots are card-averse.","Sundays, browse the Mauerpark flea market."],
+    travelTips: ["Carry some cash - many spots are card-averse.","Sundays, browse the Mauerpark flea market."],
     hiddenGems: [
       { title: "Teufelsberg", description: "An abandoned cold-war spy station.", image: "go/destinations/berlin/gem1" },
       { title: "Markthalle Neun", description: "A historic hall famed for street food.", image: "go/destinations/berlin/gem2" }
@@ -1095,7 +1095,7 @@ export const EXPLORE_DESTINATIONS: Destination[] = [
     coordinates: { lat: -34.6037, lng: -58.3816 },
     dna: { adventure: 45, culture: 85, food: 85, nature: 40, nightlife: 92, budgetFriendly: 60 },
     budget: { accommodation: 3500, food: 1800, transport: 1100 },
-    travelTips: ["Dinner starts late — 9pm or later.","Carry cash for the best exchange rates."],
+    travelTips: ["Dinner starts late - 9pm or later.","Carry cash for the best exchange rates."],
     hiddenGems: [
       { title: "El Ateneo Grand Splendid", description: "A grand theater turned bookstore.", image: "go/destinations/buenos-aires/gem1" },
       { title: "Feria de Mataderos", description: "A folk market of crafts and dance.", image: "go/destinations/buenos-aires/gem2" }
@@ -1119,7 +1119,7 @@ export const EXPLORE_DESTINATIONS: Destination[] = [
     coordinates: { lat: 19.4326, lng: -99.1332 },
     dna: { adventure: 55, culture: 88, food: 92, nature: 45, nightlife: 82, budgetFriendly: 70 },
     budget: { accommodation: 3500, food: 1800, transport: 1200 },
-    travelTips: ["Eat tacos al pastor from the busiest stalls.","The altitude is real — pace your first day."],
+    travelTips: ["Eat tacos al pastor from the busiest stalls.","The altitude is real - pace your first day."],
     hiddenGems: [
       { title: "Mercado de San Juan", description: "A gourmet market of rare ingredients.", image: "go/destinations/mexico-city/gem1" },
       { title: "Casa Luis Barragán", description: "The architect's luminous modernist home.", image: "go/destinations/mexico-city/gem2" }
@@ -1167,7 +1167,7 @@ export const EXPLORE_DESTINATIONS: Destination[] = [
     coordinates: { lat: -36.8485, lng: 174.7633 },
     dna: { adventure: 70, culture: 60, food: 70, nature: 80, nightlife: 65, budgetFriendly: 45 },
     budget: { accommodation: 5000, food: 2400, transport: 1600 },
-    travelTips: ["Ferry to Waiheke for wine and beaches.","Weather shifts fast — always pack a layer."],
+    travelTips: ["Ferry to Waiheke for wine and beaches.","Weather shifts fast - always pack a layer."],
     hiddenGems: [
       { title: "Waiheke Island", description: "Vineyards and coves a short ferry away.", image: "go/destinations/auckland/gem1" },
       { title: "Mount Eden", description: "A grassy volcanic crater over the city.", image: "go/destinations/auckland/gem2" }

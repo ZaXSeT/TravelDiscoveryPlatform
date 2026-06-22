@@ -30,15 +30,19 @@ export function GeneratorForm({
   onGenerate,
   pending = false,
   defaultStyle,
+  initialDestination,
+  aiLimitNote,
 }: {
   onGenerate: (input: TripInput) => void;
   pending?: boolean;
   defaultStyle?: TravelStyle;
+  initialDestination?: string;
+  aiLimitNote?: string;
 }) {
   const [budget, setBudget] = useState("1500");
   const [days, setDays] = useState("7");
   const [style, setStyle] = useState<TravelStyle>(defaultStyle ?? "culture");
-  const [destinationSlug, setDestinationSlug] = useState("");
+  const [destinationSlug, setDestinationSlug] = useState(initialDestination ?? "");
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,10 +126,13 @@ export function GeneratorForm({
           />
         </div>
 
-        <Button type="submit" size="lg" disabled={pending} className="w-full gap-2">
+        <Button variant="gold" type="submit" size="lg" disabled={pending} className="w-full gap-2">
           <Wand2 className="size-4" />
           {pending ? "Generating…" : "Generate itinerary"}
         </Button>
+        {aiLimitNote && (
+          <p className="text-center text-xs text-muted-foreground">{aiLimitNote}</p>
+        )}
       </div>
     </motion.form>
   );

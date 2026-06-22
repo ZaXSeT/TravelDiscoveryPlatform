@@ -2,12 +2,21 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { createJournal, updateJournal } from "@/features/journal/actions";
-import { DESTINATIONS } from "@/constants/destinations";
+import { DESTINATIONS, EXPLORE_DESTINATIONS } from "@/constants/destinations";
+import { DestinationPicker } from "@/features/trip-generator/components/destination-picker";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { routes } from "@/constants/routes";
 import type { JournalRow } from "@/types/db";
 
@@ -58,6 +67,7 @@ export function JournalEditor({
           if (res.error.fields) setFieldErrors(res.error.fields);
           return;
         }
+        toast.success("Journal created");
         router.push(`${routes.journalEntry(res.data.slug)}/edit`);
       } else if (journal) {
         const res = await updateJournal({ id: journal.id, ...payload });
@@ -67,6 +77,7 @@ export function JournalEditor({
           return;
         }
         setNotice("Saved.");
+        toast.success(visibility === "public" ? "Journal published" : "Journal saved");
         router.refresh();
       }
     } finally {
@@ -129,39 +140,35 @@ export function JournalEditor({
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="space-y-1.5">
+        <div className="space-y-1.5 z-50">
           <Label htmlFor="j-destination">Destination</Label>
-          <select
-            id="j-destination"
+          <DestinationPicker
             value={destinationSlug}
-            onChange={(e) => setDestinationSlug(e.target.value)}
-            className="h-11 w-full rounded-md border border-input bg-card px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-          >
-            <option value="">None</option>
-            {DESTINATIONS.map((d) => (
-              <option key={d.slug} value={d.slug}>
-                {d.name}
-              </option>
-            ))}
-          </select>
+            onChange={setDestinationSlug}
+            emptyLabel="None"
+            options={[...DESTINATIONS, ...EXPLORE_DESTINATIONS]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((d) => ({ slug: d.slug, name: d.name }))}
+          />
         </div>
-        <div className="space-y-1.5">
+        <div className="space-y-1.5 z-40">
           <Label htmlFor="j-visibility">Visibility</Label>
-          <select
-            id="j-visibility"
+          <Select
             value={visibility}
-            onChange={(e) =>
-              setVisibility(e.target.value as "private" | "public")
-            }
-            className="h-11 w-full rounded-md border border-input bg-card px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            onValueChange={(val) => setVisibility(val as "private" | "public")}
           >
-            <option value="private">Private (only you)</option>
-            <option value="public">Public (shown in the feed)</option>
-          </select>
+            <SelectTrigger id="j-visibility" className="h-11 w-full bg-card">
+              <SelectValue placeholder="Select visibility" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="private">Private (only you)</SelectItem>
+              <SelectItem value="public">Public (shown in the feed)</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
-      <Button type="submit" disabled={pending} size="lg">
+      <Button variant="gold" type="submit" disabled={pending} size="lg">
         {pending
           ? "Saving…"
           : mode === "create"

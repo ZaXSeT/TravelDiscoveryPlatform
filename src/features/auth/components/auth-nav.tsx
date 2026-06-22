@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/constants/routes";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
@@ -48,6 +49,7 @@ export function AuthNav({
   const signOut = async () => {
     await getSupabaseBrowserClient().auth.signOut();
     onNavigate?.();
+    toast.success("Signed out");
     router.push(routes.home);
     router.refresh();
   };

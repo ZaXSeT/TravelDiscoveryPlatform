@@ -6,7 +6,11 @@ import { ImagePlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { BUCKETS, journalImagePath } from "@/lib/supabase/storage";
+import { compressImage } from "@/lib/media/compress";
 import { limits } from "@/constants/config";
+
+// We compress before upload, so accept fairly large originals (the result will be small).
+const ORIGINAL_MAX_BYTES = 40 * 1024 * 1024;
 import {
   addJournalImage,
   setJournalCover,
@@ -38,12 +42,14 @@ export function ImageUploader({
       setError("Please choose a JPEG, PNG, or WebP image.");
       return;
     }
-    if (file.size > limits.uploadMaxBytes) {
-      setError("Image must be 5 MB or smaller.");
+    if (file.size > ORIGINAL_MAX_BYTES) {
+      setError("Image is too large (max 40 MB).");
       return;
     }
     setPending(true);
     try {
+      // Downscale + compress big photos (keeps it HD but small); originals stay if small.
+      const upload = await compressImage(file);
       const supabase = getSupabaseBrowserClient();
       const {
         data: { user },
@@ -52,10 +58,10 @@ export function ImageUploader({
         setError("Please sign in again.");
         return;
       }
-      const path = journalImagePath(user.id, journalId, file.type);
+      const path = journalImagePath(user.id, journalId, upload.type);
       const { error: upErr } = await supabase.storage
         .from(BUCKETS.journalMedia)
-        .upload(path, file, { contentType: file.type, upsert: false });
+        .upload(path, upload, { contentType: upload.type, upsert: false });
       if (upErr) {
         setError("Upload failed. Please try again.");
         return;
