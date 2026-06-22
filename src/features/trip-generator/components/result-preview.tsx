@@ -191,7 +191,12 @@ export function ResultPreview({
             key={day.dayIndex}
             className="rounded-2xl border border-border bg-surface-1 p-5 shadow-sm"
           >
-            <h3 className="font-display text-xl">{day.title}</h3>
+            <h3 className="font-display text-xl">
+              Day {day.dayIndex}
+              {day.title && (
+                <span className="text-muted-foreground"> · {day.title}</span>
+              )}
+            </h3>
             <ul className="mt-4 space-y-3">
               {day.items.map((item) => (
                 <li

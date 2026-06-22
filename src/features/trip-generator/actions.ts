@@ -172,7 +172,11 @@ export async function saveTrip(
       .insert({
         itinerary_id: itin.id,
         day_index: di + 1,
-        title: (day.title ?? `Day ${di + 1}`).slice(0, 120),
+        // Theme only — the planner already labels each day "Day N"; strip any leading "Day N".
+        title: (day.title ?? "")
+          .replace(/^\s*day\s*\d+\s*[:·\-–—.]*\s*/i, "")
+          .trim()
+          .slice(0, 120),
       })
       .select("id")
       .single();

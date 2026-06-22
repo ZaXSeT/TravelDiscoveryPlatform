@@ -150,7 +150,11 @@ Do NOT include logistics as items: no flights, airport arrivals/departures, trai
     items.sort(
       (a, b) => (a.startTime ?? "99:99").localeCompare(b.startTime ?? "99:99"),
     );
-    return { dayIndex: di + 1, title: String(d.title ?? `Day ${di + 1}`), items };
+    // Keep the theme only; the UI prints the "Day N" label, so strip any leading "Day N".
+    const title = String(d.title ?? "")
+      .replace(/^\s*day\s*\d+\s*[:·\-–—.]*\s*/i, "")
+      .trim();
+    return { dayIndex: di + 1, title, items };
   });
 
   const allItems = itinerary.flatMap((d) => d.items);

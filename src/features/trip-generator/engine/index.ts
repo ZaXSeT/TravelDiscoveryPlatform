@@ -166,7 +166,8 @@ export function generateTrip(
       }
       // sort the day's items by time for a natural schedule
       items.sort((a, b) => (a.startTime ?? "").localeCompare(b.startTime ?? ""));
-      days.push({ dayIndex: n, title: `Day ${n} · ${STYLE_LABEL[input.style]}`, items });
+      // Theme only — the UI renders the "Day N" label itself, so don't repeat it here.
+      days.push({ dayIndex: n, title: STYLE_LABEL[input.style], items });
     }
     return days;
   };

@@ -57,7 +57,7 @@ export default async function TripGeneratorPage({
         <PageContainer width="full" className="relative z-10 w-full pt-8 pb-24 md:pt-16 md:pb-32">
           <Reveal>
             <h1 className="font-serif text-6xl md:text-7xl lg:text-8xl font-light tracking-tight text-white leading-[1]">
-              AI <span className="italic text-white/80">Journey Builder</span>
+              Journey <span className="italic text-white/80">Builder</span>
             </h1>
           </Reveal>
           <Reveal delayMs={100}>

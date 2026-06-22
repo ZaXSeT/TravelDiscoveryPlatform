@@ -89,41 +89,40 @@ export function TripGeneratorClient({
 
   // Explain a fallback result. Daily limit is user-aware (3/day guest, 10/day signed in).
   const dailyLimit = user ? 10 : 3;
-  const aiLimitNote = `Up to ${dailyLimit} AI plans/day${
+  const aiLimitNote = `Up to ${dailyLimit} plans/day${
     user ? "" : " — sign in for more"
   }.`;
   const offlineNote =
     trip?.source === "rules" && trip.fallbackReason === "rate_limited"
-      ? `Daily AI limit reached (${dailyLimit}/day). This is an offline plan — ${
+      ? `Daily limit reached (${dailyLimit}/day). This is an offline plan — ${
           user ? "try again later." : "sign in for a higher limit, or try again later."
         }`
       : undefined;
 
   return (
     <div className="space-y-6">
-      {/* Travel DNA personalization banner */}
-      <Link
-        href={routes.travelDna}
-        className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card px-5 py-3 shadow-sm transition-colors hover:border-accent-gold"
-      >
-        <span className="inline-flex items-center gap-2 text-sm">
-          <Fingerprint className="size-4 text-accent-goldText" />
-          {hasTravelDna ? (
-            <span className="text-foreground">
-              Personalized with your <strong>Travel DNA</strong> - picks are matched to you.
-            </span>
-          ) : (
-            <span className="text-muted-foreground">
-              Take the <strong className="text-foreground">Travel DNA</strong> assessment
-              for personalized destination matches.
-            </span>
-          )}
-        </span>
-        <ArrowRight className="size-4 shrink-0 text-muted-foreground" />
-      </Link>
-
       <div className="grid gap-10 lg:grid-cols-[360px_1fr] lg:items-start">
-        <div className="relative z-10 lg:sticky lg:top-24">
+        <div className="relative z-10 flex flex-col gap-6 lg:sticky lg:top-24">
+          {/* Travel DNA personalization banner */}
+          <Link
+            href={routes.travelDna}
+            className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card px-5 py-3 shadow-sm transition-colors hover:border-accent-gold"
+          >
+            <span className="inline-flex items-center gap-2 text-sm">
+              <Fingerprint className="size-4 text-accent-goldText shrink-0" />
+              {hasTravelDna ? (
+                <span className="text-foreground">
+                  Personalized with <strong>Travel DNA</strong>
+                </span>
+              ) : (
+                <span className="text-muted-foreground">
+                  Take the <strong className="text-foreground">Travel DNA</strong> test
+                </span>
+              )}
+            </span>
+            <ArrowRight className="size-4 shrink-0 text-muted-foreground" />
+          </Link>
+
           <GeneratorForm
             onGenerate={generate}
             pending={generating}
