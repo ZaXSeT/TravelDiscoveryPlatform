@@ -43,13 +43,11 @@ export function JournalEditor({
   );
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setNotice(null);
     setFieldErrors({});
     setPending(true);
     try {
@@ -76,9 +74,9 @@ export function JournalEditor({
           if (res.error.fields) setFieldErrors(res.error.fields);
           return;
         }
-        setNotice("Saved.");
         toast.success(visibility === "public" ? "Journal published" : "Journal saved");
-        router.refresh();
+        // Leave the editor and open the journal so the user sees the saved result.
+        router.push(routes.journalEntry(res.data.slug));
       }
     } finally {
       setPending(false);
@@ -92,12 +90,6 @@ export function JournalEditor({
           {error}
         </p>
       )}
-      {notice && (
-        <p role="status" className="text-sm text-accent-green">
-          {notice}
-        </p>
-      )}
-
       <div className="space-y-1.5">
         <Label htmlFor="j-title">Title</Label>
         <Input
