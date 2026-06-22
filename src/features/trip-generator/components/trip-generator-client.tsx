@@ -90,12 +90,12 @@ export function TripGeneratorClient({
   // Explain a fallback result. Daily limit is user-aware (3/day guest, 10/day signed in).
   const dailyLimit = user ? 10 : 3;
   const aiLimitNote = `Up to ${dailyLimit} plans/day${
-    user ? "" : " — sign in for more"
-  }.`;
+    user ? "." : ". Sign in for more."
+  }`;
   const offlineNote =
     trip?.source === "rules" && trip.fallbackReason === "rate_limited"
-      ? `Daily limit reached (${dailyLimit}/day). This is an offline plan — ${
-          user ? "try again later." : "sign in for a higher limit, or try again later."
+      ? `Daily limit reached (${dailyLimit}/day). This is an offline plan. ${
+          user ? "Try again later." : "Sign in for a higher limit, or try again later."
         }`
       : undefined;
 
