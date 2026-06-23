@@ -29,7 +29,7 @@ export function HeroTitle() {
   }, [controls]);
 
   return (
-    <h1 className="font-serif text-[18vw] leading-[0.85] tracking-tight md:text-[10vw] lg:text-[8vw] xl:text-[7vw] 2xl:text-[120px] flex flex-col gap-2">
+    <h1 className="font-serif text-[22vw] leading-[0.85] tracking-tight md:text-[13vw] lg:text-[10vw] xl:text-[9vw] 2xl:text-[160px] flex flex-col gap-2">
       <span className="flex flex-wrap gap-x-[3vw] md:gap-x-[2vw]">
         {line1.map((word, i) => (
           <span key={i} className="inline-block overflow-hidden pb-[0.4em] -mb-[0.4em] pt-[0.2em] -mt-[0.2em] px-[0.2em] -mx-[0.2em]">

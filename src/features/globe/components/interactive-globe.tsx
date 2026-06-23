@@ -33,6 +33,7 @@ interface InteractiveGlobeProps {
 export function InteractiveGlobe({ fallbackImageId, alt }: InteractiveGlobeProps) {
   const reduced = usePrefersReducedMotion();
   const [enabled, setEnabled] = useState(false);
+  const [mobile, setMobile] = useState(false);
 
   useEffect(() => {
     if (reduced) {
@@ -44,14 +45,16 @@ export function InteractiveGlobe({ fallbackImageId, alt }: InteractiveGlobeProps
       navigator as Navigator & { deviceMemory?: number }
     ).deviceMemory;
     const cores = navigator.hardwareConcurrency ?? 4;
-    
-    const isCapable = 
-      wide &&
+
+    // The globe now runs on mobile too — gate only on a genuine low-end / no-WebGL check,
+    // not screen width. Mobile gets a lighter render (lower DPR, no drag) in GlobeCanvas.
+    const isCapable =
       webglAvailable() &&
       (deviceMemory === undefined || deviceMemory >= 4) &&
       cores >= 4;
 
     if (isCapable) {
+      setMobile(!wide);
       // Delay mounting WebGL during initial load to prevent freezing the preloader animation.
       // Trigger it exactly at 2000ms, which is when the preloader counter reaches 90% and intentionally slows down.
       if (!preloaderStore.hasRun) {
@@ -65,8 +68,12 @@ export function InteractiveGlobe({ fallbackImageId, alt }: InteractiveGlobeProps
 
   if (enabled) {
     return (
-      <div className="relative mx-auto aspect-square w-full max-w-xl">
-        <GlobeCanvas />
+      <div
+        className="relative mx-auto aspect-square w-full max-w-xl"
+        // Let vertical swipes scroll the page instead of being captured by the canvas.
+        style={mobile ? { touchAction: "pan-y" } : undefined}
+      >
+        <GlobeCanvas mobile={mobile} />
       </div>
     );
   }
@@ -74,7 +81,7 @@ export function InteractiveGlobe({ fallbackImageId, alt }: InteractiveGlobeProps
   // Static fallback (mobile / reduced-motion / low-end / no WebGL) - identical to the
   // Phase 2/3 static globe so nothing regresses.
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-full border border-white/10 bg-dark-0 shadow-card">
+    <div className="relative mx-auto aspect-square w-full max-w-xl overflow-hidden rounded-full border border-white/10 bg-dark-0 shadow-card">
       <CldImage
         publicId={fallbackImageId}
         alt={alt}

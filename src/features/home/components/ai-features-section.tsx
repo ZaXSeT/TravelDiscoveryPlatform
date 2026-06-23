@@ -28,7 +28,8 @@ const FEATURES = [
 // landing page and shows how they connect (DNA → Builder).
 export function AiFeaturesSection() {
   return (
-    <section className="section-y bg-background">
+    // Use pb-24 md:pb-32 instead of section-y to remove the double top padding since it shares a background with the previous section
+    <section className="pb-24 md:pb-32 bg-background">
       <PageContainer>
         <SectionHeader
           eyebrow="Plan smarter"
@@ -40,19 +41,23 @@ export function AiFeaturesSection() {
             <Reveal key={f.href} delayMs={i * 100}>
               <Link
                 href={f.href}
-                className="group flex h-full flex-col rounded-3xl border border-border bg-card p-8 shadow-sm transition-all hover:-translate-y-1 hover:border-accent-gold hover:shadow-xl"
+                className="group relative flex h-full flex-col overflow-hidden rounded-[2.5rem] border border-border/50 bg-card p-8 md:p-10 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-accent-gold/30 hover:shadow-2xl hover:shadow-accent-gold/5"
               >
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-surface-1 text-accent-goldText">
+                {/* Subtle background glow effect on hover */}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-accent-gold/0 to-transparent transition-colors duration-500 group-hover:from-accent-gold/5" />
+                <div className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full bg-accent-gold/5 blur-3xl transition-all duration-500 group-hover:bg-accent-gold/15" />
+                
+                <div className="relative z-10 flex size-14 items-center justify-center rounded-2xl bg-surface-1 text-accent-gold transition-transform duration-500 group-hover:scale-110">
                   <f.Icon className="size-6" />
                 </div>
-                <p className="mt-6 text-xs font-medium uppercase tracking-[0.18em] text-accent-goldText">
+                <p className="relative z-10 mt-8 text-[10px] font-bold uppercase tracking-[0.2em] text-accent-gold/80">
                   {f.eyebrow}
                 </p>
-                <h3 className="mt-2 font-display text-2xl sm:text-3xl">{f.title}</h3>
-                <p className="mt-3 flex-1 text-muted-foreground">{f.desc}</p>
-                <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-foreground">
+                <h3 className="relative z-10 mt-3 font-display text-2xl sm:text-3xl text-foreground transition-colors duration-500 group-hover:text-accent-gold">{f.title}</h3>
+                <p className="relative z-10 mt-4 flex-1 text-muted-foreground leading-relaxed">{f.desc}</p>
+                <span className="relative z-10 mt-8 inline-flex items-center gap-2 text-sm font-semibold text-foreground transition-colors duration-500 group-hover:text-accent-gold">
                   {f.cta}
-                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                  <ArrowRight className="size-4 transition-transform duration-500 group-hover:translate-x-1.5" />
                 </span>
               </Link>
             </Reveal>

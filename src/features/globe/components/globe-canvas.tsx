@@ -275,9 +275,13 @@ function Earth() {
   );
 }
 
-export default function GlobeCanvas() {
+export default function GlobeCanvas({ mobile = false }: { mobile?: boolean }) {
   return (
-    <Canvas camera={{ position: [0, 0, 3], fov: 42 }} dpr={[1, 2]}>
+    <Canvas
+      camera={{ position: [0, 0, 3], fov: 42 }}
+      // Cap pixel ratio harder on mobile GPUs to keep the frame rate smooth.
+      dpr={mobile ? [1, 1.5] : [1, 2]}
+    >
       {/* Match the section's dark surface so the globe blends in (no visible panel) */}
       <color attach="background" args={["#17171a"]} />
       <ambientLight intensity={0.12} />
@@ -285,13 +289,17 @@ export default function GlobeCanvas() {
       <Suspense fallback={null}>
         <Earth />
       </Suspense>
-      <OrbitControls
-        enableZoom={false}
-        enablePan={false}
-        rotateSpeed={0.35}
-        minPolarAngle={Math.PI * 0.18}
-        maxPolarAngle={Math.PI * 0.82}
-      />
+      {/* On mobile we skip manual drag so vertical swipes scroll the page; the globe still
+          auto-rotates and markers stay tappable. Desktop keeps full orbit control. */}
+      {!mobile && (
+        <OrbitControls
+          enableZoom={false}
+          enablePan={false}
+          rotateSpeed={0.35}
+          minPolarAngle={Math.PI * 0.18}
+          maxPolarAngle={Math.PI * 0.82}
+        />
+      )}
     </Canvas>
   );
 }
