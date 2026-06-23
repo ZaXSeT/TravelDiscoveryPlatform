@@ -2,8 +2,9 @@ import type { NextConfig } from "next";
 
 // Content-Security-Policy listing every origin the app legitimately uses:
 // Supabase (auth/storage/realtime), Cloudinary + Unsplash + picsum (images), and
-// OpenStreetMap tiles (Leaflet). Shipped as Report-Only first so it can be validated in
-// a real browser before switching to enforcing (05_SECURITY_AND_RLS.md §8).
+// OpenStreetMap tiles (Leaflet). Now ENFORCED (was Report-Only). NOTE: script-src still
+// allows 'unsafe-inline'/'unsafe-eval' (Next.js bootstrap); tightening to per-request
+// nonces is a future hardening step (05_SECURITY_AND_RLS.md §8).
 const csp = [
   "default-src 'self'",
   "base-uri 'self'",
@@ -40,11 +41,13 @@ const securityHeaders = [
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",
   },
-  { key: "Content-Security-Policy-Report-Only", value: csp },
+  { key: "Content-Security-Policy", value: csp },
 ];
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Don't advertise the framework.
+  poweredByHeader: false,
   // ESLint is run separately; do not fail production builds on lint style issues.
   eslint: { ignoreDuringBuilds: true },
   images: {

@@ -23,7 +23,7 @@ Where this section disagrees with anything lower down, **this section wins.**
   **Google Search grounding** (real places + accurate coordinates), a Leaflet route map with
   numbered markers, and a budget estimate. Pipeline: user input → **catalog destination
   (source of truth)** → Travel DNA → Gemini → editable itinerary → save. Has **result
-  caching**, **rate limiting** (guest 3/day per IP, account 5/min + 10/day), and a
+  caching**, **rate limiting** (guest 2/day per IP, account 3/min + 5/day), and a
   **deterministic offline fallback** so the user always gets a plan.
 - **Travel DNA assessment** (`src/features/travel-dna`) — 8-question quiz → radar + archetype
   + ranked destination matches with "why". Saved to `profiles.travel_dna`; **personalizes**
@@ -49,6 +49,12 @@ Where this section disagrees with anything lower down, **this section wins.**
 6. **Day-title doubling fixed** — titles are theme-only (engine + Gemini + save strip "Day N");
    the UI prints the "Day N" label (`result-preview.tsx`, `engine/index.ts`, `actions.ts`).
 7. **Journal "Save changes"** now redirects to the journal detail page (`journal-editor.tsx`).
+8. **AI rate limits lowered** — guest **2/day** per IP, account **3/min + 5/day** (was 3 / 10)
+   (`src/features/trip-generator/actions.ts` + client note).
+9. **Build fix** — removed accidentally **duplicated destination image blocks** in
+   `src/lib/cloudinary/url.ts` (the london→petra set was pasted 3×, causing duplicate object
+   keys that broke the Vercel type-check). Now one clean set of 46. ⚠️ this fix is
+   **uncommitted** — commit `url.ts` + push to make the next Vercel deploy pass.
 
 ### Verified working (live, this session)
 - Guest generate → real Gemini grounded itinerary; **4/4 days ordered, times chronological,
@@ -56,6 +62,31 @@ Where this section disagrees with anything lower down, **this section wins.**
 - Service-role key **valid**; account-deletion path ready (not run live — destructive).
 - `profiles.travel_dna` column **exists**; Travel DNA save works.
 - Duplicate-email signup **blocked** with a clear message.
+
+### 🔒 Security audit (2026-06-23)
+Full code audit done. **Strong core:** no secret leaks (service-role + Gemini keys server-only,
+`.env*` gitignored, nothing committed); RLS on all **8 tables (29 owner-scoped policies)**;
+defense-in-depth auth (middleware + `requireUser()`); all **7 server-action modules** auth +
+Zod-validate; **XSS-safe** journal renderer (React-escaped, no `dangerouslySetInnerHTML`);
+open-redirect guard (`safeReturnTo` = same-origin only); brute-force rate-limits on
+sign-in/up/reset; security headers (nosniff, X-Frame-Options DENY, HSTS, CSP); image-domain
+allowlist; input length caps via Zod; password min-8 + letter + digit; CSRF covered by Next
+Server Actions. **Verdict: B+ / A‑** — gaps below are mostly production config, not architecture.
+
+**Gaps to address (tracked):**
+- [ ] CSP is **Report-Only** → enforce real `Content-Security-Policy` in `next.config.ts`. *(fixing now)*
+- [ ] `poweredByHeader` not disabled (leaks `X-Powered-By: Next.js`). *(fixing now)*
+- [ ] `npm audit`: 4 vulns (postcss transitive via Next) → add `overrides` postcss ≥8.5.10.
+      **Do NOT `npm audit fix --force`** (downgrades Next to 9.x). *(fixing now)*
+- [ ] Rate-limiter falls back to **in-memory + fail-open** → set `UPSTASH_REDIS_REST_URL/TOKEN`
+      in Vercel, otherwise limits are ineffective on serverless (per-instance, reset on cold start).
+- [ ] Storage buckets are **public-read** → private journal media is reachable by direct URL
+      (UUID obscurity only). For true privacy: private bucket + signed URLs.
+- [ ] No **server-enforced upload limits** (size/MIME) on buckets — client checks are bypassable.
+      Set `file_size_limit` + `allowed_mime_types` on `avatars` + `journal-media`.
+- [ ] Enable Supabase **email confirmation** for production.
+- [ ] Maturity: no MFA/CAPTCHA, no audit logging/monitoring, no CI security scan
+      (Dependabot/CodeQL); plan service-role key rotation if leaked.
 
 ### ⚙️ Continue on your laptop
 Everything is committed **and pushed** (origin/main, 0 unpushed). On the other machine:
