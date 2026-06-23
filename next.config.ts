@@ -12,7 +12,8 @@ const csp = [
   "frame-ancestors 'none'",
   "form-action 'self'",
   // Next.js injects inline bootstrap scripts; tighten to nonces when enforcing.
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+  // 'unsafe-eval' intentionally omitted — prod doesn't need it (dev re-adds it via Next).
+  "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
   "worker-src 'self' blob:",
@@ -33,6 +34,8 @@ const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "DENY" },
+  // Isolate our browsing context from cross-origin windows (clickjacking/XS-Leaks hardening).
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
   {
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",

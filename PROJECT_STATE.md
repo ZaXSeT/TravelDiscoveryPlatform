@@ -84,14 +84,24 @@ Server Actions. **Verdict: B+ / A‑** — gaps below are mostly production conf
       (jpeg/png/webp). Applied live via service role + in `supabase/setup.sql`. Blocks oversize /
       non-image uploads even if the client is bypassed (also closes stored-XSS-via-upload).
 
-**Still open (production config / future):**
-- [ ] Rate-limiter falls back to **in-memory + fail-open** → set `UPSTASH_REDIS_REST_URL/TOKEN`
-      in Vercel, otherwise limits are ineffective on serverless (per-instance, reset on cold start).
-- [ ] Storage buckets are **public-read** → private journal media is reachable by direct URL
-      (UUID obscurity only). For true privacy: private bucket + signed URLs.
+**Fixed (cont.):**
+- [x] **Distributed rate-limiting** — Upstash Redis connected via Vercel Marketplace
+      integration (injects `KV_REST_API_URL/TOKEN`); `limiter.ts` reads both `UPSTASH_*` and
+      `KV_REST_API_*`. Replaces the per-instance in-memory fallback on serverless.
+- [x] **CI security scanning** — `.github/dependabot.yml` (weekly npm + actions update PRs)
+      + `.github/workflows/codeql.yml` (SAST on push/PR + weekly). CodeQL is free for PUBLIC
+      repos; a PRIVATE repo needs GitHub Advanced Security.
+- [x] **Extra header hardening** — dropped `'unsafe-eval'` from CSP `script-src` (verified
+      globe/maps/all pages still work, 0 violations) + added `Cross-Origin-Opener-Policy:
+      same-origin`. (script-src still allows `'unsafe-inline'`; nonces are the next step.)
+
+**Still open (future):**
+- [ ] Storage buckets are **public-read** → private journal media reachable by direct URL
+      (triple-UUID obscurity, URL only ever held by the owner). **Deliberately deferred** —
+      low severity vs a high-risk refactor (signed-URL expiry breaks caching, touches
+      feed/detail/cards/profile). Do via a private bucket + signed URLs only if needed.
 - [ ] Enable Supabase **email confirmation** for production.
-- [ ] Maturity: no MFA/CAPTCHA, no audit logging/monitoring, no CI security scan
-      (Dependabot/CodeQL); plan service-role key rotation if leaked.
+- [ ] Maturity: no MFA/CAPTCHA, no audit logging/monitoring; plan service-role key rotation if leaked.
 
 ### ⚙️ Continue on your laptop
 Everything is committed **and pushed** (origin/main, 0 unpushed). On the other machine:
