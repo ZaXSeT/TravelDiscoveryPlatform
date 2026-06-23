@@ -15,6 +15,9 @@ export function imageUrl(publicId: string, { w, h }: ImageOptions): string {
     const t = `f_auto,q_auto,c_fill,g_auto,w_${w},h_${h}`;
     return `https://res.cloudinary.com/${cloud}/image/upload/${t}/${publicId}`;
   }
+  if (publicId.toLowerCase().includes('taipei/gem2')) {
+    return '/images/Beitou-Hot-Springs-upscaled.png';
+  }
   // Deterministic dev placeholder using realistic Unsplash URLs.
   const idMap: Record<string, string[]> = {
     'bali': [
@@ -549,7 +552,7 @@ export function imageUrl(publicId: string, { w, h }: ImageOptions): string {
       'https://images.unsplash.com/photo-1577871598838-a543ee47cd79',
       'https://images.unsplash.com/photo-1502099530544-2b61cbaed85c'
     ],
-    'taipei/gem2': ['https://images.unsplash.com/photo-1600796909244-c73913eb3b98'],
+    'taipei/gem2': ['https://images.unsplash.com/photo-1542737778-930684405657'],
     'taipei': [
       'https://images.unsplash.com/photo-1598935898639-81586f7d2129',
       'https://images.unsplash.com/photo-1552993873-0dd1110e025f',
