@@ -33,8 +33,8 @@ export default async function JournalPage() {
   }
 
   return (
-    <div className="pt-8 md:pt-32 pb-32 min-h-screen bg-background">
-      <PageContainer width="full" className="section-y">
+    <div className="pt-24 md:pt-28 pb-32 min-h-screen bg-background">
+      <PageContainer width="full">
         <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-border pb-8 mb-10 md:mb-12">
           <div className="max-w-5xl">
             <p className="mb-1 text-[11px] md:text-xs font-semibold uppercase tracking-[0.25em] text-accent-goldText">
