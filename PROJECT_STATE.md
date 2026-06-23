@@ -73,17 +73,22 @@ sign-in/up/reset; security headers (nosniff, X-Frame-Options DENY, HSTS, CSP); i
 allowlist; input length caps via Zod; password min-8 + letter + digit; CSRF covered by Next
 Server Actions. **Verdict: B+ / A‑** — gaps below are mostly production config, not architecture.
 
-**Gaps to address (tracked):**
-- [ ] CSP is **Report-Only** → enforce real `Content-Security-Policy` in `next.config.ts`. *(fixing now)*
-- [ ] `poweredByHeader` not disabled (leaks `X-Powered-By: Next.js`). *(fixing now)*
-- [ ] `npm audit`: 4 vulns (postcss transitive via Next) → add `overrides` postcss ≥8.5.10.
-      **Do NOT `npm audit fix --force`** (downgrades Next to 9.x). *(fixing now)*
+**Fixed (2026-06-23):**
+- [x] **CSP enforced** — `next.config.ts` now sends `Content-Security-Policy` (was Report-Only).
+      Verified 0 violations on home/explore/destination(Leaflet)/journal/travel-dna.
+- [x] **`X-Powered-By` removed** — `poweredByHeader: false`. Verified absent in response headers.
+- [x] **postcss vuln cleared** — `overrides: postcss ^8.5.10` in `package.json` (resolves to 8.5.15
+      everywhere incl. nested under Next). `npm audit` 4 → 2 (remaining 2 low = `@supabase/auth-js`,
+      transitive via the pinned `supabase-js` 2.45.4 — accepted). ⚠️ commit **package-lock.json** too.
+- [x] **Server-enforced upload limits** — `avatars` 5 MB / `journal-media` 15 MB, **image MIME only**
+      (jpeg/png/webp). Applied live via service role + in `supabase/setup.sql`. Blocks oversize /
+      non-image uploads even if the client is bypassed (also closes stored-XSS-via-upload).
+
+**Still open (production config / future):**
 - [ ] Rate-limiter falls back to **in-memory + fail-open** → set `UPSTASH_REDIS_REST_URL/TOKEN`
       in Vercel, otherwise limits are ineffective on serverless (per-instance, reset on cold start).
 - [ ] Storage buckets are **public-read** → private journal media is reachable by direct URL
       (UUID obscurity only). For true privacy: private bucket + signed URLs.
-- [ ] No **server-enforced upload limits** (size/MIME) on buckets — client checks are bypassable.
-      Set `file_size_limit` + `allowed_mime_types` on `avatars` + `journal-media`.
 - [ ] Enable Supabase **email confirmation** for production.
 - [ ] Maturity: no MFA/CAPTCHA, no audit logging/monitoring, no CI security scan
       (Dependabot/CodeQL); plan service-role key rotation if leaked.

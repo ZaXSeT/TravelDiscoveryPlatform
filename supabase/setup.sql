@@ -479,10 +479,12 @@ create policy "journal_images_delete_own"
 -- Editorial destination media is NOT here (it lives in Cloudinary, D3).
 -- =============================================================================
 
-insert into storage.buckets (id, name, public)
+-- file_size_limit + allowed_mime_types are server-enforced (client checks are bypassable):
+-- only images, capped per bucket (avatars 5 MB, journal-media 15 MB).
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values
-  ('avatars', 'avatars', false),
-  ('journal-media', 'journal-media', false)
+  ('avatars', 'avatars', false, 5242880, array['image/jpeg', 'image/png', 'image/webp']),
+  ('journal-media', 'journal-media', false, 15728640, array['image/jpeg', 'image/png', 'image/webp'])
 on conflict (id) do nothing;
 
 -- storage.objects already has RLS enabled by Supabase; we only add policies.
@@ -576,6 +578,13 @@ create policy "journal_media_delete_own"
 update storage.buckets
 set public = true
 where id in ('avatars', 'journal-media');
+
+-- Idempotently (re)apply server-enforced upload caps to existing buckets.
+update storage.buckets
+set allowed_mime_types = array['image/jpeg', 'image/png', 'image/webp']
+where id in ('avatars', 'journal-media');
+update storage.buckets set file_size_limit = 5242880  where id = 'avatars';      -- 5 MB
+update storage.buckets set file_size_limit = 15728640 where id = 'journal-media'; -- 15 MB
 
 
 -- =============================================================================
