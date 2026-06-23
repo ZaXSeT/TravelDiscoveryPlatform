@@ -5,8 +5,12 @@ import { headers } from "next/headers";
 // configured; otherwise a best-effort in-memory window (per-process - fine for dev/demo).
 // On any error it allows the request (availability over strictness for non-critical paths).
 
-const upstashUrl = process.env.UPSTASH_REDIS_REST_URL;
-const upstashToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+// Accept both the Upstash names and Vercel's KV-style names (the Vercel Marketplace Upstash
+// integration sometimes injects KV_REST_API_URL/TOKEN instead) so setup "just works".
+const upstashUrl =
+  process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
+const upstashToken =
+  process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
 
 interface Bucket {
   count: number;
