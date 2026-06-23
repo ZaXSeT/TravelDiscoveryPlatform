@@ -1,9 +1,87 @@
-# PROJECT_STATE — GO, Travel Discovery Platform
+# PROJECT_STATE — Orbis (Travel Discovery Platform, formerly "GO")
 
-> Snapshot date: 2026-06-19
-> Source of truth: the codebase + `ProjectDocs/`. This file reconciles them where the
-> docs lag the implementation. Phase model: [`ProjectDocs/Phase0/ROADMAP.md`](ProjectDocs/Phase0/ROADMAP.md).
-> Build health at snapshot: `npm run typecheck` ✅ (exit 0), `npm run lint` ✅ (exit 0).
+> Snapshot date: **2026-06-23**
+> Build health: `npx tsc --noEmit` ✅ 0 errors · `npm run build` ✅ 62 routes.
+> Git: branch `main`, **working tree clean, in sync with `origin/main` (0 unpushed)**.
+> ⬇️ Read **"CURRENT STATE — 2026-06-23"** first; the older "TL;DR / Pending / Blockers"
+> sections below are from the 2026-06-19 snapshot and are kept for history only.
+
+---
+
+## ⭐ CURRENT STATE — 2026-06-23 (read this first)
+
+The project has moved **far past** the 2026-06-19 snapshot below. On top of the Phase 3
+CRUD spine it is now a competition build with **AI itineraries, a 3D globe, and Travel DNA**.
+Where this section disagrees with anything lower down, **this section wins.**
+
+### Major features built since the old snapshot
+- **Interactive 3D globe** — Three.js / react-three-fiber, custom day/night shader, clouds,
+  bump + ocean specular; a **photo marker on every one of the 46 destinations** (click →
+  detail). Desktop-first. (`src/features/globe`)
+- **AI Journey Builder** (`src/features/trip-generator`) — **overrides decision D4**. Real
+  day-by-day itineraries via **Gemini** (`@google/genai`, model `gemini-2.5-flash`) with
+  **Google Search grounding** (real places + accurate coordinates), a Leaflet route map with
+  numbered markers, and a budget estimate. Pipeline: user input → **catalog destination
+  (source of truth)** → Travel DNA → Gemini → editable itinerary → save. Has **result
+  caching**, **rate limiting** (guest 3/day per IP, account 5/min + 10/day), and a
+  **deterministic offline fallback** so the user always gets a plan.
+- **Travel DNA assessment** (`src/features/travel-dna`) — 8-question quiz → radar + archetype
+  + ranked destination matches with "why". Saved to `profiles.travel_dna`; **personalizes**
+  the AI builder (User DNA + Destination DNA fed to Gemini).
+- **46 destinations** (`src/constants/destinations.ts`), each with DNA + coordinates + photo.
+- **Toasts** (`sonner`) on auth (login/logout/welcome), wishlist, journal, trip, DNA, profile.
+- **Account management** — delete account (Danger zone, service-role + cascade + storage
+  purge + typed-DELETE confirm), **confirm-password** on sign-up, **duplicate-email guard**,
+  avatar **cropper**, client-side **image compression** for uploads.
+- **Slim navbar** — Explore · Plan · Journal · Profile (+ Sign out). Travel DNA reached
+  contextually (home AI section, Plan banner, Profile), not a nav item.
+
+### This session's changes (2026-06-23)
+1. **Confirm-password** field on sign-up (Zod `.refine`, server-validated).
+2. **Delete account** from Profile → Danger zone (`src/lib/supabase/admin.ts` service-role
+   client + `deleteAccount` in `src/features/profile/actions.ts` + `delete-account-button.tsx`).
+3. **Duplicate-email signup blocked** in both email-confirm ON (empty `identities`) and OFF
+   ("already registered") modes — `src/features/auth/actions.ts`.
+4. **Navbar slimmed** — Travel DNA removed from nav (`src/components/layout/header.tsx`).
+5. **AI plan ordering hardened** — items sorted by `startTime` per day in the Gemini path;
+   prompt enforces chronological order + one geographic cluster per day + real coords
+   (`src/features/trip-generator/ai/gemini.ts`). Verified with a live Paris 4-day grounded call.
+6. **Day-title doubling fixed** — titles are theme-only (engine + Gemini + save strip "Day N");
+   the UI prints the "Day N" label (`result-preview.tsx`, `engine/index.ts`, `actions.ts`).
+7. **Journal "Save changes"** now redirects to the journal detail page (`journal-editor.tsx`).
+
+### Verified working (live, this session)
+- Guest generate → real Gemini grounded itinerary; **4/4 days ordered, times chronological,
+  coordinates accurate** (`POST /trip-generator 200` ~37s cold).
+- Service-role key **valid**; account-deletion path ready (not run live — destructive).
+- `profiles.travel_dna` column **exists**; Travel DNA save works.
+- Duplicate-email signup **blocked** with a clear message.
+
+### ⚙️ Continue on your laptop
+Everything is committed **and pushed** (origin/main, 0 unpushed). On the other machine:
+1. `git pull`
+2. `npm install`  *(new deps: three, @react-three/fiber+drei, @google/genai, sonner, leaflet,
+   react-leaflet, framer-motion, gsap, zustand)*
+3. Recreate **`.env.local`** (gitignored — base it on `.env.example`). Needed for full features:
+   - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Supabase project
+   - `SUPABASE_SERVICE_ROLE_KEY` — **required for account deletion**
+   - `GEMINI_API_KEY`, `GEMINI_MODEL=gemini-2.5-flash` — AI Builder (billing enabled)
+   - `NEXT_PUBLIC_SITE_URL=http://localhost:3000`
+   - *(optional)* `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` — dev falls back to picsum placeholders
+4. `npm run dev`
+- **DB is a hosted Supabase project (shared)** — migrations are already applied to it:
+  `profiles.travel_dna` ✅ and all **46 destinations seeded** ✅. The laptop talks to the same
+  DB, so **no DB re-setup** is needed (unless you point at a brand-new Supabase project, in
+  which case run `supabase/setup.sql`).
+
+### Pending / next ideas
+- Phase 5 hardening: security headers/CSP, SEO/OG finalization, Playwright e2e of judge flows.
+- *(optional)* embed Travel DNA quiz into the Plan page; further visual polish.
+
+### Known quirks (not bugs)
+- After a `.next` rebuild, an **already-open browser tab** can show *"Couldn't generate a trip"*
+  (stale server-action id). Fix: restart dev + **hard-refresh (Ctrl+Shift+R)**.
+- Gemini cold grounded call ~37s, warm ~25s; identical inputs are served from cache.
 
 ---
 

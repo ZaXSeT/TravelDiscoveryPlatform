@@ -49,12 +49,12 @@ function normalize(input: TripInput): TripInput {
 async function canUseGemini(userId?: string): Promise<boolean> {
   if (userId) {
     // Accounts: small burst guard + a bounded daily cap.
-    if (!(await rateLimit(`rl:trip-gen:u:${userId}:min`, 5, 60))) return false; // 5 / minute
-    return rateLimit(`rl:trip-gen:u:${userId}:day`, 10, 86_400); // 10 / day per account
+    if (!(await rateLimit(`rl:trip-gen:u:${userId}:min`, 3, 60))) return false; // 3 / minute
+    return rateLimit(`rl:trip-gen:u:${userId}:day`, 5, 86_400); // 5 / day per account
   }
   // Guests: a hard daily cap (per IP) so anonymous users can try but can't spam.
   const ipKey = await clientRateKey("trip-gen");
-  return rateLimit(`${ipKey}:day`, 3, 86_400); // 3 / day per IP
+  return rateLimit(`${ipKey}:day`, 2, 86_400); // 2 / day per IP
 }
 
 // Generation entry point. Order of operations:

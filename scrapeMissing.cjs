@@ -13,7 +13,8 @@ async function scrapeMissing() {
       const ids = [];
       for (const item of (data.results || [])) {
         if (item.premium || item.is_premium || (item.slug && item.slug.includes('premium'))) continue;
-        ids.push('https://images.unsplash.com/photo-' + item.id);
+        const url = item.urls.raw.split('?')[0];
+        ids.push(url);
         if (ids.length >= 10) break;
       }
       results[place] = ids;

@@ -87,8 +87,8 @@ export function TripGeneratorClient({
     void doSave(trip);
   };
 
-  // Explain a fallback result. Daily limit is user-aware (3/day guest, 10/day signed in).
-  const dailyLimit = user ? 10 : 3;
+  // Explain a fallback result. Daily limit is user-aware (2/day guest, 5/day signed in).
+  const dailyLimit = user ? 5 : 2;
   const aiLimitNote = `Up to ${dailyLimit} plans/day${
     user ? "." : ". Sign in for more."
   }`;

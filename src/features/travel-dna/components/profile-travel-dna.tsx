@@ -55,14 +55,14 @@ export function ProfileTravelDna({ dna }: { dna: Dna | null }) {
               key={m.destination.slug}
               className="overflow-hidden rounded-xl border border-border"
             >
-              <div className="relative h-20 w-full bg-surface-2">
+              <div className="relative aspect-video w-full bg-surface-2">
                 <CldImage
                   publicId={m.destination.media.thumbnail}
                   alt={m.destination.name}
-                  width={320}
-                  height={160}
+                  width={640}
+                  height={360}
                   fill
-                  sizes="160px"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover"
                 />
                 <span className="absolute right-1.5 top-1.5 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-semibold text-white">
