@@ -29,6 +29,23 @@ function num(v: unknown): number | null {
   const n = typeof v === "string" ? parseFloat(v) : (v as number);
   return Number.isFinite(n) ? n : null;
 }
+// A real place should sit in or near the destination — not another city/country. Beyond this
+// it's almost certainly a hallucinated coordinate, so we drop it (no stray map markers).
+const MAX_PLACE_KM = 300;
+function kmBetween(
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number,
+): number {
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.sqrt(h));
+}
 function usdToCents(v: unknown): number {
   const n = num(v);
   return n && n > 0 ? Math.round(n * 100) : 0;
@@ -161,16 +178,35 @@ Do NOT include logistics as items: no flights, airport arrivals/departures, trai
   if (rawDays.length === 0) throw new Error("Gemini returned no days");
 
   const itinerary: GeneratedDay[] = rawDays.map((d, di) => {
-    const items: GeneratedItem[] = (d.items ?? []).slice(0, 4).map((it) => ({
-      title: String(it.name ?? "Activity").slice(0, 160),
-      description: it.description ? String(it.description).slice(0, 400) : null,
-      startTime: sanitizeTime(it.startTime),
-      cost: usdToCents(it.costUsd),
-      note: null,
-      lat: num(it.lat),
-      lng: num(it.lng),
-      image: String(it.imageQuery ?? it.name ?? "travel"),
-    }));
+    const items: GeneratedItem[] = (d.items ?? []).slice(0, 4).map((it) => {
+      // Reject coordinates that fall implausibly far from the destination (hallucinated /
+      // wrong-city), so the route map only ever plots places that are actually there.
+      let lat = num(it.lat);
+      let lng = num(it.lng);
+      if (
+        lat !== null &&
+        lng !== null &&
+        kmBetween(
+          lat,
+          lng,
+          destination.coordinates.lat,
+          destination.coordinates.lng,
+        ) > MAX_PLACE_KM
+      ) {
+        lat = null;
+        lng = null;
+      }
+      return {
+        title: String(it.name ?? "Activity").slice(0, 160),
+        description: it.description ? String(it.description).slice(0, 400) : null,
+        startTime: sanitizeTime(it.startTime),
+        cost: usdToCents(it.costUsd),
+        note: null,
+        lat,
+        lng,
+        image: String(it.imageQuery ?? it.name ?? "travel"),
+      };
+    });
     // Guarantee chronological order within the day (timed items first, by time).
     items.sort(
       (a, b) => (a.startTime ?? "99:99").localeCompare(b.startTime ?? "99:99"),
