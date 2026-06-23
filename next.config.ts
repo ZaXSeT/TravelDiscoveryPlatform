@@ -12,7 +12,8 @@ const csp = [
   "frame-ancestors 'none'",
   "form-action 'self'",
   // Next.js injects inline bootstrap scripts; tighten to nonces when enforcing.
-  // 'unsafe-eval' intentionally omitted — prod doesn't need it (dev re-adds it via Next).
+  // 'unsafe-eval' omitted — production doesn't need it. (This CSP is prod-only, so dev's
+  // eval-based HMR is unaffected; see the prod guard below.)
   "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
   "font-src 'self' data:",
@@ -30,6 +31,11 @@ const csp = [
   "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://res.cloudinary.com https://images.unsplash.com https://plus.unsplash.com",
 ].join("; ");
 
+// CSP is enforced in PRODUCTION only. `next dev` needs 'unsafe-eval' (+ ws) for HMR / React
+// Fast Refresh, so a strict CSP breaks the dev server (blank screen). CSP adds no security
+// value on localhost anyway.
+const isProd = process.env.NODE_ENV === "production";
+
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -44,7 +50,7 @@ const securityHeaders = [
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains; preload",
   },
-  { key: "Content-Security-Policy", value: csp },
+  ...(isProd ? [{ key: "Content-Security-Policy", value: csp }] : []),
 ];
 
 const nextConfig: NextConfig = {

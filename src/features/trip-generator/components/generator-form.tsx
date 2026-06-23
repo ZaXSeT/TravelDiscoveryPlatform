@@ -57,6 +57,7 @@ export function GeneratorForm({
       style,
       destinationSlug: destinationSlug || null,
     });
+    
   };
 
   return (

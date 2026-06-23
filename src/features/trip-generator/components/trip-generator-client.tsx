@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { Sparkles, Loader2, Fingerprint, ArrowRight, Check } from "lucide-react";
+import { Sparkles, Loader2, Fingerprint, ArrowRight, Check, Ban } from "lucide-react";
 import { GeneratorForm } from "@/features/trip-generator/components/generator-form";
 import { ResultPreview } from "@/features/trip-generator/components/result-preview";
 import { generateTripAction, saveTrip } from "@/features/trip-generator/actions";
@@ -33,6 +33,7 @@ export function TripGeneratorClient({
   const [generating, setGenerating] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [limitReached, setLimitReached] = useState(false);
   const resultRef = useRef<HTMLDivElement>(null);
 
   // On small screens, bring the result into view after generating.
@@ -51,10 +52,22 @@ export function TripGeneratorClient({
   // `bypassCache` (Regenerate) forces a fresh AI variation instead of the cached plan.
   const generate = async (inp: TripInput, opts?: { bypassCache?: boolean }) => {
     setError(null);
+    setLimitReached(false);
     setLastInput(inp);
     setGenerating(true);
+    
+    // Ensure the browser scrolls to the top AFTER the layout has shrunk to the generating state
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 50);
     try {
       const result = await generateTripAction(inp, opts);
+      // A real daily-limit hit: don't surface the offline plan — tell the user plainly.
+      if (result.source === "rules" && result.fallbackReason === "rate_limited") {
+        setTrip(null);
+        setLimitReached(true);
+        return;
+      }
       setTrip(result);
     } catch {
       setError("Couldn't generate a trip right now. Please try again.");
@@ -92,12 +105,6 @@ export function TripGeneratorClient({
   const aiLimitNote = `Up to ${dailyLimit} plans/day${
     user ? "." : ". Sign in for more."
   }`;
-  const offlineNote =
-    trip?.source === "rules" && trip.fallbackReason === "rate_limited"
-      ? `Daily limit reached (${dailyLimit}/day). This is an offline plan. ${
-          user ? "Try again later." : "Sign in for a higher limit, or try again later."
-        }`
-      : undefined;
 
   return (
     <div className="space-y-6">
@@ -134,6 +141,44 @@ export function TripGeneratorClient({
         <div ref={resultRef} className="relative z-0 scroll-mt-24">
           {generating ? (
             <GeneratingState />
+          ) : limitReached ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="flex h-full min-h-[400px] flex-col items-center justify-center rounded-3xl border border-amber-500/30 bg-amber-500/5 p-10 text-center shadow-xl shadow-black/5"
+            >
+              <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-amber-500/15">
+                <Ban className="size-8 text-amber-600" />
+              </div>
+              <h3 className="font-display text-3xl tracking-tight text-foreground">
+                Daily limit reached
+              </h3>
+              <p className="mt-4 max-w-sm text-lg text-muted-foreground">
+                You&apos;ve used all {dailyLimit} AI plans for today.{" "}
+                {user
+                  ? "Please try again tomorrow."
+                  : "Sign in for a higher daily limit, or try again tomorrow."}
+              </p>
+              {!user && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    openGate({
+                      title: "Sign in for more plans",
+                      description:
+                        "Signed-in travelers get a higher daily limit.",
+                      onAuthed: () => {
+                        if (lastInput) void generate(lastInput);
+                      },
+                    })
+                  }
+                  className="mt-6 rounded-full bg-foreground px-6 py-2.5 text-sm font-medium text-background transition-opacity hover:opacity-90"
+                >
+                  Sign in
+                </button>
+              )}
+            </motion.div>
           ) : trip ? (
             <ResultPreview
               trip={trip}
@@ -144,7 +189,6 @@ export function TripGeneratorClient({
               saving={saving}
               error={error}
               personalized={hasTravelDna}
-              offlineNote={offlineNote}
             />
           ) : (
             <motion.div

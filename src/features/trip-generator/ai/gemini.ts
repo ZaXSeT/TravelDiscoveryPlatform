@@ -96,28 +96,53 @@ Rules:
 
 Do NOT include logistics as items: no flights, airport arrivals/departures, train/bus transfers, hotel check-in/check-out, "free time", "relax at hotel", or generic transit — only actual things to see and do. Put any arrival/transport tips in "notes" instead.`;
 
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
-  let res: Response;
-  try {
-    res = await fetch(`${ENDPOINT}/${model}:generateContent`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "x-goog-api-key": key },
-      body: JSON.stringify({
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        tools: [{ google_search: {} }],
-        // Cap "thinking": a structured itinerary needs little reasoning, and full thinking
-        // pushed latency to ~58s (over the timeout). A small budget keeps quality while
-        // cutting latency to ~25s and cost by ~half.
-        generationConfig: { temperature: 0.6, thinkingConfig: { thinkingBudget: 512 } },
-      }),
-      cache: "no-store",
-      signal: controller.signal,
-    });
-  } finally {
-    clearTimeout(timer);
+  const body = JSON.stringify({
+    contents: [{ role: "user", parts: [{ text: prompt }] }],
+    tools: [{ google_search: {} }],
+    // Cap "thinking": a structured itinerary needs little reasoning, and full thinking
+    // pushed latency to ~58s (over the timeout). A small budget keeps quality while
+    // cutting latency to ~25s and cost by ~half.
+    generationConfig: { temperature: 0.6, thinkingConfig: { thinkingBudget: 512 } },
+  });
+
+  // Flash models intermittently return 503 ("high demand") / 429. Rather than dropping to the
+  // offline planner, try the primary model once, then the lighter fallback (usually available)
+  // several times with growing backoff — all inside the time budget. When Google is broadly
+  // overloaded even this fails, and that's what the offline planner is for.
+  const FALLBACK_MODEL = "gemini-2.5-flash-lite";
+  const RETRYABLE = new Set([429, 500, 502, 503, 504]);
+  const deadline = Date.now() + TIMEOUT_MS;
+  const MAX_ATTEMPTS = 6;
+  let res: Response | undefined;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    // Primary model first (better quality when it's up); every retry uses the fallback.
+    const tryModel = attempt === 0 ? model : FALLBACK_MODEL;
+    // Only start an attempt if there's room for a full generation (~20s), not just a 503.
+    if (deadline - Date.now() < 22000) break;
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), deadline - Date.now());
+    try {
+      res = await fetch(`${ENDPOINT}/${tryModel}:generateContent`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-goog-api-key": key },
+        body,
+        cache: "no-store",
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timer);
+    }
+    if (res.ok) break;
+    if (!RETRYABLE.has(res.status)) throw new Error(`Gemini HTTP ${res.status}`);
+    console.warn(
+      `[trip-generator] ${tryModel} HTTP ${res.status} (attempt ${attempt + 1}/${MAX_ATTEMPTS})`,
+    );
+    // Growing backoff (capped) before retrying the fallback model.
+    await new Promise((r) => setTimeout(r, Math.min(3000, 600 * (attempt + 1))));
   }
-  if (!res.ok) throw new Error(`Gemini HTTP ${res.status}`);
+  if (!res || !res.ok) {
+    throw new Error(`Gemini HTTP ${res?.status ?? "no-response"}`);
+  }
 
   const data = (await res.json()) as {
     candidates?: { content?: { parts?: { text?: string }[] } }[];

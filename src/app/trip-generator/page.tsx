@@ -63,7 +63,7 @@ export default async function TripGeneratorPage({
           <Reveal delayMs={100}>
             <p className="mt-6 max-w-2xl text-lg md:text-xl font-light leading-relaxed text-white/70">
               AI-assisted planning, grounded in ORBIS destination data and Travel DNA.
-              Set your budget, days, and style - Gemini drafts a personalized day-by-day
+              Set your budget, days, and style - our AI drafts a personalized day-by-day
               route with real places, photos, and an estimated budget. Edit it, then save.
             </p>
           </Reveal>
