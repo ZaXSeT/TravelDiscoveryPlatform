@@ -83,7 +83,7 @@ export function Hero() {
             <div className="overflow-hidden p-4 -m-4">
               <motion.div
                 custom={0.4} // Final stagger for buttons
-                initial={{ y: "120%" }}
+                initial={{ y: "150%" }}
                 animate={controls}
                 className="flex flex-wrap gap-4 justify-start md:justify-end"
                 style={{ willChange: "transform", WebkitFontSmoothing: "antialiased" }}
