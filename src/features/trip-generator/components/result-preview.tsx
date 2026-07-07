@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { CldImage } from "@/components/media/cld-image";
 import { formatMoney } from "@/lib/format";
+import { googleMapsSearchUrl } from "@/lib/maps";
 import { TripRouteMap } from "@/features/trip-generator/components/trip-route-map";
 import type { RoutePoint } from "@/features/trip-generator/components/trip-route-leaflet";
 import { DnaRadar } from "@/features/destinations/components/dna-radar";
@@ -199,45 +200,56 @@ export function ResultPreview({
             </h3>
             <ul className="mt-4 space-y-3">
               {day.items.map((item) => (
-                <li
-                  key={item.n}
-                  className="flex items-start gap-4 rounded-xl border border-border bg-card p-3 shadow-sm"
-                >
-                  <div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-surface-2">
-                    {item.image && (
-                      <CldImage
-                        publicId={item.image}
-                        alt={item.title}
-                        width={160}
-                        height={160}
-                        fill
-                        sizes="64px"
-                        className="object-cover"
-                      />
-                    )}
-                    <span className="absolute left-1 top-1 flex size-5 items-center justify-center rounded-full bg-accent-gold text-[11px] font-semibold text-[#1a1408]">
-                      {item.n}
-                    </span>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-3">
-                      <span className="font-medium text-foreground">{item.title}</span>
-                      <span className="shrink-0 text-sm tabular-nums text-muted-foreground">
-                        {item.cost === 0 ? "Free" : formatMoney(item.cost)}
+                <li key={item.n}>
+                  <a
+                    href={googleMapsSearchUrl(item.title, {
+                      context: trip.destinationName,
+                      lat: item.lat,
+                      lng: item.lng,
+                    })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Open ${item.title} in Google Maps`}
+                    className="group flex items-start gap-4 rounded-xl border border-border bg-card p-3 shadow-sm outline-none transition-colors hover:border-accent-gold/60 focus-visible:ring-2 focus-visible:ring-accent-gold"
+                  >
+                    <div className="relative size-16 shrink-0 overflow-hidden rounded-lg bg-surface-2">
+                      {item.image && (
+                        <CldImage
+                          publicId={item.image}
+                          alt={item.title}
+                          width={160}
+                          height={160}
+                          fill
+                          sizes="64px"
+                          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05] motion-reduce:transition-none"
+                        />
+                      )}
+                      <span className="absolute left-1 top-1 flex size-5 items-center justify-center rounded-full bg-accent-gold text-[11px] font-semibold text-[#1a1408]">
+                        {item.n}
                       </span>
                     </div>
-                    {item.startTime && (
-                      <span className="mt-0.5 inline-flex items-center gap-1 text-xs text-muted-foreground">
-                        <Clock className="size-3" />
-                        {item.startTime}
-                      </span>
-                    )}
-                    {item.description && (
-                      <p className="mt-1 text-sm text-muted-foreground">
-                        {item.description}
-                      </p>
-                    )}
-                  </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-start justify-between gap-3">
+                        <span className="font-medium text-foreground transition-colors group-hover:text-accent-goldText">
+                          {item.title}
+                        </span>
+                        <span className="shrink-0 text-sm tabular-nums text-muted-foreground">
+                          {item.cost === 0 ? "Free" : formatMoney(item.cost)}
+                        </span>
+                      </div>
+                      {item.startTime && (
+                        <span className="mt-0.5 inline-flex items-center gap-1 text-xs text-muted-foreground">
+                          <Clock className="size-3" />
+                          {item.startTime}
+                        </span>
+                      )}
+                      {item.description && (
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          {item.description}
+                        </p>
+                      )}
+                    </div>
+                  </a>
                 </li>
               ))}
             </ul>

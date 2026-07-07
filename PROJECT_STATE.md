@@ -2,6 +2,7 @@
 
 > Snapshot date: **2026-06-23**
 > Build health: `npx tsc --noEmit` ✅ 0 errors · `npm run build` ✅ 62 routes.
+> Deploy: **🚀 LIVE on Vercel (production)** — auto-deploys from `origin/main`.
 > Git: branch `main`, **working tree clean, in sync with `origin/main` (0 unpushed)**.
 > ⬇️ Read **"CURRENT STATE — 2026-06-23"** first; the older "TL;DR / Pending / Blockers"
 > sections below are from the 2026-06-19 snapshot and are kept for history only.

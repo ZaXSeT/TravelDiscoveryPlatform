@@ -18,7 +18,9 @@ Tailwind, and Supabase. See [`ProjectDocs/`](ProjectDocs/) for the full specs an
   (desktop-gated, static fallback on mobile/reduced-motion), Lenis smooth scroll + GSAP
   scroll parallax via one provider, and Framer Motion page transitions. Additive and
   non-breaking; Three.js/GSAP/Lenis are lazy + gated (excluded from the mobile bundle).
-- Phase 5 (Hardening/SEO/Deploy): pending.
+- **Phase 5 — Hardening/SEO/Deploy:** in progress — **deployed to Vercel (production
+  live)**; security hardening + CI scanning done. Remaining: Phase 3 live gate
+  verification, Supabase email confirmation for prod, SEO/OG finalization.
 
 ## Getting started
 

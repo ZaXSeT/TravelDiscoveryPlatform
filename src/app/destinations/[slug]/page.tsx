@@ -133,7 +133,7 @@ export default async function DestinationPage({
             description="Local-favorite spots most visitors miss."
           />
           <div className="mt-8">
-            <HiddenGems gems={d.hiddenGems} />
+            <HiddenGems gems={d.hiddenGems} context={`${d.name}, ${d.country}`} />
           </div>
         </section>
 
@@ -141,7 +141,7 @@ export default async function DestinationPage({
         <section>
           <SectionHeader eyebrow="Nearby" title="Worth the detour" />
           <div className="mt-8">
-            <NearbyList items={d.nearby} />
+            <NearbyList items={d.nearby} context={`${d.name}, ${d.country}`} />
           </div>
         </section>
 
