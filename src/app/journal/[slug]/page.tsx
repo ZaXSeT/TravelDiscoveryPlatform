@@ -59,25 +59,32 @@ export default async function JournalDetailPage({
   return (
     <article className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative w-full h-[60vh] min-h-[500px] md:h-[75vh] md:min-h-[600px] flex flex-col justify-center items-center text-center">
+      <div className="relative w-full h-[60vh] min-h-[500px] md:h-[75vh] md:min-h-[600px] flex flex-col justify-end text-left">
         {/* Parallax Background */}
-        <div className="fixed top-0 left-0 w-full h-[60vh] min-h-[500px] md:h-[75vh] md:min-h-[600px] z-0 pointer-events-none">
-          {journal.cover_path ? (
-            <JournalImage
-              path={journal.cover_path}
-              isSeed={journal.is_seed}
-              alt={journal.title}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover absolute inset-0"
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-surface-2 to-surface-1" />
-          )}
-          {/* Subtle, soft cinematic vignette overlay */}
-          <div className="absolute inset-0 bg-black/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+        <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden pointer-events-none">
+          <Parallax 
+            speed={0.3} 
+            startAtZero={true}
+            offset={["start start", "end start"]}
+            className="w-full h-[120%] -top-[10%] relative"
+          >
+            {journal.cover_path ? (
+              <JournalImage
+                path={journal.cover_path}
+                isSeed={journal.is_seed}
+                alt={journal.title}
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover absolute inset-0"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-surface-2 to-surface-1" />
+            )}
+            {/* Subtle, soft cinematic vignette overlay */}
+            <div className="absolute inset-0 bg-black/40" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+          </Parallax>
         </div>
         
         {/* Hero Content Overlay */}
