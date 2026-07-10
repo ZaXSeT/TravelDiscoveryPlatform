@@ -17,7 +17,7 @@ export function InspirationSection() {
           title="Stories from the road"
           description="A glimpse of the trips our travelers remember most."
         />
-        <div className="mt-8 flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] md:mt-10 md:grid md:grid-cols-3 md:overflow-visible md:snap-none md:pb-0">
+        <div className="mt-8 -mx-4 px-4 md:mx-0 md:px-0 flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] md:mt-10 md:grid md:grid-cols-3 md:overflow-visible md:snap-none md:pb-0">
           {INSPIRATION.map((entry, i) => (
             <Reveal 
               key={entry.slug} 

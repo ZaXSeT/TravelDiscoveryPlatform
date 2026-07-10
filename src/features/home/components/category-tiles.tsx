@@ -15,7 +15,7 @@ export function CategoryTiles() {
           title="What kind of trip are you after?"
           align="center"
         />
-        <div className="mt-8 flex flex-row overflow-x-auto snap-x snap-mandatory gap-3 pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-12 sm:grid sm:grid-cols-3 sm:overflow-visible sm:snap-none sm:pb-0 lg:flex lg:h-[500px] lg:flex-row lg:gap-4 xl:gap-6">
+        <div className="mt-8 -mx-4 px-4 sm:mx-0 sm:px-0 flex flex-row overflow-x-auto snap-x snap-mandatory gap-3 pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-12 sm:grid sm:grid-cols-3 sm:overflow-visible sm:snap-none sm:pb-0 lg:flex lg:h-[500px] lg:flex-row lg:gap-4 xl:gap-6">
           {HOME_CATEGORIES.map((c) => (
             <Link
               key={c.category}
@@ -30,7 +30,7 @@ export function CategoryTiles() {
                 className="object-cover transition-transform duration-1000 group-hover:scale-105 motion-reduce:transition-none"
               />
               {/* Rich gradient scrim */}
-              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-60 transition-opacity duration-700 group-hover:opacity-80" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 transition-opacity duration-700 group-hover:opacity-100" />
               
               <div className="absolute inset-0 flex flex-col justify-end p-4 text-white sm:p-6 lg:p-5">
                 <div className="translate-y-0 lg:translate-y-4 transition-transform duration-700 group-hover:translate-y-0">
