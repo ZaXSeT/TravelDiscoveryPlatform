@@ -41,11 +41,11 @@ export function AiFeaturesSection() {
             <Reveal 
               key={f.href} 
               delayMs={i * 100}
-              className="shrink-0 snap-start w-[85vw] max-w-[340px] md:w-full md:max-w-none h-full"
+              className="shrink-0 snap-start w-[85vw] max-w-[340px] md:w-full md:max-w-none flex flex-col"
             >
               <Link
                 href={f.href}
-                className="group relative flex h-full flex-col overflow-hidden rounded-[2.5rem] border border-border/50 bg-card p-8 md:p-10 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-accent-gold/30 hover:shadow-2xl hover:shadow-accent-gold/5"
+                className="group relative flex flex-1 flex-col overflow-hidden rounded-[2.5rem] border border-border/50 bg-card p-8 md:p-10 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-accent-gold/30 hover:shadow-2xl hover:shadow-accent-gold/5"
               >
                 {/* Subtle background glow effect on hover */}
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-accent-gold/0 to-transparent transition-colors duration-500 group-hover:from-accent-gold/5" />
