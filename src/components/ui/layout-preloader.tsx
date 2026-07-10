@@ -224,31 +224,37 @@ export function LayoutPreloader() {
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_50%_40%_at_50%_45%,rgba(200,169,126,0.07),transparent)]" />
 
       {/* Image grid (background) */}
-      <div className="preloader-grid pointer-events-none absolute inset-0 grid grid-cols-5 gap-[2px] opacity-40">
+      <div className="preloader-grid pointer-events-none absolute inset-0 grid grid-cols-3 md:grid-cols-5 gap-[2px] opacity-40">
         {PRELOADER_IMAGES.map((img, i) => (
-          <div key={i} className="preloader-img relative overflow-hidden" style={{ clipPath: "inset(100% 0 0 0)" }}>
+          <div 
+            key={i} 
+            className={cn(
+              "preloader-img relative overflow-hidden",
+              i >= 3 ? "hidden md:block" : ""
+            )} 
+            style={{ clipPath: "inset(100% 0 0 0)" }}
+          >
             <CldImage
               publicId={img.id}
               alt={img.label}
-              width={400}
-              height={600}
-              sizes="20vw"
-              className="h-full w-full object-cover"
+              fill
+              sizes="(max-width: 768px) 33vw, 20vw"
+              className="object-cover"
+              priority
               onLoad={onImageLoad}
             />
-            <div className="absolute inset-0 bg-[#0a0a0b]/40" />
           </div>
         ))}
       </div>
 
       {/* Center content */}
-      <div className="preloader-content relative z-10 flex flex-col items-center gap-8">
+      <div className="preloader-content relative z-10 flex flex-col items-center gap-6 md:gap-8">
         {/* Brand */}
         <div className="flex items-center overflow-hidden">
           {["O", "r", "b", "i", "s"].map((letter, i) => (
             <span
               key={i}
-              className="preloader-word inline-block font-serif text-6xl tracking-tight text-white md:text-8xl"
+              className="preloader-word inline-block font-serif text-5xl tracking-tight text-white md:text-8xl"
               style={{ opacity: 0 }}
             >
               {letter}
@@ -258,7 +264,7 @@ export function LayoutPreloader() {
 
         {/* Tagline */}
         <p
-          className="preloader-tagline text-[10px] font-light uppercase tracking-[0.5em] text-white/40 md:text-[12px]"
+          className="preloader-tagline text-[9px] font-light uppercase tracking-[0.4em] text-white/40 md:text-[12px] md:tracking-[0.5em]"
           style={{ opacity: 0 }}
         >
           Discover the world

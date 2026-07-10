@@ -39,7 +39,7 @@ export function ProfileTravelDna({ dna }: { dna: Dna | null }) {
       <div className="mx-auto w-full max-w-[280px] md:max-w-[260px]">
         <DnaRadar dna={dna} name="you" />
       </div>
-      <div className="text-center md:text-left">
+      <div className="text-center md:text-left min-w-0">
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-gold/80">
           Your traveler profile
         </p>

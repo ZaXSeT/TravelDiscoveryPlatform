@@ -155,7 +155,7 @@ export function NavBar({ items, className, leftContent, rightContent, defaultDar
     <NavbarThemeContext.Provider value={useWhiteText}>
       <div
         className={cn(
-          "fixed bottom-0 sm:bottom-auto sm:top-0 left-1/2 -translate-x-1/2 z-50 mb-6 sm:pt-6 w-full sm:w-auto px-4 sm:px-0 pointer-events-none transition-colors duration-500",
+          "fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:bottom-auto sm:top-0 left-1/2 -translate-x-1/2 z-50 sm:pt-6 w-full sm:w-auto px-4 sm:px-0 pointer-events-none transition-colors duration-500",
           className,
         )}
       >
