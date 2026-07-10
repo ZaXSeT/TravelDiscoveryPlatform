@@ -81,50 +81,48 @@ export default async function JournalDetailPage({
         </div>
         
         {/* Hero Content Overlay */}
-        <div className="relative z-10 w-full pt-20 pb-12 px-4 flex flex-col items-center">
-          <PageContainer width="default" className="flex flex-col items-center">
-            <div className="max-w-3xl flex flex-col items-center">
-              <div className="flex items-center space-x-4 mb-6">
-                <Link 
-                  href={`/profile/${journal.user_id}`}
-                  className="hover:opacity-80 transition-opacity"
-                >
-                  <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-accent-gold drop-shadow-md">
-                    {journal.author_label}
-                  </p>
-                </Link>
-                {journal.created_at && (
-                  <>
-                    <span className="text-white/40 text-xs">•</span>
-                    <p className="text-xs md:text-sm font-medium uppercase tracking-widest text-white/80 drop-shadow-md">
-                      {new Date(journal.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                    </p>
-                  </>
-                )}
-              </div>
-              
-              <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] leading-[1.1] tracking-tight text-white drop-shadow-lg text-balance">
-                {journal.title}
-              </h1>
-              
-              {journal.excerpt && (
-                <p className="mt-8 max-w-2xl text-lg md:text-2xl font-light text-white/90 leading-relaxed drop-shadow-md text-balance">
-                  {journal.excerpt}
+        <div className="relative z-10 w-full pt-32 pb-16 px-6 md:px-12 lg:px-24 flex flex-col justify-end">
+          <div className="max-w-4xl">
+            <div className="flex items-center space-x-4 mb-6">
+              <Link 
+                href={`/profile/${journal.user_id}`}
+                className="hover:opacity-80 transition-opacity"
+              >
+                <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-accent-gold drop-shadow-md">
+                  {journal.author_label}
                 </p>
-              )}
-
-              {isOwner && (
-                <div className="mt-10">
-                  <Button asChild variant="outline" className="gap-2 rounded-full px-8 py-6 bg-white/5 text-white border-white/20 hover:bg-white hover:text-black backdrop-blur-md transition-all">
-                    <Link href={routes.journalEdit(journal.slug)}>
-                      <Pencil className="size-4" />
-                      Edit Journal
-                    </Link>
-                  </Button>
-                </div>
+              </Link>
+              {journal.created_at && (
+                <>
+                  <span className="text-white/40 text-xs">•</span>
+                  <p className="text-xs md:text-sm font-medium uppercase tracking-widest text-white/80 drop-shadow-md">
+                    {new Date(journal.created_at).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                  </p>
+                </>
               )}
             </div>
-          </PageContainer>
+            
+            <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.05] tracking-tight text-white drop-shadow-lg text-balance">
+              {journal.title}
+            </h1>
+            
+            {journal.excerpt && (
+              <p className="mt-8 max-w-2xl text-lg md:text-2xl font-light text-white/90 leading-relaxed drop-shadow-md">
+                {journal.excerpt}
+              </p>
+            )}
+
+            {isOwner && (
+              <div className="mt-10">
+                <Button asChild variant="outline" className="gap-2 rounded-full px-8 py-6 bg-white/5 text-white border-white/20 hover:bg-white hover:text-black backdrop-blur-md transition-all">
+                  <Link href={routes.journalEdit(journal.slug)}>
+                    <Pencil className="size-4" />
+                    Edit Journal
+                  </Link>
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

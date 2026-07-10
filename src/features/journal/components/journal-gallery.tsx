@@ -47,7 +47,7 @@ export function JournalGallery({ images, isSeed, journalTitle, className }: Jour
       <Dialog open={selectedIndex !== null} onOpenChange={(open) => !open && setSelectedIndex(null)}>
         <DialogContent 
           showClose={false}
-          className="max-w-none w-screen max-h-none h-screen inset-0 p-0 border-none bg-black/95 sm:rounded-none overflow-hidden flex items-center justify-center"
+          className="max-w-none w-screen max-h-none h-screen inset-0 p-0 border-none bg-transparent shadow-none sm:rounded-none overflow-hidden flex items-center justify-center pointer-events-none"
         >
           <VisuallyHidden>
             <DialogTitle>Image Gallery</DialogTitle>
@@ -56,7 +56,7 @@ export function JournalGallery({ images, isSeed, journalTitle, className }: Jour
           
           {selectedIndex !== null && (
             <div 
-              className="relative w-full h-full cursor-zoom-out"
+              className="relative w-full h-full cursor-zoom-out pointer-events-auto"
               onClick={() => setSelectedIndex(null)}
             >
               <JournalImage
