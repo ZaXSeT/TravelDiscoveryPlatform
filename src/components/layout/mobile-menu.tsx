@@ -67,7 +67,7 @@ export function MobileMenu({ links }: MobileMenuProps) {
                 <Link
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className="font-display text-4xl md:text-5xl font-medium tracking-tight text-foreground transition-colors hover:text-accent-gold"
+                  className="font-serif text-5xl md:text-6xl font-normal tracking-tight text-foreground/90 transition-all duration-500 hover:text-accent-gold hover:tracking-normal"
                 >
                   {l.label}
                 </Link>
