@@ -111,6 +111,11 @@ Server Actions. **Verdict: B+ / A‑** — gaps below are mostly production conf
       Verified: wrong pw → "Incorrect password" + account survives; correct pw → deleted.
 - [x] **Per-account sign-in rate limit** — 15 / 15 min per (hashed) email, on top of the per-IP
       cap, blunts distributed brute-force against one specific account.
+- [x] **MFA / 2FA (TOTP)** — enrol in Profile → Security (QR + manual key + verify;
+      `two-factor-setup.tsx`), a post-login challenge page (`/auth/mfa` + `mfa-challenge.tsx`),
+      and **aal2 enforcement**: `signInAction` diverts to `/auth/mfa`, `requireUser` +
+      `isMfaChallengeRequired` gate every protected page. Verified E2E with computed TOTP codes:
+      enrol → sign out → fresh login diverts to MFA → correct code → aal2 → protected pages open.
 
 **Still open (future):**
 - [ ] Storage buckets are **public-read** → private journal media reachable by direct URL
@@ -123,7 +128,8 @@ Server Actions. **Verdict: B+ / A‑** — gaps below are mostly production conf
       **and `@supabase/ssr` 0.5→0.12, which changes the SSR cookie API** and risks breaking all
       auth/session. Not worth it for a low-severity issue pre-demo; do as a planned, fully-tested
       upgrade later.
-- [ ] Maturity: no MFA/CAPTCHA, no audit logging/monitoring; plan service-role key rotation if leaked.
+- [ ] Maturity: no CAPTCHA (Supabase Turnstile/hCaptcha), no audit logging/monitoring; plan
+      service-role key rotation if leaked. (MFA/2FA is now implemented — see above.)
 
 ### ⚙️ Continue on your laptop
 Everything is committed **and pushed** (origin/main, 0 unpushed). On the other machine:

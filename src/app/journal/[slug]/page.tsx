@@ -59,7 +59,7 @@ export default async function JournalDetailPage({
   return (
     <article className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="relative w-full h-[60vh] min-h-[500px] md:h-[70vh] md:min-h-[600px] flex flex-col justify-end">
+      <div className="relative w-full h-[60vh] min-h-[500px] md:h-[75vh] md:min-h-[600px] flex flex-col justify-center items-center text-center overflow-hidden">
         {journal.cover_path ? (
           <JournalImage
             path={journal.cover_path}
@@ -68,37 +68,51 @@ export default async function JournalDetailPage({
             fill
             priority
             sizes="100vw"
-            className="object-cover"
+            className="object-cover absolute inset-0 -z-10"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-surface-2 to-surface-1" />
+          <div className="absolute inset-0 bg-gradient-to-br from-surface-2 to-surface-1 -z-10" />
         )}
-        {/* Stronger gradient overlay for readability: dark at bottom for text, dark at top for navbar */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/90" />
+        {/* Subtle, soft cinematic vignette overlay */}
+        <div className="absolute inset-0 bg-black/40 -z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 -z-10" />
         
         {/* Hero Content Overlay */}
-        <div className="relative z-10 w-full pt-32 pb-12 md:pb-16">
-          <PageContainer width="default" className="w-full px-4">
-            <div className="max-w-4xl">
-              <Link 
-                href={`/profile/${journal.user_id}`}
-                className="inline-block hover:opacity-80 transition-opacity"
-              >
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent-gold drop-shadow-md">
-                  By {journal.author_label}
-                </p>
-              </Link>
-              <h1 className="mt-4 font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight tracking-tight text-white drop-shadow-lg">
+        <div className="relative z-10 w-full pt-20 pb-12 px-4 flex flex-col items-center">
+          <PageContainer width="default" className="flex flex-col items-center">
+            <div className="max-w-3xl flex flex-col items-center">
+              <div className="flex items-center space-x-4 mb-6">
+                <Link 
+                  href={`/profile/${journal.user_id}`}
+                  className="hover:opacity-80 transition-opacity"
+                >
+                  <p className="text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-accent-gold drop-shadow-md">
+                    {journal.author_label}
+                  </p>
+                </Link>
+                {journal.created_at && (
+                  <>
+                    <span className="text-white/40 text-xs">•</span>
+                    <p className="text-xs md:text-sm font-medium uppercase tracking-widest text-white/80 drop-shadow-md">
+                      {new Date(journal.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    </p>
+                  </>
+                )}
+              </div>
+              
+              <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5rem] leading-[1.1] tracking-tight text-white drop-shadow-lg text-balance">
                 {journal.title}
               </h1>
+              
               {journal.excerpt && (
-                <p className="mt-6 max-w-2xl text-base sm:text-lg md:text-xl font-light text-white/90 leading-relaxed drop-shadow-md">
+                <p className="mt-8 max-w-2xl text-lg md:text-2xl font-light text-white/90 leading-relaxed drop-shadow-md text-balance">
                   {journal.excerpt}
                 </p>
               )}
+
               {isOwner && (
-                <div className="mt-8 flex justify-start">
-                  <Button asChild variant="outline" size="sm" className="gap-1.5 rounded-full px-6 bg-white/10 text-white border-white/20 hover:bg-white hover:text-black backdrop-blur-sm">
+                <div className="mt-10">
+                  <Button asChild variant="outline" className="gap-2 rounded-full px-8 py-6 bg-white/5 text-white border-white/20 hover:bg-white hover:text-black backdrop-blur-md transition-all">
                     <Link href={routes.journalEdit(journal.slug)}>
                       <Pencil className="size-4" />
                       Edit Journal
@@ -112,9 +126,21 @@ export default async function JournalDetailPage({
       </div>
 
       {/* Body Section */}
-      <PageContainer width="default" className="py-12 md:py-20">
+      <PageContainer width="default" className="py-16 md:py-24">
         <div className="mx-auto max-w-prose">
           <JournalBody markdown={journal.body} />
+          
+          <div className="mt-16 flex items-center justify-center">
+            <div className="h-px w-12 bg-border"></div>
+            <p className="mx-4 text-sm tracking-widest text-muted-foreground uppercase font-medium">Fin</p>
+            <div className="h-px w-12 bg-border"></div>
+          </div>
+          
+          <div className="mt-12 text-center">
+            <p className="text-sm text-muted-foreground font-light italic">
+              Written by <span className="font-semibold not-italic text-foreground">{journal.author_label}</span>
+            </p>
+          </div>
         </div>
 
         <JournalGallery 

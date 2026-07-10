@@ -12,10 +12,11 @@ export function JournalBody({ markdown }: { markdown: string }) {
 
   const flushPara = () => {
     if (para.length) {
+      const isFirst = blocks.length === 0;
       blocks.push(
         <p 
           key={key++} 
-          className="font-sans text-lg leading-[1.8] text-foreground/90 mt-6"
+          className={`font-sans text-lg leading-[1.8] text-foreground/90 mt-6 ${isFirst ? 'first-letter:float-left first-letter:text-5xl first-letter:pr-2 first-letter:font-bold first-letter:text-accent-gold first-letter:mt-1 first-letter:font-display' : ''}`}
         >
           {para.join(" ")}
         </p>,

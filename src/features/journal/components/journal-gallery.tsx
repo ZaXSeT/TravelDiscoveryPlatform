@@ -50,12 +50,12 @@ export function JournalGallery({ images, isSeed, journalTitle }: JournalGalleryP
             <DialogDescription>Full screen view of the selected image</DialogDescription>
           </VisuallyHidden>
           
-          {selectedIndex !== null && (
+          {selectedIndex !== null && images[selectedIndex] && (
             <div className="relative w-full h-full max-h-screen">
               <JournalImage
-                path={images[selectedIndex].storage_path}
+                path={images[selectedIndex]!.storage_path}
                 isSeed={isSeed}
-                alt={images[selectedIndex].alt ?? journalTitle}
+                alt={images[selectedIndex]!.alt ?? journalTitle}
                 fill
                 className="object-contain p-2 md:p-8"
                 sizes="100vw"

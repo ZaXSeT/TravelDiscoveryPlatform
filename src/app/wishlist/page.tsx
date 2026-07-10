@@ -43,7 +43,7 @@ export default async function WishlistPage() {
               Saved destinations
             </h1>
             <p className="mt-4 text-base md:text-lg text-muted-foreground">
-              The places you're dreaming about, saved and synced to your account.
+              The places you&apos;re dreaming about, saved and synced to your account.
             </p>
           </div>
           <div className="mt-6 md:mt-0 text-sm font-medium text-muted-foreground shrink-0">
