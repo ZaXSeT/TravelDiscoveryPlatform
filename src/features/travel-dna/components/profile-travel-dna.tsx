@@ -49,11 +49,11 @@ export function ProfileTravelDna({ dna }: { dna: Dna | null }) {
         <p className="mt-5 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
           Your top matches
         </p>
-        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+        <div className="mt-3 -mx-6 px-6 sm:mx-0 sm:px-0 flex flex-row overflow-x-auto snap-x snap-mandatory gap-3 pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:grid sm:grid-cols-3 sm:overflow-visible sm:snap-none sm:pb-0">
           {matches.map((m) => (
             <div
               key={m.destination.slug}
-              className="overflow-hidden rounded-xl border border-border"
+              className="overflow-hidden rounded-xl border border-border shrink-0 snap-start w-[70vw] max-w-[260px] sm:w-auto"
             >
               <div className="relative aspect-video w-full bg-surface-2">
                 <CldImage

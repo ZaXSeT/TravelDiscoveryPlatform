@@ -124,7 +124,7 @@ export function FilterPanel({
         <h3 className="mb-3 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
           Explore by Region
         </h3>
-        <div className="flex flex-wrap gap-2">
+        <div className="flex -mx-4 px-4 sm:mx-0 sm:px-0 flex-row overflow-x-auto gap-2 pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-wrap sm:pb-0">
           <Chip active={!region} onClick={() => setRegion(null)}>
             Global
           </Chip>
@@ -142,7 +142,7 @@ export function FilterPanel({
           <h3 className="mb-3 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
             Travel Style
           </h3>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex -mx-4 px-4 sm:mx-0 sm:px-0 flex-row overflow-x-auto gap-2 pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:flex-wrap sm:pb-0">
             <Chip active={!category} onClick={() => setCategory(null)}>
               Any Style
             </Chip>
