@@ -238,12 +238,14 @@ export function LayoutPreloader() {
             <CldImage
               publicId={img.id}
               alt={img.label}
-              fill
+              width={400}
+              height={600}
               sizes="(max-width: 768px) 33vw, 20vw"
-              className="object-cover"
+              className="h-full w-full object-cover"
               priority
               onLoad={onImageLoad}
             />
+            <div className="absolute inset-0 bg-[#0a0a0b]/40" />
           </div>
         ))}
       </div>
