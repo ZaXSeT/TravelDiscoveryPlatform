@@ -12,13 +12,10 @@ export function JournalBody({ markdown }: { markdown: string }) {
 
   const flushPara = () => {
     if (para.length) {
-      const isFirst = key === 0;
       blocks.push(
         <p 
           key={key++} 
-          className={`font-serif text-lg md:text-xl leading-loose tracking-wide text-primary/90 ${
-            isFirst ? "first-letter:float-left first-letter:mr-3 first-letter:text-7xl first-letter:font-display first-letter:leading-[0.8] first-letter:text-accent-goldText mt-2" : ""
-          }`}
+          className="font-sans text-lg leading-[1.8] text-foreground/90 mt-6"
         >
           {para.join(" ")}
         </p>,
@@ -29,7 +26,7 @@ export function JournalBody({ markdown }: { markdown: string }) {
   const flushList = () => {
     if (list.length) {
       blocks.push(
-        <ul key={key++} className="font-serif text-lg md:text-xl leading-loose tracking-wide text-primary/90 list-disc space-y-2 pl-6 mt-4 mb-8">
+        <ul key={key++} className="font-sans text-lg leading-[1.8] text-foreground/90 list-disc space-y-2 pl-6 mt-6 mb-8">
           {list.map((li, i) => (
             <li key={i} className="pl-2">{li}</li>
           ))}
@@ -45,7 +42,7 @@ export function JournalBody({ markdown }: { markdown: string }) {
       flushPara();
       flushList();
       blocks.push(
-        <h3 key={key++} className="mt-12 mb-6 font-display text-3xl tracking-tight text-primary">
+        <h3 key={key++} className="mt-12 mb-6 font-sans font-bold text-2xl tracking-tight text-foreground">
           {line.slice(3)}
         </h3>,
       );
@@ -53,7 +50,7 @@ export function JournalBody({ markdown }: { markdown: string }) {
       flushPara();
       flushList();
       blocks.push(
-        <h2 key={key++} className="mt-16 mb-8 font-display text-4xl md:text-5xl tracking-tight text-primary">
+        <h2 key={key++} className="mt-16 mb-8 font-sans font-bold text-3xl tracking-tight text-foreground">
           {line.slice(2)}
         </h2>,
       );

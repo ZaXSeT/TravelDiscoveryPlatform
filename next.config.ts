@@ -42,6 +42,9 @@ const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
   // Isolate our browsing context from cross-origin windows (clickjacking/XS-Leaks hardening).
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  // Stop other origins from embedding our resources (hotlink / side-channel hardening).
+  // Note: does NOT affect us loading Cloudinary/Supabase/OSM assets (that's their CORP).
+  { key: "Cross-Origin-Resource-Policy", value: "same-origin" },
   {
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",

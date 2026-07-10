@@ -10,7 +10,22 @@ import {
 } from "@/lib/validation/auth";
 import { safeReturnTo } from "@/lib/validation/common";
 import { rateLimit, clientRateKey } from "@/lib/rate-limit/limiter";
+import { isPasswordBreached } from "@/lib/auth/pwned-password";
 import { siteConfig } from "@/constants/config";
+import { routes } from "@/constants/routes";
+import { createHash } from "node:crypto";
+
+const BREACHED_PASSWORD =
+  "This password appeared in a known data breach — please choose a different one.";
+
+// Per-account attempt key (hashed so no email lands in the rate-limit store). Slows a
+// distributed brute-force against one specific account regardless of source IP.
+function accountKey(email: string): string {
+  return createHash("sha256")
+    .update(email.trim().toLowerCase())
+    .digest("hex")
+    .slice(0, 16);
+}
 
 const TOO_MANY =
   "Too many attempts. Please wait a minute and try again.";
@@ -46,6 +61,13 @@ export async function signInAction(
   if (!(await rateLimit(await clientRateKey("auth-signin"), 8, 600))) {
     return { error: TOO_MANY };
   }
+  // Per-account cap (on top of the per-IP cap) so one account can't be brute-forced from
+  // rotating IPs. Generous enough not to lock out a legit user who mistypes a few times.
+  if (
+    !(await rateLimit(`rl:auth-signin:acct:${accountKey(parsed.data.email)}`, 15, 900))
+  ) {
+    return { error: TOO_MANY };
+  }
 
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
@@ -55,6 +77,14 @@ export async function signInAction(
   }
 
   const dest = safeReturnTo(formData.get("returnTo")?.toString());
+
+  // With 2FA enabled the password only reaches aal1 — divert to the TOTP step first.
+  const { data: aal } =
+    await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (aal && aal.nextLevel === "aal2" && aal.currentLevel !== "aal2") {
+    redirect(`${routes.mfa}?returnTo=${encodeURIComponent(dest)}`);
+  }
+
   redirect(`${dest}${dest.includes("?") ? "&" : "?"}welcome=back`);
 }
 
@@ -74,6 +104,10 @@ export async function signUpAction(
 
   if (!(await rateLimit(await clientRateKey("auth-signup"), 5, 600))) {
     return { error: TOO_MANY };
+  }
+  // Reject passwords known to be compromised (HaveIBeenPwned k-anonymity).
+  if (await isPasswordBreached(parsed.data.password)) {
+    return { fieldErrors: { password: BREACHED_PASSWORD } };
   }
 
   const supabase = await createSupabaseServerClient();
@@ -148,6 +182,9 @@ export async function updatePasswordAction(
   });
   if (!parsed.success) {
     return { fieldErrors: firstErrors(parsed.error.flatten().fieldErrors) };
+  }
+  if (await isPasswordBreached(parsed.data.password)) {
+    return { fieldErrors: { password: BREACHED_PASSWORD } };
   }
 
   const supabase = await createSupabaseServerClient();

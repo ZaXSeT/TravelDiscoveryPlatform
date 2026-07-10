@@ -86,9 +86,14 @@ export function JournalEditor({
   return (
     <form onSubmit={submit} className="space-y-5">
       {error && (
-        <p role="alert" className="text-sm text-destructive">
-          {error}
-        </p>
+        <div role="alert" className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">
+          <p className="font-bold">{error}</p>
+          {Object.keys(fieldErrors).length > 0 && (
+            <pre className="mt-2 text-xs overflow-auto">
+              {JSON.stringify(fieldErrors, null, 2)}
+            </pre>
+          )}
+        </div>
       )}
       <div className="space-y-1.5">
         <Label htmlFor="j-title">Title</Label>

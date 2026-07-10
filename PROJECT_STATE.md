@@ -93,8 +93,24 @@ Server Actions. **Verdict: B+ / A‑** — gaps below are mostly production conf
       + `.github/workflows/codeql.yml` (SAST on push/PR + weekly). CodeQL is free for PUBLIC
       repos; a PRIVATE repo needs GitHub Advanced Security.
 - [x] **Extra header hardening** — dropped `'unsafe-eval'` from CSP `script-src` (verified
-      globe/maps/all pages still work, 0 violations) + added `Cross-Origin-Opener-Policy:
-      same-origin`. (script-src still allows `'unsafe-inline'`; nonces are the next step.)
+      globe/maps/all pages still work, 0 violations) + `Cross-Origin-Opener-Policy: same-origin`
+      + `Cross-Origin-Resource-Policy: same-origin`. (script-src still allows `'unsafe-inline'`;
+      nonces are the next step.) Full 8-header set verified live.
+- [x] **Deep vuln audit (2026-06-23)** — no real vulnerabilities found: RLS is owner-scoped on
+      every table (profiles own-row only, destinations public by design), `journal_images` is
+      **IDOR-safe** (insert/update/delete check parent `journals.user_id = auth.uid()`), service
+      role used ONLY for scoped self-account-deletion, no `eval`/`rpc`/`exec`, no raw HTML/XSS,
+      auth callback + all redirects go through same-origin `safeReturnTo`, no secret logging.
+
+**Fixed (account hardening, 2026-06-23):**
+- [x] **Breached-password rejection** — sign-up + password-update reject passwords found in
+      HaveIBeenPwned (`src/lib/auth/pwned-password.ts`; k-anonymity, only a 5-char SHA-1 prefix
+      leaves the server; fail-open on outage). Verified: `password1` blocked, strong passes.
+- [x] **Re-auth before account deletion** — `deleteAccount(password)` re-checks the current
+      password (on top of typed "DELETE") so a hijacked/borrowed session can't nuke the account.
+      Verified: wrong pw → "Incorrect password" + account survives; correct pw → deleted.
+- [x] **Per-account sign-in rate limit** — 15 / 15 min per (hashed) email, on top of the per-IP
+      cap, blunts distributed brute-force against one specific account.
 
 **Still open (future):**
 - [ ] Storage buckets are **public-read** → private journal media reachable by direct URL
@@ -102,6 +118,11 @@ Server Actions. **Verdict: B+ / A‑** — gaps below are mostly production conf
       low severity vs a high-risk refactor (signed-URL expiry breaks caching, touches
       feed/detail/cards/profile). Do via a private bucket + signed URLs only if needed.
 - [ ] Enable Supabase **email confirmation** for production.
+- [ ] **2 low npm vulns** (`@supabase/auth-js` path routing, transitive via the pinned
+      `supabase-js` 2.45.4). **Consciously accepted** — the only fix bumps `supabase-js` 2.45→2.110
+      **and `@supabase/ssr` 0.5→0.12, which changes the SSR cookie API** and risks breaking all
+      auth/session. Not worth it for a low-severity issue pre-demo; do as a planned, fully-tested
+      upgrade later.
 - [ ] Maturity: no MFA/CAPTCHA, no audit logging/monitoring; plan service-role key rotation if leaked.
 
 ### ⚙️ Continue on your laptop

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DESTINATION_SLUGS } from "@/constants/destinations";
+import { ALL_DESTINATION_SLUGS } from "@/constants/destinations";
 
 // Shared field schemas (06_DATA_CONTRACTS.md). Single source of truth for FE + BE.
 
@@ -24,7 +24,7 @@ export const displayNameSchema = z
   .max(50, "Name is too long");
 
 export const destinationSlugSchema = z.enum(
-  DESTINATION_SLUGS as [string, ...string[]],
+  ALL_DESTINATION_SLUGS as [string, ...string[]],
 );
 
 export const optionalDestinationSlug = destinationSlugSchema.nullish();

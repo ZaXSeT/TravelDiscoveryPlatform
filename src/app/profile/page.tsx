@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { ProfileHeader } from "@/features/profile/components/profile-header";
 import { ProfileTravelDna } from "@/features/travel-dna/components/profile-travel-dna";
 import { DeleteAccountButton } from "@/features/profile/components/delete-account-button";
+import { TwoFactorSetup } from "@/features/auth/components/two-factor-setup";
 import { sanitizeDna } from "@/features/travel-dna/scoring";
 import { WishlistGrid } from "@/features/wishlist/components/wishlist-grid";
 import { ItineraryList } from "@/features/itinerary/components/itinerary-list";
@@ -40,7 +41,7 @@ export default async function ProfilePage() {
   ] = await Promise.all([
     supabase
       .from("profiles")
-      .select("display_name, bio, avatar_path")
+      .select("display_name, bio, avatar_path, banner_path")
       .eq("id", user.id)
       .maybeSingle(),
     // Separate query: if the travel_dna column isn't migrated yet, only this fails (null),
@@ -102,6 +103,7 @@ export default async function ProfilePage() {
           displayName={displayName}
           bio={profile?.bio ?? null}
           avatarPath={profile?.avatar_path ?? null}
+          bannerPath={profile?.banner_path ?? null}
           stats={{
             saved: wishlist.length,
             trips: itineraries.length,
@@ -210,6 +212,13 @@ export default async function ProfilePage() {
                 ))}
               </div>
             )}
+          </div>
+        </section>
+
+        <section>
+          <SectionHeader eyebrow="Account" title="Security" />
+          <div className="mt-8 max-w-2xl">
+            <TwoFactorSetup />
           </div>
         </section>
 

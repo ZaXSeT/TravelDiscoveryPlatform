@@ -23,13 +23,15 @@ export function DeleteAccountButton() {
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const [confirm, setConfirm] = useState("");
+  const [password, setPassword] = useState("");
 
-  const canDelete = confirm.trim().toUpperCase() === "DELETE";
+  const canDelete =
+    confirm.trim().toUpperCase() === "DELETE" && password.length > 0;
 
   const onDelete = async () => {
     if (!canDelete) return;
     setPending(true);
-    const res = await deleteAccount();
+    const res = await deleteAccount(password);
     if (!res.ok) {
       setPending(false);
       toast.error(res.error.message);
@@ -54,6 +56,7 @@ export function DeleteAccountButton() {
         className="mt-4 border-destructive/40 text-destructive hover:bg-destructive hover:text-white"
         onClick={() => {
           setConfirm("");
+          setPassword("");
           setOpen(true);
         }}
       >
@@ -86,6 +89,18 @@ export function DeleteAccountButton() {
               onChange={(e) => setConfirm(e.target.value)}
               placeholder="DELETE"
               autoComplete="off"
+            />
+          </div>
+
+          <div className="mt-4 space-y-1.5">
+            <Label htmlFor="delete-password">Confirm your password</Label>
+            <Input
+              id="delete-password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Your password"
+              autoComplete="current-password"
             />
           </div>
 

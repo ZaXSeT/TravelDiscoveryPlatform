@@ -24,6 +24,10 @@ export function avatarPath(userId: string, type: string): string {
   return `${userId}/${crypto.randomUUID()}.${extFromType(type)}`;
 }
 
+export function bannerPath(userId: string, type: string): string {
+  return `${userId}/banner-${crypto.randomUUID()}.${extFromType(type)}`;
+}
+
 export function journalImagePath(
   userId: string,
   journalId: string,

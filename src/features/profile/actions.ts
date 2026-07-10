@@ -60,6 +60,19 @@ export async function setAvatar(storagePath: string): Promise<ActionResult> {
   return ok();
 }
 
+export async function setBanner(storagePath: string): Promise<ActionResult> {
+  if (!storagePath) return fail("validation", "Missing image.");
+  const { supabase, user } = await getAuthedContext();
+  if (!user) return fail("unauthorized", "Please sign in.");
+  const { error } = await supabase
+    .from("profiles")
+    .update({ banner_path: storagePath })
+    .eq("id", user.id);
+  if (error) return fail("server_error", "Could not update your banner.");
+  revalidatePath(routes.profile);
+  return ok();
+}
+
 // Best-effort removal of a user's files (one level of nesting handles both avatars/{id}/…
 // and journal-media/{id}/{journalId}/…). Never throws — account deletion shouldn't fail
 // just because storage cleanup hiccups.
@@ -94,12 +107,22 @@ async function purgeUserStorage(
 // Permanently delete the signed-in user's account. Deleting the auth user cascades all
 // their rows (profiles, wishlists, itineraries, journals) via on-delete-cascade FKs; we
 // also purge their uploaded files. Requires the service role (server-only).
-export async function deleteAccount(): Promise<ActionResult> {
-  const { user } = await getAuthedContext();
+export async function deleteAccount(password: string): Promise<ActionResult> {
+  const { supabase, user } = await getAuthedContext();
   if (!user) return fail("unauthorized", "Please sign in.");
   if (!isAdminConfigured()) {
     return fail("server_error", "Account deletion isn't available right now.");
   }
+
+  // Re-authenticate: require the current password so a hijacked or borrowed (still-signed-in)
+  // session can't nuke the account. Verified by attempting a fresh password sign-in.
+  if (!user.email) return fail("validation", "Account email missing.");
+  if (!password) return fail("validation", "Enter your password to confirm.");
+  const { error: authErr } = await supabase.auth.signInWithPassword({
+    email: user.email,
+    password,
+  });
+  if (authErr) return fail("validation", "Incorrect password.");
 
   const admin = createSupabaseAdminClient();
   await purgeUserStorage(admin, BUCKETS.avatars, user.id);

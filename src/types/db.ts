@@ -33,6 +33,7 @@ export interface Database {
           id: string;
           display_name: string;
           avatar_path: string | null;
+          banner_path: string | null;
           bio: string | null;
           travel_dna: Json | null;
         } & Timestamps;
@@ -40,12 +41,14 @@ export interface Database {
           id: string;
           display_name: string;
           avatar_path?: string | null;
+          banner_path?: string | null;
           bio?: string | null;
           travel_dna?: Json | null;
         };
         Update: {
           display_name?: string;
           avatar_path?: string | null;
+          banner_path?: string | null;
           bio?: string | null;
           travel_dna?: Json | null;
         };

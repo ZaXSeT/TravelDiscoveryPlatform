@@ -23,6 +23,7 @@ export const routes = {
   reset: "/auth/reset",
   updatePassword: "/auth/update-password",
   authCallback: "/auth/callback",
+  mfa: "/auth/mfa",
 } as const;
 
 export type AppRoute = typeof routes;
