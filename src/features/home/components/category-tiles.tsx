@@ -15,7 +15,7 @@ export function CategoryTiles() {
           title="What kind of trip are you after?"
           align="center"
         />
-        <div className="mt-8 -mx-4 px-4 sm:mx-0 sm:px-0 flex flex-row overflow-x-auto snap-x snap-mandatory gap-3 pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:mt-12 sm:grid sm:grid-cols-3 sm:overflow-visible sm:snap-none sm:pb-0 lg:flex lg:h-[500px] lg:flex-row lg:gap-4 xl:gap-6">
+        <div className="mt-8 -mx-4 flex flex-row overflow-x-auto snap-x snap-mandatory gap-3 pb-8 before:w-4 before:shrink-0 after:w-4 after:shrink-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:mt-12 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:snap-none sm:pb-0 sm:before:hidden sm:after:hidden lg:flex lg:h-[500px] lg:flex-row lg:gap-4 xl:gap-6">
           {HOME_CATEGORIES.map((c) => (
             <Link
               key={c.category}
