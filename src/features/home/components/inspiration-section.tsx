@@ -22,7 +22,7 @@ export function InspirationSection() {
             <Reveal 
               key={entry.slug} 
               delayMs={i * 80}
-              className="shrink-0 snap-center w-[75vw] max-w-[300px] md:w-auto"
+              className="shrink-0 snap-center w-[75vw] max-w-[300px] md:w-full md:max-w-none"
             >
               <Link
                 href={routes.destination(entry.destinationSlug)}
