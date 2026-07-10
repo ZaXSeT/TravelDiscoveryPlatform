@@ -27,7 +27,20 @@ export async function generateMetadata({
     .eq("id", id)
     .maybeSingle();
 
-  if (!data) return { title: "Profile Not Found" };
+  if (!data) {
+    const { data: journalData } = await supabase
+      .from("journals")
+      .select("author_label")
+      .eq("user_id", id)
+      .eq("is_seed", true)
+      .limit(1)
+      .maybeSingle();
+      
+    if (journalData) {
+      return { title: `${journalData.author_label || "Orbis Editorial"}'s Profile` };
+    }
+    return { title: "Profile Not Found" };
+  }
   return { title: `${data.display_name}'s Profile` };
 }
 
@@ -63,23 +76,34 @@ export default async function PublicProfilePage({
       .order("created_at", { ascending: false }),
   ]);
 
-  if (!profile) {
-    notFound();
+  let profileData = profile;
+  const journals = journalRows ?? [];
+
+  if (!profileData) {
+    if (journals.length > 0 && journals[0].is_seed) {
+      profileData = {
+        display_name: journals[0].author_label || "Orbis Editorial",
+        bio: "Curated travel stories and guides from our editorial team.",
+        avatar_path: null,
+        banner_path: null,
+      };
+    } else {
+      notFound();
+    }
   }
 
-  const journals = journalRows ?? [];
   const travelDna = sanitizeDna(dnaRow?.travel_dna);
 
-  const displayName = profile.display_name || "Traveler";
+  const displayName = profileData.display_name || "Traveler";
 
   return (
     <div className="pt-4 md:pt-20">
       <PageContainer width="full" className="section-y space-y-16">
         <ProfileHeader
           displayName={displayName}
-          bio={profile.bio ?? null}
-          avatarPath={profile.avatar_path ?? null}
-          bannerPath={profile.banner_path ?? null}
+          bio={profileData.bio ?? null}
+          avatarPath={profileData.avatar_path ?? null}
+          bannerPath={profileData.banner_path ?? null}
           isReadOnly={true}
           stats={{
             saved: 0, // Public profiles don't expose private stats yet
