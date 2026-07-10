@@ -12,6 +12,7 @@ import { JournalCard } from "@/features/journal/components/journal-card";
 import type { JournalSummary } from "@/features/journal/types";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { BackButton } from "@/components/ui/back-button";
 
 export const dynamic = "force-dynamic";
 
@@ -106,18 +107,21 @@ export default async function PublicProfilePage({
   return (
     <div className="pt-4 md:pt-20">
       <PageContainer width="full" className="section-y space-y-16">
-        <ProfileHeader
-          displayName={displayName}
-          bio={profileData.bio ?? null}
-          avatarPath={profileData.avatar_path ?? null}
-          bannerPath={profileData.banner_path ?? null}
-          isReadOnly={true}
-          stats={{
-            saved: 0, // Public profiles don't expose private stats yet
-            trips: 0,
-            journals: journals.length,
-          }}
-        />
+        <div className="space-y-4">
+          <BackButton />
+          <ProfileHeader
+            displayName={displayName}
+            bio={profileData.bio ?? null}
+            avatarPath={profileData.avatar_path ?? null}
+            bannerPath={profileData.banner_path ?? null}
+            isReadOnly={true}
+            stats={{
+              saved: 0, // Public profiles don't expose private stats yet
+              trips: 0,
+              journals: journals.length,
+            }}
+          />
+        </div>
 
         <section>
           <SectionHeader
