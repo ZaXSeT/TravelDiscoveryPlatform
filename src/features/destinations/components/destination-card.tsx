@@ -33,16 +33,18 @@ export function DestinationCard({
         {/* Smoother, richer gradient scrim */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-70 transition-opacity duration-500 group-hover:opacity-90" />
         
-        <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-accent-gold transition-transform duration-500 group-hover:-translate-y-1">
+        <div className="absolute inset-x-0 bottom-0 p-4 text-white sm:p-6 lg:p-8">
+          <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent-gold transition-transform duration-500 group-hover:-translate-y-1 sm:text-[10px]">
             {d.region}
           </p>
-          <h3 className="mt-2 font-display text-3xl transition-transform duration-500 group-hover:-translate-y-1 sm:text-4xl">{d.name}</h3>
+          <h3 className="mt-1.5 font-display text-2xl transition-transform duration-500 group-hover:-translate-y-1 sm:mt-2 sm:text-3xl lg:text-4xl">
+            {d.name}
+          </h3>
           
-          <div className="mt-3 flex items-center justify-between transition-transform duration-500 group-hover:-translate-y-1">
-            <p className="text-sm font-medium text-white/90 sm:text-base">{d.country}</p>
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10 opacity-0 backdrop-blur-md transition-all duration-500 group-hover:bg-accent-gold group-hover:text-black group-hover:opacity-100">
-              <ArrowUpRight className="size-5" />
+          <div className="mt-2 flex items-center justify-between transition-transform duration-500 group-hover:-translate-y-1 sm:mt-3">
+            <p className="text-xs font-medium text-white/90 sm:text-sm lg:text-base">{d.country}</p>
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-white/10 opacity-0 backdrop-blur-md transition-all duration-500 group-hover:bg-accent-gold group-hover:text-black group-hover:opacity-100 sm:size-10">
+              <ArrowUpRight className="size-4 sm:size-5" />
             </div>
           </div>
         </div>

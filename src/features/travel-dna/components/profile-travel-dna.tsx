@@ -49,13 +49,13 @@ export function ProfileTravelDna({ dna }: { dna: Dna | null }) {
         <p className="mt-8 text-left text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
           Your top matches
         </p>
-        <div className="mt-3 -mx-6 px-6 sm:mx-0 sm:px-0 flex flex-row overflow-x-auto snap-x snap-mandatory gap-3 pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:grid sm:grid-cols-3 sm:overflow-visible sm:snap-none sm:pb-0">
+        <div className="mt-4 flex flex-col gap-3 sm:grid sm:grid-cols-3 sm:gap-4">
           {matches.map((m) => (
             <div
               key={m.destination.slug}
-              className="overflow-hidden rounded-xl border border-border shrink-0 snap-start w-[70vw] max-w-[260px] sm:w-auto"
+              className="flex items-center gap-4 rounded-xl border border-border/50 bg-surface-1/50 p-2 sm:block sm:overflow-hidden sm:border-border sm:bg-transparent sm:p-0"
             >
-              <div className="relative aspect-video w-full bg-surface-2">
+              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg sm:aspect-video sm:h-auto sm:w-full sm:rounded-none">
                 <CldImage
                   publicId={m.destination.media.thumbnail}
                   alt={m.destination.name}
@@ -65,13 +65,13 @@ export function ProfileTravelDna({ dna }: { dna: Dna | null }) {
                   sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover"
                 />
-                <span className="absolute right-1.5 top-1.5 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-semibold text-white">
+                <span className="absolute bottom-1 right-1 rounded-md bg-black/70 px-1.5 py-0.5 text-[9px] font-bold text-white sm:top-1.5 sm:right-1.5 sm:bottom-auto sm:rounded-full sm:px-2 sm:text-[11px]">
                   {m.score}%
                 </span>
               </div>
-              <div className="p-2.5">
+              <div className="flex-1 text-left sm:p-2.5">
                 <p className="truncate text-sm font-medium">{m.destination.name}</p>
-                <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                <p className="mt-0.5 flex items-center gap-1 text-xs text-muted-foreground">
                   <MapPin className="size-3" />
                   {m.destination.country}
                 </p>

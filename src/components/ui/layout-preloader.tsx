@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { CldImage } from "@/components/media/cld-image";
 import { preloaderStore } from "@/lib/store/preloader-store";
+import { cn } from "@/lib/utils";
 
 gsap.registerPlugin();
 
