@@ -36,9 +36,13 @@ export function AiFeaturesSection() {
           title="Two ways to plan with AI"
           description="Discover your Travel DNA, then let the AI Journey Builder turn it into a real, editable trip - grounded in current, real-world places."
         />
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
+        <div className="mt-8 -mx-4 px-4 md:mx-0 md:px-0 flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] md:mt-10 md:grid md:grid-cols-2 md:overflow-visible md:snap-none md:pb-0 md:gap-6">
           {FEATURES.map((f, i) => (
-            <Reveal key={f.href} delayMs={i * 100}>
+            <Reveal 
+              key={f.href} 
+              delayMs={i * 100}
+              className="shrink-0 snap-center w-[85vw] max-w-[340px] md:w-full md:max-w-none h-full"
+            >
               <Link
                 href={f.href}
                 className="group relative flex h-full flex-col overflow-hidden rounded-[2.5rem] border border-border/50 bg-card p-8 md:p-10 shadow-sm transition-all duration-500 hover:-translate-y-2 hover:border-accent-gold/30 hover:shadow-2xl hover:shadow-accent-gold/5"
