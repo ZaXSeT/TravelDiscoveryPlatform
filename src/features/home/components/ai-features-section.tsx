@@ -3,6 +3,7 @@ import { Fingerprint, Wand2, ArrowRight } from "lucide-react";
 import { PageContainer } from "@/components/layout/page-container";
 import { SectionHeader } from "@/components/layout/section-header";
 import { Reveal } from "@/components/motion/reveal";
+import { cn } from "@/lib/utils";
 import { routes } from "@/constants/routes";
 
 const FEATURES = [
