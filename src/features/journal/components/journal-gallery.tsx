@@ -54,15 +54,15 @@ export function JournalGallery({ images, isSeed, journalTitle, className }: Jour
             <DialogDescription>Full screen view of the selected image</DialogDescription>
           </VisuallyHidden>
           
-          {selectedIndex !== null && (
-            <div 
+          {selectedIndex !== null && images[selectedIndex] && (
+            <div
               className="relative w-full h-full cursor-zoom-out pointer-events-auto"
               onClick={() => setSelectedIndex(null)}
             >
               <JournalImage
-                path={images[selectedIndex].storage_path}
+                path={images[selectedIndex]!.storage_path}
                 isSeed={isSeed}
-                alt={images[selectedIndex].alt ?? journalTitle}
+                alt={images[selectedIndex]!.alt ?? journalTitle}
                 fill
                 className="object-contain p-2 md:p-8"
                 sizes="100vw"
