@@ -36,35 +36,22 @@ export function InteractiveGlobe({ fallbackImageId, alt }: InteractiveGlobeProps
   const [mobile, setMobile] = useState(false);
 
   useEffect(() => {
-    if (reduced) {
+    // The only hard requirement is a working WebGL context — no screen-width or perf-tier
+    // gating, so the 3D globe shows on virtually every phone (design decision). Mobile still
+    // gets a lighter render (lower DPR, fewer markers, no drag), and reduced-motion users get
+    // the globe without auto-rotation (see GlobeCanvas).
+    if (!webglAvailable()) {
       setEnabled(false);
       return;
     }
-    const wide = window.matchMedia("(min-width: 1024px)").matches;
-    const deviceMemory = (
-      navigator as Navigator & { deviceMemory?: number }
-    ).deviceMemory;
-    const cores = navigator.hardwareConcurrency ?? 4;
-
-    // The globe now runs on mobile too — gate only on a genuine low-end / no-WebGL check,
-    // not screen width. Mobile gets a lighter render (lower DPR, no drag) in GlobeCanvas.
-    const isCapable =
-      webglAvailable() &&
-      (deviceMemory === undefined || deviceMemory >= 4) &&
-      cores >= 4;
-
-    if (isCapable) {
-      setMobile(!wide);
-      // Delay mounting WebGL during initial load to prevent freezing the preloader animation.
-      // Trigger it exactly at 2000ms, which is when the preloader counter reaches 90% and intentionally slows down.
-      if (!preloaderStore.hasRun) {
-        const timer = setTimeout(() => setEnabled(true), 2000);
-        return () => clearTimeout(timer);
-      } else {
-        setEnabled(true);
-      }
+    setMobile(!window.matchMedia("(min-width: 1024px)").matches);
+    // Delay mounting WebGL during initial load so it never freezes the preloader animation.
+    if (!preloaderStore.hasRun) {
+      const timer = setTimeout(() => setEnabled(true), 2000);
+      return () => clearTimeout(timer);
     }
-  }, [reduced]);
+    setEnabled(true);
+  }, []);
 
   if (enabled) {
     return (
@@ -73,13 +60,13 @@ export function InteractiveGlobe({ fallbackImageId, alt }: InteractiveGlobeProps
         // Let vertical swipes scroll the page instead of being captured by the canvas.
         style={mobile ? { touchAction: "pan-y" } : undefined}
       >
-        <GlobeCanvas mobile={mobile} />
+        <GlobeCanvas mobile={mobile} reducedMotion={reduced} />
       </div>
     );
   }
 
-  // Static fallback (mobile / reduced-motion / low-end / no WebGL) - identical to the
-  // Phase 2/3 static globe so nothing regresses.
+  // Static fallback (only when WebGL is unavailable) - identical to the Phase 2/3 static
+  // globe so nothing regresses.
   return (
     <div className="relative mx-auto aspect-square w-full max-w-xl overflow-hidden rounded-full border border-white/10 bg-dark-0 shadow-card">
       <CldImage

@@ -182,19 +182,32 @@ function PhotoMarker({
 
 function PhotoMarkers({
   groupRef,
+  mobile,
 }: {
   groupRef: React.RefObject<THREE.Group | null>;
+  mobile: boolean;
 }) {
+  // Thin the marker set on phones (every other one) to halve the per-frame DOM work and
+  // reduce clutter on a small screen, while keeping good geographic spread.
+  const dests = mobile
+    ? ALL_DESTINATIONS.filter((_, i) => i % 2 === 0)
+    : ALL_DESTINATIONS;
   return (
     <>
-      {ALL_DESTINATIONS.map((d) => (
+      {dests.map((d) => (
         <PhotoMarker key={d.slug} dest={d} groupRef={groupRef} />
       ))}
     </>
   );
 }
 
-function Earth() {
+function Earth({
+  mobile,
+  reducedMotion,
+}: {
+  mobile: boolean;
+  reducedMotion: boolean;
+}) {
   const earth = useRef<THREE.Group>(null);
   const clouds = useRef<THREE.Mesh>(null);
 

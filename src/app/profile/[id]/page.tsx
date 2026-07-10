@@ -11,6 +11,7 @@ import { sanitizeDna } from "@/features/travel-dna/scoring";
 import { JournalCard } from "@/features/journal/components/journal-card";
 import type { JournalSummary } from "@/features/journal/types";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -20,15 +21,15 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const supabase = await createSupabaseServerClient();
-  const { data } = await supabase
+  const supabaseAdmin = createSupabaseAdminClient();
+  const { data } = await supabaseAdmin
     .from("profiles")
     .select("display_name")
     .eq("id", id)
     .maybeSingle();
 
   if (!data) {
-    const { data: journalData } = await supabase
+    const { data: journalData } = await supabaseAdmin
       .from("journals")
       .select("author_label")
       .eq("user_id", id)
@@ -51,23 +52,24 @@ export default async function PublicProfilePage({
 }) {
   const { id } = await params;
   const supabase = await createSupabaseServerClient();
+  const supabaseAdmin = createSupabaseAdminClient();
 
   const [
     { data: profile },
     { data: dnaRow },
     { data: journalRows },
   ] = await Promise.all([
-    supabase
+    supabaseAdmin
       .from("profiles")
       .select("display_name, bio, avatar_path, banner_path")
       .eq("id", id)
       .maybeSingle(),
-    supabase
+    supabaseAdmin
       .from("profiles")
       .select("travel_dna")
       .eq("id", id)
       .maybeSingle(),
-    supabase
+    supabaseAdmin
       .from("journals")
       .select("id, slug, title, excerpt, author_label, cover_path, is_seed, visibility")
       .eq("user_id", id)
