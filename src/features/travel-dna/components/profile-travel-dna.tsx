@@ -35,18 +35,18 @@ export function ProfileTravelDna({ dna }: { dna: Dna | null }) {
   const matches = rankDestinations(dna).slice(0, 3);
 
   return (
-    <div className="grid gap-6 rounded-2xl border border-border bg-card p-6 sm:p-8 md:grid-cols-[220px_1fr] md:items-center">
-      <div className="mx-auto w-full max-w-[220px]">
+    <div className="grid gap-8 rounded-[2rem] border border-border bg-card p-6 sm:p-8 md:grid-cols-[260px_1fr] md:items-center">
+      <div className="mx-auto w-full max-w-[280px] md:max-w-[260px]">
         <DnaRadar dna={dna} name="you" />
       </div>
-      <div>
-        <p className="text-xs uppercase tracking-[0.16em] text-accent-goldText">
+      <div className="text-center md:text-left">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-gold/80">
           Your traveler profile
         </p>
-        <h3 className="mt-1 font-display text-2xl">{archetype.title}</h3>
-        <p className="mt-2 text-sm text-muted-foreground">{archetype.blurb}</p>
+        <h3 className="mt-2 font-display text-3xl">{archetype.title}</h3>
+        <p className="mx-auto mt-3 max-w-md text-base text-muted-foreground leading-relaxed md:mx-0">{archetype.blurb}</p>
 
-        <p className="mt-5 text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">
+        <p className="mt-8 text-left text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
           Your top matches
         </p>
         <div className="mt-3 -mx-6 px-6 sm:mx-0 sm:px-0 flex flex-row overflow-x-auto snap-x snap-mandatory gap-3 pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:grid sm:grid-cols-3 sm:overflow-visible sm:snap-none sm:pb-0">

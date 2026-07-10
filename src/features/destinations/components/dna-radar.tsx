@@ -32,10 +32,12 @@ export function DnaRadar({ dna, name }: { dna: Dna; name: string }) {
   const gridLevels = [0.25, 0.5, 0.75, 1];
 
   return (
-    <figure className="flex flex-col items-center">
+    <figure className="flex w-full flex-col items-center">
       <svg
         viewBox={`0 0 ${SIZE} ${SIZE}`}
-        className="w-full max-w-[320px]"
+        width="100%"
+        height="100%"
+        className="w-full h-auto aspect-square max-w-[320px]"
         role="img"
         aria-label={`Travel DNA for ${name}`}
       >
