@@ -15,12 +15,12 @@ export function CategoryTiles() {
           title="What kind of trip are you after?"
           align="center"
         />
-        <div className="mt-12 flex flex-col gap-4 sm:grid sm:grid-cols-3 lg:flex lg:h-[500px] lg:flex-row lg:gap-4 xl:gap-6">
+        <div className="mt-12 flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:grid sm:grid-cols-3 sm:overflow-visible sm:snap-none sm:pb-0 lg:flex lg:h-[500px] lg:flex-row lg:gap-4 xl:gap-6">
           {HOME_CATEGORIES.map((c) => (
             <Link
               key={c.category}
               href={`${routes.explore}?category=${encodeURIComponent(c.category)}`}
-              className="group relative aspect-[4/3] sm:aspect-square lg:aspect-auto lg:flex-1 overflow-hidden rounded-[2rem] bg-surface-2 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] hover:flex-[3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="group relative w-[70vw] max-w-[280px] shrink-0 snap-center aspect-[3/4] sm:w-auto sm:aspect-square lg:aspect-auto lg:flex-1 overflow-hidden rounded-[2rem] bg-surface-2 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] hover:flex-[3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
             >
               <CldImage
                 publicId={c.image}
