@@ -22,27 +22,34 @@ export function InspirationSection() {
             <Reveal key={entry.slug} delayMs={i * 80}>
               <Link
                 href={routes.destination(entry.destinationSlug)}
-                className="group block overflow-hidden rounded-lg border border-border bg-card"
+                className="group relative block overflow-hidden rounded-2xl aspect-[4/5] bg-surface-2 shadow-sm transition-shadow hover:shadow-xl"
               >
-                <div className="relative aspect-[16/10] overflow-hidden bg-surface-2">
-                  <CldImage
-                    publicId={entry.cover}
-                    alt={entry.title}
-                    width={720}
-                    height={450}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105 motion-reduce:transition-none"
-                  />
-                </div>
-                <div className="p-5">
-                  <p className="text-xs uppercase tracking-[0.16em] text-accent-goldText">
-                    {entry.author}
-                  </p>
-                  <h3 className="mt-2 font-display text-xl">{entry.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {entry.excerpt}
-                  </p>
+                <CldImage
+                  publicId={entry.cover}
+                  alt={entry.title}
+                  width={720}
+                  height={900}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover transition-transform duration-1000 group-hover:scale-110 motion-reduce:transition-none"
+                />
+                
+                {/* Premium gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-100" />
+                
+                {/* Content overlay */}
+                <div className="absolute inset-0 p-6 sm:p-8 flex flex-col justify-end">
+                  <div className="transform transition-transform duration-500 translate-y-4 group-hover:translate-y-0">
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent-gold drop-shadow-md mb-3 opacity-90">
+                      {entry.author}
+                    </p>
+                    <h3 className="font-display text-2xl sm:text-3xl tracking-tight text-white drop-shadow-lg mb-3">
+                      {entry.title}
+                    </h3>
+                    <p className="text-sm sm:text-base text-white/80 line-clamp-2 drop-shadow-sm leading-relaxed opacity-0 transition-opacity duration-500 group-hover:opacity-100 delay-100">
+                      {entry.excerpt}
+                    </p>
+                  </div>
                 </div>
               </Link>
             </Reveal>
