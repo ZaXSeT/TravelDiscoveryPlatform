@@ -62,12 +62,12 @@ export default async function JournalDetailPage({
       {/* Hero Section */}
       <div className="relative w-full h-[60vh] min-h-[500px] md:h-[75vh] md:min-h-[600px] flex flex-col justify-end text-left">
         {/* Parallax Background */}
-        <div className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden pointer-events-none">
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <Parallax 
-            speed={0.3} 
-            startAtZero={true}
+            speed={0.15} 
             offset={["start start", "end start"]}
-            className="w-full h-[120%] -top-[10%] relative"
+            startAtZero
+            className="absolute inset-x-0 top-0 h-[115%] w-full z-0"
           >
             {journal.cover_path ? (
               <JournalImage
