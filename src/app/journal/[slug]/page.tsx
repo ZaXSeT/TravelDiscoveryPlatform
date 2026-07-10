@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Pencil } from "lucide-react";
 import { PageContainer } from "@/components/layout/page-container";
 import { Button } from "@/components/ui/button";
+import { Parallax } from "@/components/motion/parallax";
 import { JournalBody } from "@/features/journal/components/journal-body";
 import { JournalImage } from "@/features/journal/components/journal-image";
 import { JournalGallery } from "@/features/journal/components/journal-gallery";

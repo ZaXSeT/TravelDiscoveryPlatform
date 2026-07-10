@@ -34,4 +34,5 @@ export const HOME_CATEGORIES = [
   { label: "Food", category: "Food", image: "go/category/paris" },
   { label: "Culture", category: "Culture", image: "go/category/new-york" },
   { label: "Nature", category: "Nature", image: "go/category/landscape" },
+  { label: "Luxury", category: "Luxury", image: "go/destinations/dubai_1" },
 ] as const;
