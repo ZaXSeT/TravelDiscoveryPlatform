@@ -23,9 +23,13 @@ export function FeaturedDestinations() {
             </Button>
           }
         />
-        <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
+        <div className="mt-8 -mx-4 px-4 flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:px-0 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:snap-none sm:pb-0 lg:grid-cols-3">
           {featured.map((d, i) => (
-            <Reveal key={d.slug} delayMs={i * 80}>
+            <Reveal 
+              key={d.slug} 
+              delayMs={i * 80}
+              className="shrink-0 snap-start w-[75vw] max-w-[280px] sm:w-auto sm:max-w-none"
+            >
               <DestinationCard destination={d} priority={i === 0} />
             </Reveal>
           ))}
