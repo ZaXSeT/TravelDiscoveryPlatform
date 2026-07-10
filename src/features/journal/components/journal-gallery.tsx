@@ -15,16 +15,17 @@ interface JournalGalleryProps {
   images: GalleryImage[];
   isSeed: boolean;
   journalTitle: string;
+  className?: string;
 }
 
-export function JournalGallery({ images, isSeed, journalTitle }: JournalGalleryProps) {
+export function JournalGallery({ images, isSeed, journalTitle, className }: JournalGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   if (!images || images.length === 0) return null;
 
   return (
     <>
-      <div className="mx-auto mt-16 grid max-w-prose grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
+      <div className={className || "grid grid-cols-2 gap-3 md:gap-4"}>
         {images.map((img, idx) => (
           <button
             key={img.id}
