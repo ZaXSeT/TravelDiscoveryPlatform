@@ -256,6 +256,8 @@ function Earth({
   );
 
   useFrame((_, delta) => {
+    // Respect the user's reduced-motion preference: show the globe, but hold it still.
+    if (reducedMotion) return;
     if (earth.current) earth.current.rotation.y += delta * 0.03;
     if (clouds.current) clouds.current.rotation.y += delta * 0.043;
   });
@@ -267,7 +269,7 @@ function Earth({
           <sphereGeometry args={[R, 96, 96]} />
           <primitive object={earthMaterial} attach="material" />
         </mesh>
-        <PhotoMarkers groupRef={earth} />
+        <PhotoMarkers groupRef={earth} mobile={mobile} />
       </group>
 
       <mesh ref={clouds} scale={1.012}>
@@ -288,7 +290,13 @@ function Earth({
   );
 }
 
-export default function GlobeCanvas({ mobile = false }: { mobile?: boolean }) {
+export default function GlobeCanvas({
+  mobile = false,
+  reducedMotion = false,
+}: {
+  mobile?: boolean;
+  reducedMotion?: boolean;
+}) {
   return (
     <Canvas
       camera={{ position: [0, 0, 3], fov: 42 }}
@@ -300,7 +308,7 @@ export default function GlobeCanvas({ mobile = false }: { mobile?: boolean }) {
       <ambientLight intensity={0.12} />
       <directionalLight position={LIGHT_POS} intensity={1.5} color="#fff4e0" />
       <Suspense fallback={null}>
-        <Earth />
+        <Earth mobile={mobile} reducedMotion={reducedMotion} />
       </Suspense>
       {/* On mobile we skip manual drag so vertical swipes scroll the page; the globe still
           auto-rotates and markers stay tappable. Desktop keeps full orbit control. */}

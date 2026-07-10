@@ -33,14 +33,13 @@ export async function generateMetadata({
       .from("journals")
       .select("author_label")
       .eq("user_id", id)
-      .eq("is_seed", true)
       .limit(1)
       .maybeSingle();
       
     if (journalData) {
-      return { title: `${journalData.author_label || "Orbis Editorial"}'s Profile` };
+      return { title: `${journalData.author_label || "Traveler"}'s Profile` };
     }
-    return { title: "Profile Not Found" };
+    return { title: "Traveler's Profile" };
   }
   return { title: `${data.display_name}'s Profile` };
 }
@@ -82,15 +81,21 @@ export default async function PublicProfilePage({
   const journals = journalRows ?? [];
 
   if (!profileData) {
-    if (journals.length > 0 && journals[0].is_seed) {
+    const first = journals[0];
+    if (first?.is_seed) {
       profileData = {
-        display_name: journals[0].author_label || "Orbis Editorial",
+        display_name: first.author_label || "Orbis Editorial",
         bio: "Curated travel stories and guides from our editorial team.",
         avatar_path: null,
         banner_path: null,
       };
     } else {
-      notFound();
+      profileData = {
+        display_name: first?.author_label || "Traveler",
+        bio: "A fellow traveler exploring the world.",
+        avatar_path: null,
+        banner_path: null,
+      };
     }
   }
 
