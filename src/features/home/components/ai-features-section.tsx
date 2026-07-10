@@ -37,16 +37,12 @@ export function AiFeaturesSection() {
           title="Two ways to plan with AI"
           description="Discover your Travel DNA, then let the AI Journey Builder turn it into a real, editable trip - grounded in current, real-world places."
         />
-        <div className="mt-8 -mx-4 flex flex-row overflow-x-auto snap-x snap-mandatory pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:mt-10 md:grid md:grid-cols-2 md:overflow-visible md:snap-none md:pb-0 md:gap-6">
+        <div className="mt-8 -mx-4 pl-4 scroll-pl-4 flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:pl-0 md:scroll-pl-0 md:mt-10 md:grid md:grid-cols-2 md:overflow-visible md:snap-none md:pb-0 md:gap-6">
           {FEATURES.map((f, i) => (
             <Reveal 
               key={f.href} 
               delayMs={i * 100}
-              className={cn(
-                "shrink-0 snap-start w-[85vw] max-w-[340px] md:w-full md:max-w-none flex flex-col",
-                "ml-4 md:ml-0",
-                i === FEATURES.length - 1 ? "mr-4 md:mr-0" : ""
-              )}
+              className="shrink-0 snap-start w-[85vw] max-w-[340px] md:w-full md:max-w-none flex flex-col"
             >
               <Link
                 href={f.href}
@@ -71,6 +67,7 @@ export function AiFeaturesSection() {
               </Link>
             </Reveal>
           ))}
+          <div className="shrink-0 w-0 md:hidden" />
         </div>
       </PageContainer>
     </section>
