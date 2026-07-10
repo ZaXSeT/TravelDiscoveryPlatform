@@ -68,14 +68,14 @@ export default async function JournalDetailPage({
             fill
             priority
             sizes="100vw"
-            className="object-cover absolute inset-0 -z-10"
+            className="object-cover absolute inset-0"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-surface-2 to-surface-1 -z-10" />
+          <div className="absolute inset-0 bg-gradient-to-br from-surface-2 to-surface-1" />
         )}
         {/* Subtle, soft cinematic vignette overlay */}
-        <div className="absolute inset-0 bg-black/40 -z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 -z-10" />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
         
         {/* Hero Content Overlay */}
         <div className="relative z-10 w-full pt-20 pb-12 px-4 flex flex-col items-center">

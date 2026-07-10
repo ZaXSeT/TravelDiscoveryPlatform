@@ -44,18 +44,24 @@ export function JournalGallery({ images, isSeed, journalTitle }: JournalGalleryP
       </div>
 
       <Dialog open={selectedIndex !== null} onOpenChange={(open) => !open && setSelectedIndex(null)}>
-        <DialogContent className="max-w-[95vw] w-full max-h-[95vh] h-full p-0 border-none bg-black/95 sm:rounded-xl overflow-hidden flex items-center justify-center">
+        <DialogContent 
+          showClose={false}
+          className="max-w-none w-screen max-h-none h-screen inset-0 p-0 border-none bg-black/95 sm:rounded-none overflow-hidden flex items-center justify-center"
+        >
           <VisuallyHidden>
             <DialogTitle>Image Gallery</DialogTitle>
             <DialogDescription>Full screen view of the selected image</DialogDescription>
           </VisuallyHidden>
           
-          {selectedIndex !== null && images[selectedIndex] && (
-            <div className="relative w-full h-full max-h-screen">
+          {selectedIndex !== null && (
+            <div 
+              className="relative w-full h-full cursor-zoom-out"
+              onClick={() => setSelectedIndex(null)}
+            >
               <JournalImage
-                path={images[selectedIndex]!.storage_path}
+                path={images[selectedIndex].storage_path}
                 isSeed={isSeed}
-                alt={images[selectedIndex]!.alt ?? journalTitle}
+                alt={images[selectedIndex].alt ?? journalTitle}
                 fill
                 className="object-contain p-2 md:p-8"
                 sizes="100vw"
