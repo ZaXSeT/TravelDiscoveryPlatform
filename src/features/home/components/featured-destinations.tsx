@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PageContainer } from "@/components/layout/page-container";
 import { SectionHeader } from "@/components/layout/section-header";
 import { Reveal } from "@/components/motion/reveal";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { DestinationCard } from "@/features/destinations/components/destination-card";
 import { getFeatured } from "@/constants/destinations";
@@ -23,12 +24,16 @@ export function FeaturedDestinations() {
             </Button>
           }
         />
-        <div className="mt-8 -mx-4 flex flex-row overflow-x-auto snap-x snap-mandatory gap-4 pb-8 before:w-4 before:shrink-0 after:w-4 after:shrink-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:snap-none sm:pb-0 sm:before:hidden sm:after:hidden lg:grid-cols-3">
+        <div className="mt-8 -mx-4 flex flex-row overflow-x-auto snap-x snap-mandatory pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:mt-10 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:snap-none sm:pb-0 lg:grid-cols-3">
           {featured.map((d, i) => (
             <Reveal 
               key={d.slug} 
               delayMs={i * 80}
-              className="shrink-0 snap-start w-[75vw] max-w-[280px] sm:w-auto sm:max-w-none"
+              className={cn(
+                "shrink-0 snap-start w-[75vw] max-w-[280px] sm:w-auto sm:max-w-none",
+                i === 0 ? "ml-4 sm:ml-0" : "ml-4 sm:ml-0",
+                i === featured.length - 1 ? "mr-4 sm:mr-0" : ""
+              )}
             >
               <DestinationCard destination={d} priority={i === 0} />
             </Reveal>

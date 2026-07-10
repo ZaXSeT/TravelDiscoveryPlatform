@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { PageContainer } from "@/components/layout/page-container";
 import { SectionHeader } from "@/components/layout/section-header";
 import { CldImage } from "@/components/media/cld-image";
+import { cn } from "@/lib/utils";
 import { HOME_CATEGORIES } from "@/constants/categories";
 import { routes } from "@/constants/routes";
 
@@ -15,12 +16,16 @@ export function CategoryTiles() {
           title="What kind of trip are you after?"
           align="center"
         />
-        <div className="mt-8 -mx-4 flex flex-row overflow-x-auto snap-x snap-mandatory gap-3 pb-8 before:w-4 before:shrink-0 after:w-4 after:shrink-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:mt-12 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:snap-none sm:pb-0 sm:before:hidden sm:after:hidden lg:flex lg:h-[500px] lg:flex-row lg:gap-4 xl:gap-6">
-          {HOME_CATEGORIES.map((c) => (
+        <div className="mt-8 -mx-4 flex flex-row overflow-x-auto snap-x snap-mandatory pb-8 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:mt-12 sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:snap-none sm:pb-0 lg:flex lg:h-[500px] lg:flex-row lg:gap-4 xl:gap-6">
+          {HOME_CATEGORIES.map((c, i) => (
             <Link
               key={c.category}
               href={`${routes.explore}?category=${encodeURIComponent(c.category)}`}
-              className="group relative w-[140px] shrink-0 snap-center aspect-[4/5] sm:w-auto sm:aspect-square lg:aspect-auto lg:flex-1 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] bg-surface-2 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] hover:flex-[3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className={cn(
+                "group relative w-[140px] shrink-0 snap-center aspect-[4/5] sm:w-auto sm:aspect-square lg:aspect-auto lg:flex-1 overflow-hidden rounded-[1.5rem] sm:rounded-[2rem] bg-surface-2 transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] hover:flex-[3] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                "ml-3 sm:ml-0 lg:ml-0",
+                i === HOME_CATEGORIES.length - 1 ? "mr-3 sm:mr-0 lg:mr-0" : ""
+              )}
             >
               <CldImage
                 publicId={c.image}
