@@ -28,11 +28,11 @@ export type SortValue = (typeof SORTS)[number]["value"];
 
 // Homepage category tiles (curated, link into Explore with a preselected filter).
 export const HOME_CATEGORIES = [
-  { label: "Beaches", category: "Beach", image: "go/category/bali" },
+  { label: "Beaches", category: "Beach", image: "go/destinations/maldives/hero" },
   { label: "Cities", category: "City", image: "go/category/tokyo" },
   { label: "Adventure", category: "Adventure", image: "go/category/switzerland" },
-  { label: "Food", category: "Food", image: "go/category/paris" },
-  { label: "Culture", category: "Culture", image: "go/category/new-york" },
+  { label: "Food", category: "Food", image: "go/destinations/osaka/hero" },
+  { label: "Culture", category: "Culture", image: "go/destinations/kyoto/hero" },
   { label: "Nature", category: "Nature", image: "go/category/landscape" },
-  { label: "Luxury", category: "Luxury", image: "go/destinations/dubai_1" },
+  { label: "Luxury", category: "Luxury", image: "go/destinations/dubai/hero" },
 ] as const;
