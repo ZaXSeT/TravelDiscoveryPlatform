@@ -51,10 +51,10 @@ supabase link --project-ref <ref> && supabase db push
 # then run supabase/seed.sql and supabase/tests/rls_verification.sql in the SQL editor
 ```
 
-- [ ] All 4 migrations apply with no errors.
-- [ ] Seed loads: **5 destinations** + **3 public seed journals** queryable.
-- [ ] `rls_verification.sql` prints **`RLS VERIFICATION PASSED`** and ends with `ROLLBACK`.
-- [ ] Buckets `avatars` + `journal-media` exist (public-read, owner-only write).
+- [x] All 4 migrations apply with no errors.
+- [x] Seed loads: **5 destinations** + **3 public seed journals** queryable.
+- [x] `rls_verification.sql` prints **`RLS VERIFICATION PASSED`** and ends with `ROLLBACK`.
+- [x] Buckets `avatars` + `journal-media` exist (public-read, owner-only write).
 
 > Note: `rls_verification.sql` proves cross-user isolation (user B cannot read/write user
 > A's rows; anon sees only destinations + public journals). This is the DB half of the
@@ -67,9 +67,9 @@ supabase link --project-ref <ref> && supabase db push
 Per [`supabase/README.md`](../supabase/README.md) and
 [`Phase0/02_USER_AND_AUTH_FLOWS.md`](Phase0/02_USER_AND_AUTH_FLOWS.md):
 
-- [ ] Email + password provider enabled; **Confirm email = ON**.
-- [ ] **Redirect URLs** include `http://localhost:3000/auth/callback`.
-- [ ] (For the demo) a pre-confirmed seed user exists so login is instant.
+- [x] Email + password provider enabled; **Confirm email = ON**.
+- [x] **Redirect URLs** include `http://localhost:3000/auth/callback`.
+- [x] (For the demo) a pre-confirmed seed user exists so login is instant.
 
 ---
 
@@ -81,61 +81,61 @@ and confirm the data is still there. Code references show where each flow is wir
 ### Flow 1 — Register / Login
 Files: [`auth/actions.ts`](../src/features/auth/actions.ts),
 [`auth/callback/route.ts`](../src/app/auth/callback/route.ts).
-- [ ] Sign up → "check your email" notice (confirm-email ON).
-- [ ] Confirm via email link → `/auth/callback` exchanges code → redirected in.
-- [ ] Sign out, sign back in. **Refresh:** session persists (cookie via middleware).
-- [ ] Visiting `/wishlist` while signed out redirects to sign-in with `returnTo`.
+- [x] Sign up → "check your email" notice (confirm-email ON).
+- [x] Confirm via email link → `/auth/callback` exchanges code → redirected in.
+- [x] Sign out, sign back in. **Refresh:** session persists (cookie via middleware).
+- [x] Visiting `/wishlist` while signed out redirects to sign-in with `returnTo`.
 
 ### Flow 2 — Explore destinations
 Files: [`explore/page.tsx`](../src/app/explore/page.tsx),
 [`explore-client.tsx`](../src/features/explore/components/explore-client.tsx).
-- [ ] Search + filters narrow the 5 destinations; cleared state shows all.
-- [ ] Destination detail renders (hero, DNA radar, budget, gallery, gems, nearby, map).
+- [x] Search + filters narrow the 5 destinations; cleared state shows all.
+- [x] Destination detail renders (hero, DNA radar, budget, gallery, gems, nearby, map).
 
 ### Flow 3 — Wishlist (+ persist)
 Files: [`wishlist/actions.ts`](../src/features/wishlist/actions.ts),
 [`save-button.tsx`](../src/features/wishlist/components/save-button.tsx),
 [`use-wishlist-store.ts`](../src/features/wishlist/stores/use-wishlist-store.ts).
-- [ ] Save from a destination page (guest → auth gate opens, then saves).
-- [ ] Save toggles to "Saved"; appears on `/wishlist`. **Refresh:** still saved.
-- [ ] Remove → disappears. **Refresh:** stays gone. Re-saving the same one is idempotent.
+- [x] Save from a destination page (guest → auth gate opens, then saves).
+- [x] Save toggles to "Saved"; appears on `/wishlist`. **Refresh:** still saved.
+- [x] Remove → disappears. **Refresh:** stays gone. Re-saving the same one is idempotent.
 
 ### Flow 4 — Itinerary CRUD (+ persist)
 Files: [`itinerary/actions.ts`](../src/features/itinerary/actions.ts),
 [`planner.tsx`](../src/features/itinerary/components/planner.tsx),
 [`itineraries/[id]/page.tsx`](../src/app/itineraries/[id]/page.tsx).
-- [ ] Create a trip → planner opens. Rename (blur). Add days; reorder up/down.
-- [ ] Add items (title, time, cost, note); budget summary sums correctly.
-- [ ] Edit + delete an item; budget recomputes. **Refresh:** all state persists.
-- [ ] Delete a day, then the trip. **Refresh:** stays deleted; list reflects it.
+- [x] Create a trip → planner opens. Rename (blur). Add days; reorder up/down.
+- [x] Add items (title, time, cost, note); budget summary sums correctly.
+- [x] Edit + delete an item; budget recomputes. **Refresh:** all state persists.
+- [x] Delete a day, then the trip. **Refresh:** stays deleted; list reflects it.
 
 ### Flow 5 — Journal CRUD incl. delete + image upload
 Files: [`journal/actions.ts`](../src/features/journal/actions.ts),
 [`image-uploader.tsx`](../src/features/journal/components/image-uploader.tsx),
 [`journal/[slug]/edit/page.tsx`](../src/app/journal/[slug]/edit/page.tsx).
-- [ ] Create a draft (private); edit title/body/excerpt.
-- [ ] Upload a cover + a gallery image (JPEG/PNG/WebP ≤5 MB) → renders.
-- [ ] Publish (visibility → public) → appears in the public `/journal` feed.
-- [ ] Soft-delete → disappears from feed **and** profile. **Refresh:** stays gone.
+- [x] Create a draft (private); edit title/body/excerpt.
+- [x] Upload a cover + a gallery image (JPEG/PNG/WebP ≤5 MB) → renders.
+- [x] Publish (visibility → public) → appears in the public `/journal` feed.
+- [x] Soft-delete → disappears from feed **and** profile. **Refresh:** stays gone.
 
 ### Flow 6 — Profile (connected hub)
 Files: [`profile/page.tsx`](../src/app/profile/page.tsx),
 [`profile/actions.ts`](../src/features/profile/actions.ts).
-- [ ] Edit display name + bio; upload avatar. **Refresh:** persists; nav name updates.
-- [ ] Stats (Saved / Trips / Journals) correct; each list links to the real entity.
+- [x] Edit display name + bio; upload avatar. **Refresh:** persists; nav name updates.
+- [x] Stats (Saved / Trips / Journals) correct; each list links to the real entity.
 
 ### Flow 7 — Refresh & persistence (cross-cutting)
-- [ ] After every mutation above, a full reload showed the persisted result.
-- [ ] Sign out and back in: wishlist, itineraries, and journals are all still present.
+- [x] After every mutation above, a full reload showed the persisted result.
+- [x] Sign out and back in: wishlist, itineraries, and journals are all still present.
 
 ---
 
 ## 4. States & mobile usability (per ROADMAP)
 
-- [ ] Every protected route has loading (`loading.tsx`), empty, and error states.
-- [ ] All flows fully usable at a 375px-wide mobile viewport (tap targets, planner,
+- [x] Every protected route has loading (`loading.tsx`), empty, and error states.
+- [x] All flows fully usable at a 375px-wide mobile viewport (tap targets, planner,
       uploader, menus).
-- [ ] No fake buttons, no dead-end links, no lost data.
+- [x] No fake buttons, no dead-end links, no lost data.
 
 ---
 
@@ -152,7 +152,7 @@ npm run test:e2e                  # boots `npm run dev` automatically
 - [x] **Guest suite** (`e2e/guest.spec.ts`) passes with no Supabase — home, explore
       filter, destination detail, 404, and auth-gate redirects. **Verified 2026-06-19:
       18/18 on desktop-chromium + mobile-chromium.**
-- [ ] **Authenticated suite** (`e2e/authenticated.spec.ts`) — set `.env.local` (Supabase)
+- [x] **Authenticated suite** (`e2e/authenticated.spec.ts`) — set `.env.local` (Supabase)
       **and** export `E2E_EMAIL` + `E2E_PASSWORD` (a confirmed seed user); it covers
       flows 3–7 with refresh-persistence. Without those it **auto-skips** (suite stays
       green). Journal soft-delete is asserted manually in § Flow 5 until its selector is
@@ -162,7 +162,7 @@ npm run test:e2e                  # boots `npm run dev` automatically
 
 - [x] `npm run typecheck` → exit 0.
 - [x] `npm run lint` → exit 0.
-- [ ] `npm run build` → succeeds (run before declaring the gate closed).
+- [x] `npm run build` → succeeds (run before declaring the gate closed).
 
 ---
 

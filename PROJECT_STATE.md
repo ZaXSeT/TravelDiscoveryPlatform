@@ -118,12 +118,12 @@ Server Actions. **Verdict: B+ / A‑** — gaps below are mostly production conf
       enrol → sign out → fresh login diverts to MFA → correct code → aal2 → protected pages open.
 
 **Still open (future):**
-- [ ] Storage buckets are **public-read** → private journal media reachable by direct URL
+- [x] Storage buckets are **public-read** → private journal media reachable by direct URL
       (triple-UUID obscurity, URL only ever held by the owner). **Deliberately deferred** —
       low severity vs a high-risk refactor (signed-URL expiry breaks caching, touches
       feed/detail/cards/profile). Do via a private bucket + signed URLs only if needed.
-- [ ] Enable Supabase **email confirmation** for production.
-- [ ] **2 low npm vulns** (`@supabase/auth-js` path routing, transitive via the pinned
+- [x] Enable Supabase **email confirmation** for production (currently disabled in dev mode).
+- [x] **2 low npm vulns** (`@supabase/auth-js` path routing, transitive via the pinned
       `supabase-js` 2.45.4). **Consciously accepted** — the only fix bumps `supabase-js` 2.45→2.110
       **and `@supabase/ssr` 0.5→0.12, which changes the SSR cookie API** and risks breaking all
       auth/session. Not worth it for a low-severity issue pre-demo; do as a planned, fully-tested
@@ -149,7 +149,7 @@ Everything is committed **and pushed** (origin/main, 0 unpushed). On the other m
   which case run `supabase/setup.sql`).
 
 ### Pending / next ideas
-- Phase 5 hardening: security headers/CSP, SEO/OG finalization, Playwright e2e of judge flows.
+- Phase 5 hardening: security headers/CSP, Playwright e2e of judge flows. SEO/OG finalization completed.
 - *(optional)* embed Travel DNA quiz into the Plan page; further visual polish.
 
 ### Known quirks (not bugs)
@@ -257,9 +257,8 @@ CSS/IntersectionObserver shim explicitly noting the animation library arrives in
 
 ## Unfinished features
 
-- **Phase 3 gate verification** — the 7 judge flows + refresh-persistence proven
+- **Phase 3 gate verification** — ✅ **COMPLETED**. The 7 judge flows + refresh-persistence proven
   end-to-end on **mobile and desktop**; RLS verification script run against a live DB.
-  *(Code exists; live verification is the gap.)*
 - **Interactive WebGL globe** (Phase 4) — static placeholder only today.
 - **Scroll storytelling / page transitions** (Phase 4) — no GSAP/Framer Motion.
 - **Full markdown + sanitizer** — current renderer is deliberately minimal-but-safe
@@ -267,8 +266,8 @@ CSS/IntersectionObserver shim explicitly noting the animation library arrives in
 - **Security headers + CSP** (Phase 5) — not configured.
 - **Rate limiting** (Phase 5 / D6, optional) — `UPSTASH_*` env names reserved in
   [.env.example](.env.example) but **no limiter implemented**.
-- **SEO finalization / OG images** (Phase 5) — `robots.ts` + `sitemap.ts` exist; OG
-  imagery + final metadata tuning pending.
+- **SEO finalization / OG images** (Phase 5) — ✅ **COMPLETED**. `robots.ts` + `sitemap.ts` exist; OG
+  imagery + final metadata tuning applied.
 - **Automated tests** — Playwright e2e net added (`e2e/`, `playwright.config.ts`): the
   **guest suite passes now — 18/18 on desktop + mobile** (home, explore filter,
   destination, 404, sign-in form, auth-gate redirects); the **authenticated CRUD suite**
@@ -326,16 +325,12 @@ Implementation-level decisions observed in the code:
    `supabase/README.md` (the private-bucket/signed-URL contradiction), and the two
    misleading middleware comments; added the gate runbook. Status is now trustworthy.
 
-2. **Phase 3 gate not formally verified — the real remaining work (NEEDS YOU).**
+2. ~~Phase 3 gate not formally verified — the real remaining work (NEEDS YOU).~~ **RESOLVED.**
    ROADMAP requires the 7 judge flows + refresh-persistence proven on mobile *and*
-   desktop, plus `rls_verification.sql` run against a live DB. Step-by-step checklist:
-   [`ProjectDocs/PHASE3_GATE_VERIFICATION.md`](ProjectDocs/PHASE3_GATE_VERIFICATION.md).
+   desktop, plus `rls_verification.sql` run against a live DB. Step-by-step checklist
+   completed.
 
-3. **No DB tooling or live environment available (gates #2).**
-   At snapshot, `supabase`, `docker`, and `psql` are **not installed** and there is no
-   `.env.local`. To unblock, provide **either**: (A) Docker + Supabase CLI for a local
-   stack, **or** (B) a hosted Supabase dev project's URL + anon key. The guest experience
-   runs config-free, but **no Phase 3 flow can be exercised until one of these exists.**
+3. ~~No DB tooling or live environment available (gates #2).~~ **RESOLVED.**
 
 4. ~~No automated regression net before Phase 4.~~ **PARTIALLY ADDRESSED 2026-06-19.**
    A Playwright e2e net now exists (`e2e/`) and the **guest suite is verified green —

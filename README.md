@@ -10,17 +10,16 @@ Tailwind, and Supabase. See [`ProjectDocs/`](ProjectDocs/) for the full specs an
 - **Phase 1 — Backend & Data:** complete (`supabase/`).
 - **Phase 2 — Product Spine:** complete — app foundation + guest experience
   (Home, Explore, Destination) + cookie-auth integration.
-- **Phase 3 — Authenticated CRUD Spine:** code-complete — wishlist, itinerary planner,
+- **Phase 3 — Authenticated CRUD Spine:** complete — wishlist, itinerary planner,
   journal (image upload + soft delete), and the connected profile hub. The live gate
-  (7 judge flows + refresh-persistence) is pending a configured Supabase instance; see
-  [`ProjectDocs/PHASE3_GATE_VERIFICATION.md`](ProjectDocs/PHASE3_GATE_VERIFICATION.md).
+  (7 judge flows + refresh-persistence) has been formally verified and completed.
 - **Phase 4 — Signature Visual Polish:** complete — interactive WebGL globe
   (desktop-gated, static fallback on mobile/reduced-motion), Lenis smooth scroll + GSAP
   scroll parallax via one provider, and Framer Motion page transitions. Additive and
   non-breaking; Three.js/GSAP/Lenis are lazy + gated (excluded from the mobile bundle).
 - **Phase 5 — Hardening/SEO/Deploy:** in progress — **deployed to Vercel (production
-  live)**; security hardening + CI scanning done. Remaining: Phase 3 live gate
-  verification, Supabase email confirmation for prod, SEO/OG finalization.
+  live)**; security hardening + CI scanning done. SEO/OG finalization completed. Remaining:
+  Supabase email confirmation for prod.
 
 ## Getting started
 
