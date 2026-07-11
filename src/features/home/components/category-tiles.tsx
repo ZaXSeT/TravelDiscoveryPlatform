@@ -35,7 +35,7 @@ export function CategoryTiles() {
               
               <div className="absolute inset-0 flex flex-col justify-end p-4 text-white sm:p-6 lg:p-5">
                 <div className="translate-y-0 lg:translate-y-4 transition-transform duration-700 group-hover:translate-y-0">
-                  <span className="block font-display text-lg sm:text-2xl lg:text-lg xl:text-2xl transition-colors duration-500 group-hover:text-accent-gold drop-shadow-md">
+                  <span className="block truncate font-display text-lg sm:text-2xl lg:text-lg xl:text-2xl transition-colors duration-500 group-hover:text-accent-gold drop-shadow-md">
                     {c.label}
                   </span>
                   

@@ -52,7 +52,7 @@ export function Header() {
         leftContent={
           <Link
             href={routes.home}
-            className="flex items-center gap-2 px-2 font-display text-xl font-bold tracking-tight"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full font-display text-xl font-bold tracking-tight transition-colors hover:bg-white/5"
             aria-label={`${siteConfig.name} home`}
           >
             <BrandMark className="size-7" />
