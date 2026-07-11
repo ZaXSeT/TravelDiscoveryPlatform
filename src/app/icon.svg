@@ -1,0 +1,14 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="orbisGlobe" x1="9.6" y1="9.6" x2="22.4" y2="22.4" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#e6c894" />
+      <stop offset="1" stop-color="#c8a97e" />
+    </linearGradient>
+  </defs>
+  <ellipse cx="16" cy="16" rx="12.5" ry="5.2" transform="rotate(-30 16 16)"
+    stroke="#c8a97e" stroke-width="1.7" fill="none" />
+  <circle cx="27" cy="9.7" r="2" fill="#c8a97e" />
+  <circle cx="16" cy="16" r="6.6" fill="url(#orbisGlobe)" />
+  <path d="M16 9.4 C 12.2 12 12.2 20 16 22.6 M16 9.4 C 19.8 12 19.8 20 16 22.6 M9.6 15 H22.4"
+    stroke="#0b1020" stroke-opacity="0.32" stroke-width="1" fill="none" />
+</svg>
