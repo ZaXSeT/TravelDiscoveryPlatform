@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTrigger, DialogTitle, DialogClose } from "@/components/ui/dialog";
+import { X } from "lucide-react";
 import { AvatarUploader } from "@/features/profile/components/avatar-uploader";
 import { BannerUploader } from "@/features/profile/components/banner-uploader";
 import { updateProfile } from "@/features/profile/actions";
@@ -42,6 +44,8 @@ export function ProfileHeader({
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [bannerAspect, setBannerAspect] = useState<number | null>(null);
+  const [avatarAspect, setAvatarAspect] = useState<number | null>(null);
 
   const initials = displayName.slice(0, 2).toUpperCase();
 
@@ -74,16 +78,37 @@ export function ProfileHeader({
       {/* Cover Banner */}
       <div className="h-32 sm:h-48 md:h-64 w-full relative bg-gradient-to-tr from-sky-400 via-blue-500 to-indigo-600 overflow-hidden group/banner">
         {bannerPath && (
-          <Image
-            src={storagePublicUrl(BUCKETS.avatars, bannerPath)}
-            alt="Profile Banner"
-            fill
-            sizes="(max-width: 1024px) 100vw, 1024px"
-            className="object-cover"
-            priority
-          />
+          <Dialog>
+            <DialogTrigger asChild>
+              <button className="absolute inset-0 z-10 w-full h-full cursor-pointer focus:outline-none">
+                <Image
+                  src={storagePublicUrl(BUCKETS.avatars, bannerPath)}
+                  alt="Profile Banner"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 1024px"
+                  className="object-cover"
+                  priority
+                />
+              </button>
+            </DialogTrigger>
+            <DialogContent showClose={false} className="left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-none bg-transparent shadow-none p-0 flex items-center justify-center" style={{ width: '95vw', maxWidth: '1200px', maxHeight: '85vh', aspectRatio: bannerAspect || '16/9' }}>
+              <DialogTitle className="sr-only">Profile Banner</DialogTitle>
+              <div className="relative w-full h-full rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
+                <img
+                  src={storagePublicUrl(BUCKETS.avatars, bannerPath)}
+                  alt="Profile Banner"
+                  className="w-full h-full object-cover"
+                  onLoad={(e) => setBannerAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
+                />
+                <DialogClose className="absolute top-3 right-3 md:top-4 md:right-4 z-[100] flex size-10 items-center justify-center rounded-full bg-black/40 text-white/90 backdrop-blur-md transition-all duration-300 hover:bg-black/70 hover:scale-110 ring-1 ring-white/20 shadow-lg">
+                  <X className="size-5" />
+                  <span className="sr-only">Close</span>
+                </DialogClose>
+              </div>
+            </DialogContent>
+          </Dialog>
         )}
-        <div className="absolute inset-0 bg-black/5" />
+        <div className="absolute inset-0 bg-black/5 pointer-events-none z-0" />
         
         {!isReadOnly && (
           <div className="absolute top-4 right-4 z-20 opacity-0 group-hover/banner:opacity-100 transition-opacity duration-300">
@@ -94,17 +119,38 @@ export function ProfileHeader({
 
       {/* Profile Content */}
       <div className="px-5 sm:px-6 md:px-12 pb-8 sm:pb-12 relative">
-        <div className="flex items-end justify-between -mt-14 sm:-mt-20 md:-mt-24 gap-4 mb-4 sm:mb-6 relative z-10">
-          <div className="relative shrink-0 group">
+        <div className="pointer-events-none flex items-end justify-between -mt-14 sm:-mt-20 md:-mt-24 gap-4 mb-4 sm:mb-6 relative z-10">
+          <div className="pointer-events-auto relative shrink-0 group">
             <div className="relative size-24 sm:size-36 md:size-48 overflow-hidden rounded-full border-4 md:border-[6px] border-background bg-surface-2 shadow-card transition-transform duration-300 group-hover:scale-[1.02]">
               {avatarPath ? (
-                <Image
-                  src={storagePublicUrl(BUCKETS.avatars, avatarPath)}
-                  alt={displayName}
-                  fill
-                  sizes="(max-width: 640px) 96px, (max-width: 768px) 144px, 192px"
-                  className="object-cover"
-                />
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button className="absolute inset-0 z-10 w-full h-full cursor-pointer focus:outline-none">
+                      <Image
+                        src={storagePublicUrl(BUCKETS.avatars, avatarPath)}
+                        alt={displayName}
+                        fill
+                        sizes="(max-width: 640px) 96px, (max-width: 768px) 144px, 192px"
+                        className="object-cover"
+                      />
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent showClose={false} className="left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 border-none bg-transparent shadow-none p-0 flex items-center justify-center" style={{ width: '90vw', maxWidth: '600px', maxHeight: '85vh', aspectRatio: avatarAspect || '1/1' }}>
+                    <DialogTitle className="sr-only">{displayName}&apos;s Avatar</DialogTitle>
+                    <div className="relative w-full h-full rounded-2xl shadow-2xl ring-1 ring-white/10 overflow-hidden">
+                      <img
+                        src={storagePublicUrl(BUCKETS.avatars, avatarPath)}
+                        alt={displayName}
+                        className="w-full h-full object-cover"
+                        onLoad={(e) => setAvatarAspect(e.currentTarget.naturalWidth / e.currentTarget.naturalHeight)}
+                      />
+                      <DialogClose className="absolute top-3 right-3 md:top-4 md:right-4 z-[100] flex size-10 items-center justify-center rounded-full bg-black/40 text-white/90 backdrop-blur-md transition-all duration-300 hover:bg-black/70 hover:scale-110 ring-1 ring-white/20 shadow-lg">
+                        <X className="size-5" />
+                        <span className="sr-only">Close</span>
+                      </DialogClose>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               ) : (
                 <div className="flex size-full items-center justify-center font-display text-3xl sm:text-5xl lg:text-6xl tracking-[0.1em] text-primary/60">
                   {initials}
@@ -119,7 +165,7 @@ export function ProfileHeader({
           </div>
 
           {!isReadOnly && (
-            <div className="flex-1 w-full flex justify-end pb-1 sm:pb-2 md:pb-4">
+            <div className="pointer-events-auto flex-1 w-full flex justify-end pb-1 sm:pb-2 md:pb-4">
               {!editing && (
                 <Button
                   type="button"

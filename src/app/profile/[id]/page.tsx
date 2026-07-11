@@ -105,8 +105,8 @@ export default async function PublicProfilePage({
   const displayName = profileData.display_name || "Traveler";
 
   return (
-    <div className="pt-4 md:pt-20">
-      <PageContainer width="full" className="section-y space-y-16">
+    <div className="pt-24 pb-16 md:pt-32 md:pb-24">
+      <PageContainer width="full" className="space-y-16">
         <div className="space-y-4">
           <BackButton />
           <ProfileHeader

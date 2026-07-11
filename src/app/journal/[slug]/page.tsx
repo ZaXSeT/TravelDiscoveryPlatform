@@ -8,6 +8,7 @@ import { Parallax } from "@/components/motion/parallax";
 import { JournalBody } from "@/features/journal/components/journal-body";
 import { JournalImage } from "@/features/journal/components/journal-image";
 import { JournalGallery } from "@/features/journal/components/journal-gallery";
+import { BackButton } from "@/components/ui/back-button";
 import {
   createSupabaseServerClient,
   isSupabaseConfigured,
@@ -91,6 +92,9 @@ export default async function JournalDetailPage({
         {/* Hero Content Overlay */}
         <div className="relative z-10 w-full pt-32 pb-16 px-6 md:px-12 lg:px-24 flex flex-col justify-end">
           <div className="max-w-4xl">
+            <div className="mb-6">
+              <BackButton className="text-white/70 hover:bg-white/10 hover:text-white -ml-3 transition-colors" />
+            </div>
             <div className="flex items-center space-x-4 mb-6">
               <Link 
                 href={`/profile/${journal.user_id}`}

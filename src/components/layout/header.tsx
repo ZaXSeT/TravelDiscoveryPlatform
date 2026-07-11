@@ -6,6 +6,7 @@ import { Compass, BookOpen, Wand2, Menu } from "lucide-react";
 import { AuthNav } from "@/features/auth/components/auth-nav";
 import { NavBar as TubelightNavBar } from "@/components/ui/tubelight-navbar";
 import { MobileMenu } from "@/components/layout/mobile-menu";
+import { BrandMark } from "@/components/layout/brand-mark";
 import { useUiStore } from "@/stores/use-ui-store";
 import { routes } from "@/constants/routes";
 import { siteConfig } from "@/constants/config";
@@ -51,8 +52,10 @@ export function Header() {
         leftContent={
           <Link
             href={routes.home}
-            className="font-display text-xl font-bold tracking-tight px-2"
+            className="flex items-center gap-2 px-2 font-display text-xl font-bold tracking-tight"
+            aria-label={`${siteConfig.name} home`}
           >
+            <BrandMark className="size-7" />
             {siteConfig.name}
           </Link>
         }
