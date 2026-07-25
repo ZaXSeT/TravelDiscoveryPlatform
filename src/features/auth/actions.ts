@@ -11,7 +11,7 @@ import {
 import { safeReturnTo } from "@/lib/validation/common";
 import { rateLimit, clientRateKey } from "@/lib/rate-limit/limiter";
 import { isPasswordBreached } from "@/lib/auth/pwned-password";
-import { siteConfig } from "@/constants/config";
+import { authEmailOrigin } from "@/lib/auth/origin";
 import { routes } from "@/constants/routes";
 import { createHash } from "node:crypto";
 
@@ -116,7 +116,7 @@ export async function signUpAction(
     password: parsed.data.password,
     options: {
       data: { display_name: parsed.data.displayName },
-      emailRedirectTo: `${siteConfig.url}/auth/callback`,
+      emailRedirectTo: `${await authEmailOrigin()}${routes.authCallback}`,
     },
   });
   const ALREADY_REGISTERED =
@@ -139,7 +139,7 @@ export async function signUpAction(
   if (!data.session) {
     return {
       notice:
-        "Almost there. Check your email to confirm your account, then sign in.",
+        "Almost there. Check your email and tap the confirmation link — it signs you in automatically.",
     };
   }
 
@@ -163,7 +163,7 @@ export async function resetRequestAction(
 
   const supabase = await createSupabaseServerClient();
   await supabase.auth.resetPasswordForEmail(parsed.data.email, {
-    redirectTo: `${siteConfig.url}/auth/update-password`,
+    redirectTo: `${await authEmailOrigin()}${routes.updatePassword}`,
   });
 
   // Neutral response regardless of whether the account exists.

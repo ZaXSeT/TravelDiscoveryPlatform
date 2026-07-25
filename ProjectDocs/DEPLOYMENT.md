@@ -24,9 +24,19 @@ Step-by-step checklist to ship Orbis to production. Next.js on Vercel needs **no
          (keep `http://localhost:3000/auth/callback` for local dev).
    - [ ] Decide **Confirm email**: ON = users must confirm before first login (more secure);
          OFF = register→use immediately (smoother demo).
-4. **Storage:** buckets `avatars` + `journal-media` are created by `setup.sql` (public-read,
+4. **Auth → Email Templates → Confirm signup** (required when Confirm email is ON).
+   Replace the default `{{ .ConfirmationURL }}` link with a `token_hash` link:
+   ```html
+   <a href="{{ .RedirectTo }}?token_hash={{ .TokenHash }}&type=email">Confirm your account</a>
+   ```
+   The default link uses a PKCE code, which only resolves in the browser that submitted the
+   sign-up form — a recipient opening the mail on their phone lands on the login screen
+   instead of being signed in. `token_hash` is verified server-side in `/auth/callback`, so
+   confirmation works from any device. (If `{{ .RedirectTo }}` renders empty, substitute
+   `{{ .SiteURL }}/auth/callback`.)
+5. **Storage:** buckets `avatars` + `journal-media` are created by `setup.sql` (public-read,
    owner-only write) — nothing else to do.
-5. Copy the project's **URL** and **anon key** (Settings → API) for the next step.
+6. Copy the project's **URL** and **anon key** (Settings → API) for the next step.
 
 ---
 
@@ -40,7 +50,7 @@ Step-by-step checklist to ship Orbis to production. Next.js on Vercel needs **no
 |---|---|---|
 | `NEXT_PUBLIC_SUPABASE_URL` | prod Supabase URL | required |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | prod anon key | required (public, RLS-protected) |
-| `NEXT_PUBLIC_SITE_URL` | `https://<your-domain>` | **required** — inlined at build; drives metadata, sitemap, OG, auth email redirect. Set before first deploy. |
+| `NEXT_PUBLIC_SITE_URL` | `https://<your-domain>` | **required** — inlined at build; drives metadata, sitemap, OG. Set before first deploy. Auth emails fall back to Vercel's runtime host if it is missing, but metadata/OG cannot. |
 | `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME` | cloud name | optional (else Unsplash placeholders) |
 | `SUPABASE_SERVICE_ROLE_KEY` | service role key | optional — only if you run server/seed scripts; **never** expose to client |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Upstash creds | optional — enables real rate limiting |
