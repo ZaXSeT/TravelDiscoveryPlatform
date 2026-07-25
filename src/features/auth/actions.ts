@@ -12,6 +12,7 @@ import { safeReturnTo } from "@/lib/validation/common";
 import { rateLimit, clientRateKey } from "@/lib/rate-limit/limiter";
 import { isPasswordBreached } from "@/lib/auth/pwned-password";
 import { authEmailOrigin } from "@/lib/auth/origin";
+import { authErrorMessage } from "@/lib/auth/error-message";
 import { routes } from "@/constants/routes";
 import { createHash } from "node:crypto";
 
@@ -123,10 +124,14 @@ export async function signUpAction(
     "An account with this email already exists. Try signing in instead.";
 
   if (error) {
-    if (/already registered|already exists|already been registered/i.test(error.message)) {
+    if (
+      error.code === "user_already_exists" ||
+      error.code === "email_exists" ||
+      /already registered|already exists|already been registered/i.test(error.message)
+    ) {
       return { error: ALREADY_REGISTERED };
     }
-    return { error: error.message };
+    return { error: authErrorMessage(error, "signup") };
   }
 
   // With email confirmation ON, Supabase hides duplicate emails (anti-enumeration) by
@@ -192,7 +197,7 @@ export async function updatePasswordAction(
     password: parsed.data.password,
   });
   if (error) {
-    return { error: error.message };
+    return { error: authErrorMessage(error, "update-password") };
   }
 
   redirect("/");

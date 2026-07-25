@@ -24,6 +24,11 @@ Step-by-step checklist to ship Orbis to production. Next.js on Vercel needs **no
          (keep `http://localhost:3000/auth/callback` for local dev).
    - [ ] Decide **Confirm email**: ON = users must confirm before first login (more secure);
          OFF = register→use immediately (smoother demo).
+   - [ ] **Custom SMTP is mandatory if Confirm email is ON.** Supabase's built-in email
+         service caps sends at **2/hour project-wide** and *refuses to deliver to anyone who
+         is not a member of the project's team* — so outside testers never receive the
+         confirmation mail. Auth → Settings → SMTP Settings, then raise Auth → Rate Limits →
+         "Emails per hour" (only editable once custom SMTP is set).
 4. **Auth → Email Templates → Confirm signup** (required when Confirm email is ON).
    Replace the default `{{ .ConfirmationURL }}` link with a `token_hash` link:
    ```html
